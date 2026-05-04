@@ -1,0 +1,442 @@
+# Authentication Flow Diagrams
+
+## Complete Authentication System Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                         FRONTEND (Next.js)                          │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐            │
+│  │  Login Page  │  │ Signup Page  │  │ Forgot Pass  │            │
+│  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘            │
+│         │                  │                  │                     │
+│         └──────────────────┼──────────────────┘                     │
+│                            │                                        │
+│                    ┌───────▼────────┐                              │
+│                    │  useAuth Hooks │                              │
+│                    │  (TanStack Q)  │                              │
+│                    └───────┬────────┘                              │
+│                            │                                        │
+│                    ┌───────▼────────┐                              │
+│                    │   API Layer    │                              │
+│                    │  (auth.ts)     │                              │
+│                    └───────┬────────┘                              │
+│                            │                                        │
+└────────────────────────────┼────────────────────────────────────────┘
+                             │ HTTP Requests
+                             │
+┌────────────────────────────▼────────────────────────────────────────┐
+│                      BACKEND (Express.js)                           │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐            │
+│  │    Routes    │  │ Controllers  │  │    Models    │            │
+│  │ userRoutes.js│─▶│userController│─▶│   User.js    │            │
+│  └──────────────┘  └──────────────┘  └──────┬───────┘            │
+│                                              │                     │
+│                                      ┌───────▼────────┐            │
+│                                      │  MySQL Database│            │
+│                                      │  (users table) │            │
+│                                      └────────────────┘            │
+│                                                                     │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+## 1. Login Flow
+
+```
+┌─────────┐
+│  User   │
+└────┬────┘
+     │
+     │ 1. Enters email & password
+     ▼
+┌─────────────────┐
+│  Login Page     │
+│  /login         │
+└────┬────────────┘
+     │
+     │ 2. Calls useLogin()
+     ▼
+┌─────────────────┐
+│  useLogin Hook  │
+│  (TanStack Q)   │
+└────┬────────────┘
+     │
+     │ 3. POST /api/users/login
+     ▼
+┌─────────────────┐
+│  Backend API    │
+│  loginUser()    │
+└────┬────────────┘
+     │
+     │ 4. Validates credentials
+     │ 5. Compares bcrypt hash
+     ▼
+┌─────────────────┐
+│  MySQL Database │
+│  users table    │
+└────┬────────────┘
+     │
+     │ 6. Returns user data
+     ▼
+┌─────────────────┐
+│  useLogin Hook  │
+│  onSuccess()    │
+└────┬────────────┘
+     │
+     │ 7. Stores in localStorage
+     │ 8. Redirects to /profile
+     ▼
+┌─────────────────┐
+│  Profile Page   │
+│  /profile       │
+└─────────────────┘
+```
+
+## 2. Signup Flow
+
+```
+┌─────────┐
+│  User   │
+└────┬────┘
+     │
+     │ 1. Enters username, email, password
+     ▼
+┌─────────────────┐
+│  Signup Page    │
+│  /signup        │
+└────┬────────────┘
+     │
+     │ 2. Client-side validation
+     │    - Email format
+     │    - Password length (min 8)
+     │    - Username length (3-100)
+     │    - Password match
+     ▼
+┌─────────────────┐
+│  useSignup Hook │
+│  (TanStack Q)   │
+└────┬────────────┘
+     │
+     │ 3. POST /api/users
+     ▼
+┌─────────────────┐
+│  Backend API    │
+│  createUser()   │
+└────┬────────────┘
+     │
+     │ 4. Checks if email exists
+     │ 5. Checks if username exists
+     │ 6. Hashes password (bcrypt)
+     ▼
+┌─────────────────┐
+│  MySQL Database │
+│  INSERT user    │
+└────┬────────────┘
+     │
+     │ 7. Returns new user data
+     ▼
+┌─────────────────┐
+│  useSignup Hook │
+│  onSuccess()    │
+└────┬────────────┘
+     │
+     │ 8. Stores in localStorage
+     │ 9. Redirects to /profile
+     ▼
+┌─────────────────┐
+│  Profile Page   │
+│  /profile       │
+└─────────────────┘
+```
+
+## 3. Forgot Password Flow
+
+```
+┌─────────┐
+│  User   │
+└────┬────┘
+     │
+     │ 1. Enters email
+     ▼
+┌──────────────────┐
+│ Forgot Pass Page │
+│ /forgot-password │
+└────┬─────────────┘
+     │
+     │ 2. Calls useForgotPassword()
+     ▼
+┌──────────────────┐
+│ useForgotPassword│
+│ Hook (TanStack Q)│
+└────┬─────────────┘
+     │
+     │ 3. POST /api/users/forgot-password
+     ▼
+┌──────────────────┐
+│  Backend API     │
+│ forgotPassword() │
+└────┬─────────────┘
+     │
+     │ 4. Finds user by email
+     │ 5. Generates reset token (crypto)
+     │ 6. Sets token expiry (1 hour)
+     ▼
+┌──────────────────┐
+│  MySQL Database  │
+│  UPDATE user     │
+│  resetToken      │
+│  resetTokenExpiry│
+└────┬─────────────┘
+     │
+     │ 7. Sends email with reset link
+     │    Link: /reset-password?token=xxx&email=xxx
+     ▼
+┌──────────────────┐
+│  Email Service   │
+│  (Backend)       │
+└────┬─────────────┘
+     │
+     │ 8. Returns success message
+     ▼
+┌──────────────────┐
+│ Success Message  │
+│ "Check your email"│
+└──────────────────┘
+```
+
+## 4. Reset Password Flow
+
+```
+┌─────────┐
+│  User   │
+└────┬────┘
+     │
+     │ 1. Clicks email link
+     │    /reset-password?token=xxx&email=xxx
+     ▼
+┌──────────────────┐
+│ Reset Pass Page  │
+│ /reset-password  │
+└────┬─────────────┘
+     │
+     │ 2. Extracts token & email from URL
+     │ 3. Enters new password
+     │ 4. Client validates password
+     ▼
+┌──────────────────┐
+│ useResetPassword │
+│ Hook (TanStack Q)│
+└────┬─────────────┘
+     │
+     │ 5. POST /api/users/reset-password
+     │    { email, token, newPassword }
+     ▼
+┌──────────────────┐
+│  Backend API     │
+│ resetPassword()  │
+└────┬─────────────┘
+     │
+     │ 6. Finds user by email
+     │ 7. Validates token matches
+     │ 8. Checks token not expired
+     ▼
+┌──────────────────┐
+│  MySQL Database  │
+│  Verify token    │
+└────┬─────────────┘
+     │
+     │ 9. Hashes new password
+     │ 10. Updates password
+     │ 11. Clears reset token
+     ▼
+┌──────────────────┐
+│  MySQL Database  │
+│  UPDATE user     │
+│  password        │
+│  resetToken=NULL │
+└────┬─────────────┘
+     │
+     │ 12. Returns success
+     ▼
+┌──────────────────┐
+│ Success Screen   │
+│ "Password Reset" │
+└────┬─────────────┘
+     │
+     │ 13. Redirects to /login
+     ▼
+┌──────────────────┐
+│  Login Page      │
+│  /login          │
+└──────────────────┘
+```
+
+## 5. Protected Route Access
+
+```
+┌─────────┐
+│  User   │
+└────┬────┘
+     │
+     │ 1. Navigates to /profile
+     ▼
+┌──────────────────┐
+│  Profile Page    │
+│  useEffect()     │
+└────┬─────────────┘
+     │
+     │ 2. Calls getStoredUser()
+     ▼
+┌──────────────────┐
+│  localStorage    │
+│  Check for user  │
+└────┬─────────────┘
+     │
+     ├─── User Found ────┐
+     │                   │
+     │                   ▼
+     │            ┌──────────────┐
+     │            │ Show Profile │
+     │            │ Display Data │
+     │            └──────────────┘
+     │
+     └─── Not Found ────┐
+                        │
+                        ▼
+                 ┌──────────────┐
+                 │ Redirect to  │
+                 │   /login     │
+                 └──────────────┘
+```
+
+## 6. Logout Flow
+
+```
+┌─────────┐
+│  User   │
+└────┬────┘
+     │
+     │ 1. Clicks logout in header
+     ▼
+┌──────────────────┐
+│  useLogout Hook  │
+└────┬─────────────┘
+     │
+     │ 2. Calls clearStoredUser()
+     ▼
+┌──────────────────┐
+│  localStorage    │
+│  Remove user data│
+└────┬─────────────┘
+     │
+     │ 3. Redirects to home
+     ▼
+┌──────────────────┐
+│  Home Page       │
+│  /               │
+└────┬─────────────┘
+     │
+     │ 4. Header updates
+     │    Shows "Login" button
+     ▼
+┌──────────────────┐
+│  Header          │
+│  Not Authenticated│
+└──────────────────┘
+```
+
+## 7. Header Authentication State
+
+```
+┌──────────────────┐
+│  Header Component│
+│  useEffect()     │
+└────┬─────────────┘
+     │
+     │ On mount: getStoredUser()
+     ▼
+┌──────────────────┐
+│  localStorage    │
+└────┬─────────────┘
+     │
+     ├─── User Found ────┐
+     │                   │
+     │                   ▼
+     │            ┌──────────────────┐
+     │            │ Show Avatar      │
+     │            │ - Username       │
+     │            │ - Level          │
+     │            │ - Profile Link   │
+     │            │ - Logout Button  │
+     │            └──────────────────┘
+     │
+     └─── Not Found ────┐
+                        │
+                        ▼
+                 ┌──────────────────┐
+                 │ Show Login Button│
+                 └──────────────────┘
+```
+
+## 8. Data Flow Summary
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    USER AUTHENTICATION                      │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    FRONTEND LAYER                           │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  │
+│  │  Pages   │─▶│  Hooks   │─▶│   API    │─▶│  Fetch   │  │
+│  └──────────┘  └──────────┘  └──────────┘  └──────────┘  │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼ HTTP
+┌─────────────────────────────────────────────────────────────┐
+│                    BACKEND LAYER                            │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  │
+│  │  Routes  │─▶│Controller│─▶│  Models  │─▶│ Database │  │
+│  └──────────┘  └──────────┘  └──────────┘  └──────────┘  │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    PERSISTENCE                              │
+│  ┌──────────────┐              ┌──────────────┐           │
+│  │ localStorage │              │ MySQL Database│           │
+│  │ (Frontend)   │              │ (Backend)     │           │
+│  └──────────────┘              └──────────────┘           │
+└─────────────────────────────────────────────────────────────┘
+```
+
+## Key Components
+
+### Frontend
+- **Pages**: Login, Signup, Forgot Password, Reset Password, Profile
+- **Hooks**: useLogin, useSignup, useForgotPassword, useResetPassword, useLogout
+- **API Layer**: auth.ts with typed functions
+- **State**: TanStack Query for server state, localStorage for persistence
+
+### Backend
+- **Routes**: /api/users/* endpoints
+- **Controllers**: userController.js with business logic
+- **Models**: User.js with Sequelize ORM
+- **Database**: MySQL with users table
+
+### Security
+- **Password Hashing**: bcrypt with 10 salt rounds
+- **Token Generation**: crypto.randomBytes(32)
+- **Token Expiry**: 1 hour for password reset
+- **Validation**: Client and server-side
+
+### User Experience
+- **Loading States**: Shown during API calls
+- **Error Handling**: User-friendly error messages
+- **Success Feedback**: Confirmation messages
+- **Auto Redirect**: After successful auth actions
+- **Persistent Login**: Survives page refresh
