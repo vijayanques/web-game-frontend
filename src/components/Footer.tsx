@@ -815,6 +815,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 import { fetchCategories, Category } from '@/lib/api/categories';
 import * as LucideIcons from 'lucide-react';
@@ -858,12 +859,12 @@ const GameHubFooter = () => {
   // Helper function to get icon component from string
   const getIconComponent = (iconName?: string) => {
     if (!iconName) return Icons.Gamepad2({ size: 13 });
-    
+
     const pascalCase = iconName
       .split('-')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join('');
-    
+
     const IconComponent = (LucideIcons as any)[pascalCase];
     return IconComponent ? <IconComponent size={13} /> : <Icons.Gamepad2 size={13} />;
   };
@@ -1006,17 +1007,17 @@ const GameHubFooter = () => {
   };
 
   const quickLinks = [
-    { 
-      label: "All Games", 
-      href: "/", 
+    {
+      label: "All Games",
+      href: "/",
       badge: gamesData?.data?.length ? `${gamesData.data.length}+` : "500+",
       badgeType: "count"
     },
-    { label: "Tournaments", href: "#", badge: "Live", badgeType: "live" },
-    { label: "Leaderboards", href: "#", badge: null, badgeType: null },
-    { label: "Community Hub", href: "#", badge: null, badgeType: null },
-    { label: "Live Streams", href: "#", badge: null, badgeType: null },
-    { label: "Game Reviews", href: "#", badge: null, badgeType: null },
+    // { label: "Tournaments", href: "#", badge: "Live", badgeType: "live" },
+    // { label: "Leaderboards", href: "#", badge: null, badgeType: null },
+    // { label: "Community Hub", href: "#", badge: null, badgeType: null },
+    // { label: "Live Streams", href: "#", badge: null, badgeType: null },
+    // { label: "Game Reviews", href: "#", badge: null, badgeType: null },
   ];
 
   const categories = [
@@ -1041,12 +1042,9 @@ const GameHubFooter = () => {
     }));
 
   const support = [
-    { label: "Help Center", href: "#" },
-    { label: "Report a Bug", href: "#" },
-    { label: "Privacy Policy", href: "#" },
-    { label: "Terms of Service", href: "#" },
-    { label: "Cookie Settings", href: "#" },
-    { label: "Refund Policy", href: "#" },
+    { label: "Privacy Policy", href: "/privacy-policy" },
+    { label: "Terms of Service", href: "/terms-of-service" },
+    { label: "About us", href: "/about-us" },
   ];
 
   const socials = [
@@ -1061,12 +1059,12 @@ const GameHubFooter = () => {
 
   const stats = [
     { value: "2.4M+", label: "Active Players", icon: <Icons.Users size={20} />, color: "text-blue-500", bg: "bg-blue-50 border-blue-100 group-hover:bg-blue-500" },
-    { 
-      value: gamesData?.data?.length ? `${gamesData.data.length}+` : "500+", 
-      label: "Games Listed", 
-      icon: <Icons.Gamepad2 size={20} />, 
-      color: "text-orange-500", 
-      bg: "bg-orange-50 border-orange-100 group-hover:bg-orange-500" 
+    {
+      value: gamesData?.data?.length ? `${gamesData.data.length}+` : "500+",
+      label: "Games Listed",
+      icon: <Icons.Gamepad2 size={20} />,
+      color: "text-orange-500",
+      bg: "bg-orange-50 border-orange-100 group-hover:bg-orange-500"
     },
     { value: "12K+", label: "Tournaments", icon: <Icons.Trophy size={20} />, color: "text-yellow-500", bg: "bg-yellow-50 border-yellow-100 group-hover:bg-yellow-500" },
     { value: "98%", label: "Uptime", icon: <Icons.Zap size={20} />, color: "text-green-500", bg: "bg-green-50 border-green-100 group-hover:bg-green-500" },
@@ -1201,7 +1199,8 @@ const GameHubFooter = () => {
         </div>
       </div> */}
       <div className="bg-[#E8E9ED] border-t border-gray-200">
-        <div className="px-6 py-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7">
+          <div className="py-6">
           <motion.div
             ref={statsRef}
             initial="hidden"
@@ -1228,6 +1227,7 @@ const GameHubFooter = () => {
               </motion.div>
             ))}
           </motion.div>
+          </div>
         </div>
       </div>
       <div className="bg-orange-500 overflow-hidden">
@@ -1252,8 +1252,10 @@ const GameHubFooter = () => {
       </div>
 
       {/* ── Main Footer Body ── */}
-      <div className=" px-6 pt-12 pb-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <div className="px-4 sm:px-6 md:px-7 pt-12 pb-8">
+
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
 
           {/* ── Brand Column ── */}
           <motion.div
@@ -1263,7 +1265,7 @@ const GameHubFooter = () => {
             variants={brandColumnVariants}
             className="lg:col-span-4 space-y-6">
             {/* Logo */}
-            <div className="flex items-center gap-3">
+            <Link href="/" className="flex items-center gap-3 ">
               <div className="w-11 h-11 rounded-2xl bg-orange-500 flex items-center justify-center">
                 <span className="text-white font-black text-xl">T</span>
               </div>
@@ -1276,7 +1278,7 @@ const GameHubFooter = () => {
                   <span className="text-[10px] text-gray-400 ml-1 font-medium">4.9 · 120k reviews</span>
                 </div> */}
               </div>
-            </div>
+            </Link>
 
             <p className="text-sm text-gray-500 font-[poppins] leading-relaxed">
               The ultimate destination for gamers worldwide. Discover, play, and compete in hundreds of games across every genre imaginable.
@@ -1308,7 +1310,7 @@ const GameHubFooter = () => {
             </div>
 
             {/* Newsletter */}
-            <div className="bg-white/60  rounded-2xl p-4 border border-gray-200 shadow-sm relative overflow-hidden">
+            {/* <div className="bg-white/60  rounded-2xl p-4 border border-gray-200 shadow-sm relative overflow-hidden">
               <div className="" />
               <div className="absolute top-2 right-2 text-orange-400">
                 <Icons.Mail size={28} />
@@ -1340,7 +1342,7 @@ const GameHubFooter = () => {
                   </div>
                 )}
               </div>
-            </div>
+            </div> */}
 
             {/* Socials */}
             <div>
@@ -1396,11 +1398,10 @@ const GameHubFooter = () => {
                     >
                       <span>{link.label}</span>
                       {link.badge && (
-                        <span className={`text-[9px] font-black px-1.5 py-0.5 rounded-full ${
-                          link.badgeType === "live" 
-                            ? "bg-red-500 text-white animate-pulse" 
-                            : "bg-gray-100 text-gray-500 group-hover:bg-orange-100 group-hover:text-orange-500"
-                        }`}>
+                        <span className={`text-[9px] font-black px-1.5 py-0.5 rounded-full ${link.badgeType === "live"
+                          ? "bg-red-500 text-white animate-pulse"
+                          : "bg-gray-100 text-gray-500 group-hover:bg-orange-100 group-hover:text-orange-500"
+                          }`}>
                           {link.badge}
                         </span>
                       )}
@@ -1480,13 +1481,13 @@ const GameHubFooter = () => {
                   <div className="w-6 h-6 rounded-lg text-gray-500 border border-orange-100 flex items-center justify-center  group-hover:bg-orange-500 group-hover:text-white transition-all">
                     <Icons.Globe size={15} />
                   </div>
-                  gamehub.gg
+                  Theplayfree.com
                 </a>
                 <a href="#" className="flex font-[poppins] items-center gap-2.5 text-xs text-gray-500 hover:text-orange-500 transition-colors group">
                   <div className="w-6 h-6 rounded-lg text-gray-500 border border-orange-100 flex items-center justify-center  group-hover:bg-orange-500 group-hover:text-white transition-all">
                     <Icons.Mail size={15} />
                   </div>
-                  support@gamehub.gg
+                  Theplayfree.com
                 </a>
                 <div className=" cursor-pointer flex font-[poppins]  items-center gap-2.5 text-xs text-gray-500 hover:text-orange-500 transition-colors group">
                   <div className="w-6 h-6 rounded-lg text-gray-500 border border-orange-100 flex items-center justify-center  group-hover:bg-orange-500 group-hover:text-white transition-all">
@@ -1498,17 +1499,19 @@ const GameHubFooter = () => {
             </div>
           </motion.div>
         </div>
+      </div>
 
-        {/* ── Bottom Bar ── */}
+      {/* ── Bottom Bar ── */}
         <motion.div
           ref={bottomBarRef}
           initial="hidden"
           animate={isBottomBarInView ? "visible" : "hidden"}
           variants={bottomBarVariants}
-          className="mt-3 pt-1 border-t border-gray-200">
+          className="bg-[#E8E9ED] border-t border-gray-200">
+          <div className="max-w-7xl mx-auto py-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-xs text-gray-500">
-              © 2026 <span className="text-gray-600 font-bold">GameHub Inc</span> · Made with for gamers
+              © 2026 <span className="text-gray-600 font-bold">Theplayfree</span> · Made with for gamers
             </p>
 
             <div className="flex items-center gap-2 bg-white/60  border border-gray-200 rounded-full px-3 py-1.5 shadow-sm">
@@ -1517,13 +1520,17 @@ const GameHubFooter = () => {
             </div>
 
             <div className="flex items-center gap-1">
-              {["Privacy", "Terms", "Cookies", "Sitemap"].map((item, i, arr) => (
-                <span key={item} className="flex items-center">
-                  <a href="#" className="text-xs text-gray-500 hover:text-orange-500 transition-colors font-medium px-2 font-[poppins]">{item}</a>
+              {[
+                { label: "Privacy", href: "/privacy-policy" },
+                { label: "Terms", href: "/terms-of-service" }
+              ].map((item, i, arr) => (
+                <span key={item.label} className="flex items-center">
+                  <a href={item.href} className="text-xs text-gray-500 hover:text-orange-500 transition-colors font-medium px-2 font-[poppins]">{item.label}</a>
                   {i < arr.length - 1 && <span className="text-gray-200">·</span>}
                 </span>
               ))}
             </div>
+          </div>
           </div>
         </motion.div>
       </div>

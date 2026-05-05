@@ -79,6 +79,7 @@ import QueryProvider from "@/providers/QueryProvider";
 import { CategoryProvider } from "@/contexts/CategoryContext";
 import Header from "@/components/Header";
 import CategoriesHeader from "@/components/Home/CategoriesHeader";
+import CustomCursor from "@/components/CustomCursor";
 
 import "./globals.css";
 
@@ -137,6 +138,7 @@ export default function RootLayout({
       className={`${jakarta.variable} ${poppins.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <CustomCursor />
         <QueryProvider>
           <CategoryProvider>
             <Header />

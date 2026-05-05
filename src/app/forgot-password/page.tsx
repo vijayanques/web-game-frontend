@@ -224,21 +224,6 @@ export default function ForgotPasswordPage() {
             </Link>
           </div>
         </motion.div>
-
-        {/* Additional Help */}
-        <motion.div
-          ref={helpRef}
-          initial="hidden"
-          animate={isHelpInView ? "visible" : "hidden"}
-          variants={fadeUpVariants}
-          className="mt-6 text-center">
-          <p className="text-sm text-gray-600 font-[poppins]">
-            Need more help?{' '}
-            <Link href="/support" className="text-orange-500 hover:text-orange-600 font-semibold">
-              Contact support
-            </Link>
-          </p>
-        </motion.div>
       </div>
       </div>
       <Footer />

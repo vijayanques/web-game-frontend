@@ -20,6 +20,7 @@ interface GameData {
   developer?: string
   rating: number
   votes?: string
+  players?: string
   released?: string
   technology?: string
   platforms?: string[]
@@ -476,6 +477,7 @@ export default function GameDetailPage({ params }: { params: Promise<{ slug: str
   return (
     <div className="min-h-screen bg-gray-100" suppressHydrationWarning>
       <main className="px-3 sm:px-4 py-4 sm:py-5 bg-[#E8E9ED]" suppressHydrationWarning>
+        <div className="max-w-7xl mx-auto">
         {/* Breadcrumb */}
         <motion.nav
           ref={breadcrumbRef}
@@ -933,7 +935,7 @@ export default function GameDetailPage({ params }: { params: Promise<{ slug: str
                 <IconPlay size={16} className="sm:w-4.5 sm:h-4.5" />
                 Play Now
               </button> */}
-              <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
+              <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
                 <button
                   onClick={handleLike}
                   className={`flex flex-col cursor-pointer items-center gap-1 py-2 sm:py-2.5 rounded-lg sm:rounded-xl border transition-all text-xs font-semibold ${liked ? 'bg-orange-50 border-orange-200 text-orange-600' : 'bg-gray-50 border-gray-200 text-gray-500 hover:border-orange-200 hover:text-orange-500'
@@ -941,6 +943,14 @@ export default function GameDetailPage({ params }: { params: Promise<{ slug: str
                 >
                   <IconThumbUp size={14} className="sm:w-4 sm:h-4" />
                   <span className="text-[10px]">{likeCount}</span>
+                </button>
+                <button
+                  onClick={handleDislike}
+                  className={`flex flex-col cursor-pointer items-center gap-1 py-2 sm:py-2.5 rounded-lg sm:rounded-xl border transition-all text-xs font-semibold ${disliked ? 'bg-red-50 border-red-200 text-red-600' : 'bg-gray-50 border-gray-200 text-gray-500 hover:border-red-200 hover:text-red-500'
+                    }`}
+                >
+                  <IconThumbDown size={14} className="sm:w-4 sm:h-4" />
+                  <span className="text-[10px]">{dislikeCount}</span>
                 </button>
                 <button
                   onClick={handleWishlist}
@@ -1061,9 +1071,19 @@ export default function GameDetailPage({ params }: { params: Promise<{ slug: str
               className="bg-white/60 rounded-xl sm:rounded-2xl border border-gray-200 p-3 sm:p-4 grid grid-cols-2 gap-2 sm:gap-3">
               {[
                 { icon: <IconStar size={14} className="sm:w-4 sm:h-4 text-orange-500" />, val: `${game.rating}/10`, label: 'Rating' },
-                { icon: <IconUsers size={14} className="sm:w-4 sm:h-4 text-blue-500" />, val: game.votes || '0', label: 'Votes' },
-                { icon: <IconDownload size={14} className="sm:w-4 sm:h-4 text-green-500" />, val: '50M+', label: 'Downloads' },
-                { icon: <IconClock size={14} className="sm:w-4 sm:h-4 text-purple-500" />, val: game.released || 'N/A', label: 'Released' },
+                { icon: <IconUsers size={14} className="sm:w-4 sm:h-4 text-blue-500" />, val: (likeCount + dislikeCount).toString(), label: 'Votes' },
+                { icon: <IconUsers size={14} className="sm:w-4 sm:h-4 text-green-500" />, val: game.players || '0', label: 'Players Active' },
+                { icon: <IconClock size={14} className="sm:w-4 sm:h-4 text-purple-500" />, val: (() => {
+                  if (!game.released) return 'N/A'
+                  // Try to parse and format the date
+                  try {
+                    const date = new Date(game.released)
+                    if (isNaN(date.getTime())) return game.released
+                    return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+                  } catch {
+                    return game.released
+                  }
+                })(), label: 'Released' },
               ].map(({ icon, val, label }) => (
                 <div key={label} className="flex flex-col gap-1 p-2 sm:p-3 bg-white rounded-lg sm:rounded-xl">
                   {icon}
@@ -1073,7 +1093,7 @@ export default function GameDetailPage({ params }: { params: Promise<{ slug: str
               ))}
             </motion.div>
 
-            {/* Similar Games */}
+            {/*    */}
             {similarGames.length > 0 && (
               <motion.div
                 ref={similarGamesRef}
@@ -1167,6 +1187,7 @@ export default function GameDetailPage({ params }: { params: Promise<{ slug: str
               </div>
             </motion.div>
           </aside>
+        </div>
         </div>
       </main>
 

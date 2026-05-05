@@ -6,6 +6,7 @@ export interface Game {
   slug: string;
   description?: string;
   thumbnail?: string;
+  videoUrl?: string;
   genre?: string;
   rating?: number;
   plays?: number;

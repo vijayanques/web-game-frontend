@@ -347,10 +347,10 @@ export default function CategoriesHeader() {
 
   return (
     <div className="w-full bg-[#E8E9ED] border-b border-gray-300">
-      <div className="flex justify-center pt-1 pb-3 px-2 sm:px-4">
+      <div className="flex justify-center pt-1 pb-3 px-4 sm:px-6 md:px-7">
 
         {/* Container */}
-        <div className="w-full max-w-[1575px]">
+        <div className="w-full max-w-7xl mx-auto">
 
           <div className="flex items-center gap-2">
 
@@ -437,6 +437,7 @@ export default function CategoriesHeader() {
 
           </div>
         </div>
+      </div>
 
         {/* Hide scrollbar */}
         <style jsx global>{`
@@ -449,7 +450,6 @@ export default function CategoriesHeader() {
           }
         `}</style>
 
-      </div>
     </div>
   );
 }

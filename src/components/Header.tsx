@@ -736,23 +736,25 @@ export default function Header() {
     <header className="sticky top-0 z-50 bg-[#E8E9ED]" ref={headerRef}>
 
       <div className="w-full font-sans">
-
-        <div className="w-full px-4 sm:px-6 md:px-8 lg:px-12 h-16 flex items-center justify-between relative">
+        <div className="max-w-7xl mx-auto ">
+        <div className="w-full h-16 flex items-center justify-between relative">
 
           {/* LEFT */}
-          <motion.div
-            ref={logoRef}
-            initial="hidden"
-            animate={isLogoInView ? "visible" : "hidden"}
-            variants={logoVariants}
-            className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
-            <div className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-xl bg-orange-500 text-white font-bold shadow-lg text-sm sm:text-base">
-              T
-            </div>
-            <span className="text-base sm:text-lg font-semibold font-[poppins] tracking-wide">
-              Theplayfree
-            </span>
-          </motion.div>
+          <Link href="/">
+            <motion.div
+              ref={logoRef}
+              initial="hidden"
+              animate={isLogoInView ? "visible" : "hidden"}
+              variants={logoVariants}
+              className="flex items-center gap-2 sm:gap-3 flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-xl bg-orange-500 text-white font-bold shadow-lg text-sm sm:text-base">
+                T
+              </div>
+              <span className="text-base sm:text-lg font-semibold font-[poppins] tracking-wide">
+                Theplayfree
+              </span>
+            </motion.div>
+          </Link>
 
           {/* CENTER - Hidden on mobile, shown on md+ */}
           <motion.div
@@ -1029,6 +1031,7 @@ export default function Header() {
 
           </motion.div>
 
+        </div>
         </div>
 
         {/* Mobile Search Bar - Shown only on mobile */}

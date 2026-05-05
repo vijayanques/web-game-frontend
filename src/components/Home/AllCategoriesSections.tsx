@@ -2,7 +2,7 @@
 
 import { Star, Users, Play, ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { motion, useInView } from 'framer-motion';
 import { fetchCategories, Category } from '@/lib/api/categories';
@@ -38,6 +38,7 @@ const sectionSubtitleVariants = {
 function GameCard({ game, index = 0 }: { game: Game; index?: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "0px" });
+  const [hover, setHover] = useState(false);
 
   return (
     <motion.div
@@ -50,14 +51,30 @@ function GameCard({ game, index = 0 }: { game: Game; index?: number }) {
       <Link 
         href={`/game/${game.slug}`} 
         className="group relative rounded-2xl overflow-hidden cursor-pointer block"
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
       >
       <div className="absolute inset-0 rounded-2xl border border-white/10 group-hover:border-orange-400/60 transition-all duration-200 ease-out pointer-events-none" />
 
-      <img
-        src={game.thumbnail || '/Images/911-prey_16x9-cover.jpg'}
-        alt={game.title}
-        className="w-full h-48 sm:h-56 md:h-64 object-cover transition-transform duration-300 ease-out will-change-transform group-hover:scale-110"
-      />
+      {/* Video or Image */}
+      {hover && game.videoUrl ? (
+        <video
+          src={game.videoUrl}
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata"
+          className="w-full h-48 sm:h-56 md:h-64 object-cover"
+          style={{ display: 'block' }}
+        />
+      ) : (
+        <img
+          src={game.thumbnail || '/Images/911-prey_16x9-cover.jpg'}
+          alt={game.title}
+          className="w-full h-48 sm:h-56 md:h-64 object-cover transition-transform duration-300 ease-out will-change-transform group-hover:scale-110"
+        />
+      )}
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
 
       <div className="absolute bottom-0 w-full p-3 sm:p-4 text-white">
@@ -127,14 +144,14 @@ function CategorySection({ category }: { category: Category }) {
   }
 
   return (
-    <div className="" data-category-id={category.id}>
+    <div className="max-w-7xl mx-auto" data-category-id={category.id}>
       {/* 🔥 Heading */}
       <motion.div 
         ref={headingRef}
         initial="hidden"
         animate={isHeadingInView ? "visible" : "hidden"}
         variants={sectionHeadingVariants}
-        className="sm:px-6 md:px-7 pt-6 sm:pt-1 flex items-center justify-between bg-[#E8E9ED]">
+        className=" pt-6 sm:pt-1 flex items-center justify-between bg-[#E8E9ED]">
         <div>
           <motion.h2 
             initial="hidden"
@@ -170,7 +187,7 @@ function CategorySection({ category }: { category: Category }) {
       </motion.div>
 
       {/* 🎮 Horizontal Scroll */}
-      <div ref={scrollRef} className="px-4 sm:px-6 md:px-7 py-3 overflow-x-auto scrollbar-hide bg-[#E8E9ED]">
+      <div ref={scrollRef} className=" py-3 overflow-x-auto scrollbar-hide bg-[#E8E9ED]">
         {isLoading ? (
           <div className="flex gap-4 sm:gap-5 md:gap-6 pb-2">
             {[1, 2, 3, 4].map((i) => (
@@ -203,16 +220,18 @@ export default function AllCategoriesSections() {
 
   return (
     <div className="bg-[#E8E9ED]">
-      {isLoading ? (
-        <div className="px-4 sm:px-6 md:px-7 py-8">
-          <div className="h-8 w-48 bg-gray-300 rounded animate-pulse mb-4" />
-          <div className="h-4 w-64 bg-gray-200 rounded animate-pulse" />
-        </div>
-      ) : (
-        activeCategories.map((category: Category) => (
-          <CategorySection key={category.id} category={category} />
-        ))
-      )}
+      <div className="max-w-7xl mx-auto">
+        {isLoading ? (
+          <div className="px-4 sm:px-6 md:px-7 py-8">
+            <div className="h-8 w-48 bg-gray-300 rounded animate-pulse mb-4" />
+            <div className="h-4 w-64 bg-gray-200 rounded animate-pulse" />
+          </div>
+        ) : (
+          activeCategories.map((category: Category) => (
+            <CategorySection key={category.id} category={category} />
+          ))
+        )}
+      </div>
 
       <style jsx global>{`
         .scrollbar-hide {

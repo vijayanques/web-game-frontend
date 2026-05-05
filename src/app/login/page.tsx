@@ -148,23 +148,7 @@ export default function LoginPage() {
                 )}
               </div>
 
-              {/* Remember Me & Forgot Password */}
-              <div className="flex items-center justify-between">
-                <label className="flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    {...formik.getFieldProps('rememberMe')}
-                    className="w-4 h-4 text-orange-500 border-gray-300 rounded focus:ring-orange-400"
-                  />
-                  <span className="ml-2 text-sm text-gray-600 font-[poppins]">Remember me</span>
-                </label>
-                <Link
-                  href="/forgot-password"
-                  className="text-sm text-orange-500 hover:text-orange-600 font-medium font-[poppins]"
-                >
-                  Forgot password?
-                </Link>
-              </div>
+           
 
               {/* Submit Button */}
               <button

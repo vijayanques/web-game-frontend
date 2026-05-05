@@ -204,6 +204,7 @@ import { fetchCategories, Category } from "@/lib/api/categories";
 interface CardProps {
     title: string;
     image: string;
+    videoUrl?: string;
     col: number;
     row: number;
     players: string;
@@ -215,6 +216,7 @@ interface CardProps {
 const Card = ({
     title,
     image,
+    videoUrl,
     col,
     row,
     players,
@@ -237,13 +239,26 @@ const Card = ({
             {/* Border Glow */}
             <div className="absolute inset-0 rounded-2xl border border-white/10 group-hover:border-orange-400/60 transition-all duration-200 pointer-events-none" />
 
-            {/* Image */}
-            <img
-                src={image}
-                alt={title}
-                className={`w-full h-full object-cover transition-transform duration-500 ${hover ? "scale-110" : "scale-100"
-                    }`}
-            />
+            {/* Video or Image */}
+            {hover && videoUrl ? (
+                <video
+                    src={videoUrl}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    preload="metadata"
+                    className="w-full h-full object-cover"
+                    style={{ display: 'block' }}
+                />
+            ) : (
+                <img
+                    src={image}
+                    alt={title}
+                    className={`w-full h-full object-cover transition-transform duration-500 ${hover ? "scale-110" : "scale-100"
+                        }`}
+                />
+            )}
 
             {/* Gradient */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
@@ -332,6 +347,7 @@ export default function CategoryPage() {
         title: game.title,
         slug: game.slug,
         image: game.thumbnail || "/Images/911-prey_16x9-cover.jpg",
+        videoUrl: game.videoUrl,
         players: game.plays ? `${(game.plays / 1000).toFixed(1)}k` : "0",
         rating: game.rating || 4.5,
         category: game.category?.name || game.genre || "Game",
@@ -342,7 +358,7 @@ export default function CategoryPage() {
     return (
         <>
             <section className="px-4 sm:px-6 md:px-7 pt-6 sm:pt-8 pb-8 sm:pb-12 bg-[#E8E9ED]">
-                <div>
+                <div className="max-w-7xl mx-auto">
                     {/* Header */}
                     <div className="flex justify-between items-center mb-4 sm:mb-6">
                         <div>
