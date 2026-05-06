@@ -52,6 +52,7 @@ interface SimilarGame {
   rating: number
   players?: string
   thumbnail: string
+  videoUrl?: string
 }
 
 const TABS = ['All', 'Overview', 'Gameplay']
@@ -77,6 +78,7 @@ export default function GameDetailPage({ params }: { params: Promise<{ slug: str
   const [showShareMenu, setShowShareMenu] = useState(false)
   const [showSidebarShareMenu, setShowSidebarShareMenu] = useState(false)
   const [copySuccess, setCopySuccess] = useState(false)
+  const [hoveredGameId, setHoveredGameId] = useState<number | null>(null)
   const gameContainerRef = useRef<HTMLDivElement>(null)
   const shareMenuRef = useRef<HTMLDivElement>(null)
   const sidebarShareMenuRef = useRef<HTMLDivElement>(null)
@@ -1093,7 +1095,7 @@ export default function GameDetailPage({ params }: { params: Promise<{ slug: str
               ))}
             </motion.div>
 
-            {/*    */}
+            {/*  Similar Games  */}
             {similarGames.length > 0 && (
               <motion.div
                 ref={similarGamesRef}
@@ -1110,15 +1112,31 @@ export default function GameDetailPage({ params }: { params: Promise<{ slug: str
                     <a
                       key={game.id}
                       href={`/game/${game.slug}`}
+                      onMouseEnter={() => setHoveredGameId(game.id)}
+                      onMouseLeave={() => setHoveredGameId(null)}
                       className="group relative rounded-lg sm:rounded-xl overflow-hidden cursor-pointer block"
                     >
                       <div className="absolute inset-0 rounded-lg sm:rounded-xl border border-white/10 group-hover:border-orange-400/60 transition-all duration-200 ease-out pointer-events-none z-10" />
 
-                      <img
-                        src={game.thumbnail || '/Images/911-prey_16x9-cover.jpg'}
-                        alt={game.name || game.title || 'Game'}
-                        className="w-full h-24 sm:h-28 object-cover transition-transform duration-300 ease-out will-change-transform group-hover:scale-110"
-                      />
+                      {/* Video or Image */}
+                      {hoveredGameId === game.id && game.videoUrl ? (
+                        <video
+                          src={game.videoUrl}
+                          autoPlay
+                          loop
+                          muted
+                          playsInline
+                          preload="metadata"
+                          className="w-full h-24 sm:h-28 object-cover"
+                          style={{ display: 'block' }}
+                        />
+                      ) : (
+                        <img
+                          src={game.thumbnail || '/Images/911-prey_16x9-cover.jpg'}
+                          alt={game.name || game.title || 'Game'}
+                          className="w-full h-24 sm:h-28 object-cover transition-transform duration-300 ease-out will-change-transform group-hover:scale-110"
+                        />
+                      )}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent z-5" />
 
                       {/* Game Name - Center Bottom */}
