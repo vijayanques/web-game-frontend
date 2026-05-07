@@ -21,6 +21,27 @@ async function fetchGames() {
   }
 }
 
+async function fetchCategories() {
+  try {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://game-backend-production-3988.up.railway.app';
+    const response = await fetch(`${apiUrl}/api/categories`, {
+      next: { revalidate: 3600 }, // Cache for 1 hour
+    });
+    
+    if (!response.ok) {
+      console.error('Failed to fetch categories:', response.status);
+      return [];
+    }
+    
+    const data = await response.json();
+    // Handle the response format: { success: true, data: [...] }
+    return data.data || data.categories || (Array.isArray(data) ? data : []);
+  } catch (error) {
+    console.error('Error fetching categories for sitemap:', error);
+    return [];
+  }
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://game-web-app1.vercel.app';
 
@@ -76,39 +97,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  // Dynamic routes - Categories
-  const categoryRoutes = [
-    {
-      url: `${baseUrl}/category/action`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/category/adventure`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/category/puzzle`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/category/sports`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/category/strategy`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
-    },
-  ];
+  // Fetch categories dynamically
+  const categories = await fetchCategories();
+  const categoryRoutes = categories.map((category: any) => ({
+    url: `${baseUrl}/category/${category.slug}`,
+    lastModified: new Date(category.updatedAt || category.createdAt || new Date()),
+    changeFrequency: 'weekly' as const,
+    priority: 0.8,
+  }));
 
   // Fetch all games from backend
   const games = await fetchGames();
