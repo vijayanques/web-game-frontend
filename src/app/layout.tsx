@@ -107,6 +107,10 @@ export const metadata: Metadata = {
     // icon: "/Images/favicon.png",
   },
 
+  verification: {
+    google: 'googleleae893e4229261858',
+  },
+
   openGraph: {
     title: "Theplayfree - Free Browser Games",
     description: "ThePlayFree is your destination for quick, free, and entertaining browser games.",
@@ -132,11 +136,33 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'ThePlayFree',
+    description: 'ThePlayFree is your destination for quick, free, and entertaining browser games.',
+    url: process.env.NEXT_PUBLIC_BASE_URL || 'https://theplayfree.com',
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://theplayfree.com'}?search={search_term_string}`,
+      },
+      'query-input': 'required name=search_term_string',
+    },
+  };
+
   return (
     <html
       lang="en"
       className={`${jakarta.variable} ${poppins.variable} h-full antialiased`}
     >
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+      </head>
       <body className="min-h-full flex flex-col">
         <CustomCursor />
         <QueryProvider>
