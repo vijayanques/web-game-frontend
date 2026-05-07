@@ -1,11 +1,33 @@
 'use client';
 
+import { useEffect } from 'react';
 import { Shield, Lock, Eye, UserCheck, Database, Bell, Mail, Globe, FileText, AlertCircle } from 'lucide-react';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 
 export default function PrivacyPolicy() {
+  // Set document metadata
+  useEffect(() => {
+    document.title = 'Privacy Policy - Theplayfree';
+    
+    let metaDescription = document.querySelector('meta[name="description"]');
+    if (!metaDescription) {
+      metaDescription = document.createElement('meta');
+      metaDescription.setAttribute('name', 'description');
+      document.head.appendChild(metaDescription);
+    }
+    metaDescription.setAttribute('content', 'Learn how Theplayfree collects, uses, and protects your personal information. Read our comprehensive privacy policy and data protection practices.');
+    
+    let linkCanonical = document.querySelector('link[rel="canonical"]');
+    if (!linkCanonical) {
+      linkCanonical = document.createElement('link');
+      linkCanonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(linkCanonical);
+    }
+    linkCanonical.setAttribute('href', 'https://game-web-app1.vercel.app/privacy-policy');
+  }, []);
+
   const sections = [
     {
       icon: <FileText className="w-6 h-6" />,
@@ -201,13 +223,13 @@ export default function PrivacyPolicy() {
           className="bg-white rounded-2xl p-8 mb-8 shadow-sm border border-gray-200"
           variants={itemVariants}
         >
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Welcome to GameHub</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Welcome to Theplayfree</h2>
           <p className="text-gray-600 leading-relaxed mb-4">
-            At GameHub, we are committed to protecting your privacy and ensuring the security of your personal information.
+            At Theplayfree, we are committed to protecting your privacy and ensuring the security of your personal information.
             This Privacy Policy explains how we collect, use, disclose, and safeguard your data when you use our gaming platform.
           </p>
           <p className="text-gray-600 leading-relaxed">
-            By using GameHub, you agree to the collection and use of information in accordance with this policy.
+            By using Theplayfree, you agree to the collection and use of information in accordance with this policy.
             If you do not agree with our policies and practices, please do not use our services.
           </p>
         </motion.div>
@@ -321,7 +343,7 @@ export default function PrivacyPolicy() {
             ))}
           </ul>
           <p className="text-gray-600 leading-relaxed">
-            Your continued use of GameHub after any changes indicates your acceptance of the updated Privacy Policy.
+            Your continued use of Theplayfree after any changes indicates your acceptance of the updated Privacy Policy.
           </p>
         </motion.div>
 
@@ -341,8 +363,8 @@ export default function PrivacyPolicy() {
 
           <div className="grid md:grid-cols-2 gap-6">
             {[
-              { icon: Mail, title: "Email Us", text: "privacy@gamehub.gg", href: "mailto:privacy@gamehub.gg" },
-              { icon: Globe, title: "Visit Our Website", text: "www.gamehub.gg", href: "https://gamehub.gg" }
+              { icon: Mail, title: "Email Us", text: "privacy@Theplayfree.gg", href: "mailto:privacy@Theplayfree.gg" },
+              { icon: Globe, title: "Visit Our Website", text: "www.Theplayfree.gg", href: "https://Theplayfree.gg" }
             ].map((item, idx) => (
               <motion.div 
                 key={idx}
@@ -365,7 +387,7 @@ export default function PrivacyPolicy() {
 
           <div className="mt-6 pt-6 border-t border-gray-700">
             <p className="text-sm text-gray-400">
-              Data Protection Officer: dpo@gamehub.gg | Response time: Within 30 days
+              Data Protection Officer: dpo@Theplayfree.gg | Response time: Within 30 days
             </p>
           </div>
         </motion.div>

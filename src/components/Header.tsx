@@ -65,7 +65,7 @@
 //               </div>
 //             </div>
 //             <span className="hidden sm:inline font-bold text-lg sm:text-xl bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent">
-//               GameHub
+//               Theplayfree
 //             </span>
 //           </Link>
 
@@ -501,7 +501,7 @@
 //               G
 //             </div>
 //             <span className="text-lg font-semibold tracking-wide">
-//               GameHub
+//               Theplayfree
 //             </span>
 //           </div>
 

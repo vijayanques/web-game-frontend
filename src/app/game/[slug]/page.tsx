@@ -372,6 +372,27 @@ export default function GameDetailPage({ params }: { params: Promise<{ slug: str
       const voteCount = parseInt(game.votes.replace(/,/g, '')) || 0
       setLikeCount(voteCount)
     }
+
+    // Set document metadata
+    if (game) {
+      document.title = `${game.title} - Play Free Online | Theplayfree`;
+      
+      let metaDescription = document.querySelector('meta[name="description"]');
+      if (!metaDescription) {
+        metaDescription = document.createElement('meta');
+        metaDescription.setAttribute('name', 'description');
+        document.head.appendChild(metaDescription);
+      }
+      metaDescription.setAttribute('content', `Play ${game.title} online for free at Theplayfree. ${game.description.substring(0, 150)}...`);
+      
+      let linkCanonical = document.querySelector('link[rel="canonical"]');
+      if (!linkCanonical) {
+        linkCanonical = document.createElement('link');
+        linkCanonical.setAttribute('rel', 'canonical');
+        document.head.appendChild(linkCanonical);
+      }
+      linkCanonical.setAttribute('href', `https://game-web-app1.vercel.app/game/${game.slug}`);
+    }
   }, [game])
 
   // Handle share functionality

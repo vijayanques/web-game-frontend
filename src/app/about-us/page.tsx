@@ -109,7 +109,7 @@ export default function AboutUs() {
   ];
 
   const milestones = [
-    { year: "2020", event: "GameHub Founded", description: "Started with a vision to revolutionize gaming discovery" },
+    { year: "2020", event: "Theplayfree Founded", description: "Started with a vision to revolutionize gaming discovery" },
     { year: "2021", event: "1M Players", description: "Reached 1 million active players milestone" },
     { year: "2022", event: "Tournament Launch", description: "Introduced competitive tournaments and leaderboards" },
     { year: "2023", event: "Global Expansion", description: "Expanded to 50+ countries worldwide" },
@@ -140,7 +140,7 @@ export default function AboutUs() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            About GameHub
+            About Theplayfree
           </motion.h1>
 
           <motion.p 
@@ -182,7 +182,7 @@ export default function AboutUs() {
         >
           <h2 className="text-3xl font-bold text-gray-900 mb-4 font-[poppins]">Our Mission</h2>
           <p className="text-gray-600 leading-relaxed mb-4 text-lg font-[poppins]">
-            At GameHub, our mission is to revolutionize how gamers discover, play, and compete. We believe gaming should be accessible, 
+            At Theplayfree, our mission is to revolutionize how gamers discover, play, and compete. We believe gaming should be accessible, 
             inclusive, and rewarding for everyone. We're building the ultimate platform where players can find their next favorite game, 
             connect with fellow gamers, and showcase their skills on a global stage.
           </p>
@@ -319,7 +319,7 @@ export default function AboutUs() {
           className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-8 mb-8 border border-orange-200"
           variants={itemVariants}
         >
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 font-[poppins]">Why Choose GameHub?</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-8 font-[poppins]">Why Choose Theplayfree?</h2>
           <div className="grid md:grid-cols-2 gap-6">
             {[
               { title: "Largest Game Library", desc: "500+ games across all genres, constantly updated" },
@@ -374,7 +374,7 @@ export default function AboutUs() {
         >
           <h2 className="text-3xl font-bold mb-4 font-[poppins]">Join Our Community</h2>
           <p className="text-gray-300 mb-8 max-w-2xl mx-auto font-[poppins]">
-            Be part of the gaming revolution. Discover new games, compete with players worldwide, and become part of the GameHub family.
+            Be part of the gaming revolution. Discover new games, compete with players worldwide, and become part of the Theplayfree family.
           </p>
           <motion.div
             whileHover={{ scale: 1.05 }}
@@ -401,9 +401,9 @@ export default function AboutUs() {
           <h3 className="text-2xl font-bold text-gray-900 mb-6 font-[poppins]">Get in Touch</h3>
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              { icon: Globe, title: "Website", text: "www.gamehub.gg", href: "https://gamehub.gg" },
+              { icon: Globe, title: "Website", text: "www.Theplayfree.gg", href: "https://Theplayfree.gg" },
               { icon: Users, title: "Community", text: "Join our Discord", href: "#" },
-              { icon: Target, title: "Business", text: "partnerships@gamehub.gg", href: "mailto:partnerships@gamehub.gg" },
+              { icon: Target, title: "Business", text: "partnerships@Theplayfree.gg", href: "mailto:partnerships@Theplayfree.gg" },
             ].map((contact, idx) => {
               const Icon = contact.icon;
               return (

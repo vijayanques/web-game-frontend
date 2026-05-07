@@ -21,6 +21,27 @@ function ResetPasswordForm() {
 
   const { mutate: resetPassword, isPending, error, isSuccess } = useResetPassword();
 
+  // Set document metadata
+  useEffect(() => {
+    document.title = 'Reset Password - Theplayfree';
+    
+    let metaDescription = document.querySelector('meta[name="description"]');
+    if (!metaDescription) {
+      metaDescription = document.createElement('meta');
+      metaDescription.setAttribute('name', 'description');
+      document.head.appendChild(metaDescription);
+    }
+    metaDescription.setAttribute('content', 'Reset your Theplayfree account password securely. Enter your new password to regain access to your account.');
+    
+    let linkCanonical = document.querySelector('link[rel="canonical"]');
+    if (!linkCanonical) {
+      linkCanonical = document.createElement('link');
+      linkCanonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(linkCanonical);
+    }
+    linkCanonical.setAttribute('href', 'https://game-web-app1.vercel.app/reset-password');
+  }, []);
+
   useEffect(() => {
     const emailParam = searchParams.get('email');
     const tokenParam = searchParams.get('token');

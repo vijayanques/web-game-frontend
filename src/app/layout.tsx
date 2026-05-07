@@ -103,6 +103,10 @@ export const metadata: Metadata = {
   keywords: ["free games", "browser games", "online games", "play free"],
   authors: [{ name: "Theplayfree" }],
 
+  alternates: {
+    canonical: 'https://game-web-app1.vercel.app',
+  },
+
   icons: {
     // icon: "/Images/favicon.png",
   },
@@ -115,6 +119,7 @@ export const metadata: Metadata = {
     title: "Theplayfree - Free Browser Games",
     description: "ThePlayFree is your destination for quick, free, and entertaining browser games.",
     type: "website",
+    url: 'https://game-web-app1.vercel.app',
     images: [
       {
         url: "/Images/og-image.png",

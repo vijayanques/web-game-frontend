@@ -11,17 +11,17 @@ export default function TermsOfService() {
       icon: <FileText className="w-6 h-6" />,
       title: "1. Acceptance of Terms",
       content: [
-        "By accessing and using GameHub, you accept and agree to be bound by the terms and provision of this agreement.",
+        "By accessing and using Theplayfree, you accept and agree to be bound by the terms and provision of this agreement.",
         "If you do not agree to abide by the above, please do not use this service.",
         "We reserve the right to modify these terms at any time without notice.",
-        "Your continued use of GameHub following the posting of revised Terms means that you accept and agree to the changes."
+        "Your continued use of Theplayfree following the posting of revised Terms means that you accept and agree to the changes."
       ]
     },
     {
       icon: <Users className="w-6 h-6" />,
       title: "2. User Accounts & Registration",
       content: [
-        "You must be at least 13 years old to create an account on GameHub.",
+        "You must be at least 13 years old to create an account on Theplayfree.",
         "You are responsible for maintaining the confidentiality of your account credentials.",
         "You agree to provide accurate, current, and complete information during registration.",
         "You are solely responsible for all activities that occur under your account.",
@@ -33,33 +33,33 @@ export default function TermsOfService() {
       icon: <Gamepad2 className="w-6 h-6" />,
       title: "3. User Conduct & Prohibited Activities",
       content: [
-        "You agree not to engage in any conduct that restricts or inhibits anyone's use or enjoyment of GameHub.",
+        "You agree not to engage in any conduct that restricts or inhibits anyone's use or enjoyment of Theplayfree.",
         "Prohibited behaviors include: harassment, hate speech, discrimination, and threats.",
         "You may not post, transmit, or distribute any unlawful, threatening, abusive, defamatory, obscene, or otherwise objectionable material.",
         "Cheating, hacking, exploiting bugs, or using unauthorized third-party tools is strictly forbidden.",
         "You agree not to spam, flood, or engage in any form of disruptive behavior.",
         "Impersonation of any person or entity is prohibited.",
-        "You may not attempt to gain unauthorized access to GameHub systems or networks."
+        "You may not attempt to gain unauthorized access to Theplayfree systems or networks."
       ]
     },
     {
       icon: <Zap className="w-6 h-6" />,
       title: "4. Intellectual Property Rights",
       content: [
-        "All content on GameHub, including text, graphics, logos, images, and software, is the property of GameHub or its content suppliers.",
+        "All content on Theplayfree, including text, graphics, logos, images, and software, is the property of Theplayfree or its content suppliers.",
         "You may not reproduce, distribute, transmit, or display any content without our prior written permission.",
-        "User-generated content remains your property, but you grant GameHub a worldwide, royalty-free license to use it.",
+        "User-generated content remains your property, but you grant Theplayfree a worldwide, royalty-free license to use it.",
         "We respect intellectual property rights and will respond to valid DMCA notices.",
-        "Unauthorized use of GameHub's intellectual property may result in legal action."
+        "Unauthorized use of Theplayfree's intellectual property may result in legal action."
       ]
     },
     {
       icon: <Shield className="w-6 h-6" />,
       title: "5. Limitation of Liability",
       content: [
-        "GameHub is provided on an 'AS IS' and 'AS AVAILABLE' basis without warranties of any kind.",
+        "Theplayfree is provided on an 'AS IS' and 'AS AVAILABLE' basis without warranties of any kind.",
         "We do not warrant that the service will be uninterrupted, error-free, or secure.",
-        "GameHub shall not be liable for any indirect, incidental, special, consequential, or punitive damages.",
+        "Theplayfree shall not be liable for any indirect, incidental, special, consequential, or punitive damages.",
         "Our total liability shall not exceed the amount you paid for the service in the past 12 months.",
         "Some jurisdictions do not allow limitation of liability, so this may not apply to you."
       ]
@@ -68,10 +68,10 @@ export default function TermsOfService() {
       icon: <AlertCircle className="w-6 h-6" />,
       title: "6. Disclaimer of Warranties",
       content: [
-        "GameHub makes no representations or warranties regarding the accuracy of content.",
+        "Theplayfree makes no representations or warranties regarding the accuracy of content.",
         "We do not guarantee that the service will meet your requirements.",
         "We are not responsible for third-party content or services linked from our platform.",
-        "Your use of GameHub is at your own risk.",
+        "Your use of Theplayfree is at your own risk.",
         "We disclaim all warranties, express or implied, including merchantability and fitness for a particular purpose."
       ]
     },
@@ -79,9 +79,9 @@ export default function TermsOfService() {
       icon: <Scale className="w-6 h-6" />,
       title: "7. Indemnification",
       content: [
-        "You agree to indemnify and hold harmless GameHub from any claims, damages, or costs arising from your use of the service.",
+        "You agree to indemnify and hold harmless Theplayfree from any claims, damages, or costs arising from your use of the service.",
         "This includes claims resulting from your violation of these terms or infringement of third-party rights.",
-        "You agree to defend GameHub against any third-party claims related to your conduct.",
+        "You agree to defend Theplayfree against any third-party claims related to your conduct.",
         "We reserve the right to assume the exclusive defense of any claim for which you are required to indemnify us."
       ]
     },
@@ -89,9 +89,9 @@ export default function TermsOfService() {
       icon: <Gamepad2 className="w-6 h-6" />,
       title: "8. Termination of Service",
       content: [
-        "GameHub reserves the right to terminate or suspend your account at any time, with or without cause.",
+        "Theplayfree reserves the right to terminate or suspend your account at any time, with or without cause.",
         "Termination may occur for violation of these terms, illegal activity, or at our sole discretion.",
-        "Upon termination, your right to use GameHub immediately ceases.",
+        "Upon termination, your right to use Theplayfree immediately ceases.",
         "We may retain your data for legal, operational, or security purposes.",
         "Termination does not relieve you of any obligations or liabilities incurred prior to termination."
       ]
@@ -104,14 +104,14 @@ export default function TermsOfService() {
         "You agree to attempt to resolve disputes through informal negotiation first.",
         "If negotiation fails, disputes shall be resolved through binding arbitration.",
         "You waive the right to a jury trial and class action participation.",
-        "Arbitration shall take place in the jurisdiction where GameHub is located."
+        "Arbitration shall take place in the jurisdiction where Theplayfree is located."
       ]
     },
     {
       icon: <Globe className="w-6 h-6" />,
       title: "10. Modifications to Service",
       content: [
-        "GameHub reserves the right to modify, suspend, or discontinue the service at any time.",
+        "Theplayfree reserves the right to modify, suspend, or discontinue the service at any time.",
         "We may add, remove, or modify features without prior notice.",
         "We are not liable for any modification, suspension, or discontinuation of the service.",
         "We will make reasonable efforts to notify users of significant changes.",
@@ -191,7 +191,7 @@ export default function TermsOfService() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            Please read these terms carefully before using GameHub. By accessing our platform, you agree to be bound by these terms.
+            Please read these terms carefully before using Theplayfree. By accessing our platform, you agree to be bound by these terms.
           </motion.p>
 
           <motion.div
@@ -222,13 +222,13 @@ export default function TermsOfService() {
             className="bg-white rounded-2xl p-8 mb-8 shadow-sm border border-gray-200"
             variants={itemVariants}
           >
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Welcome to GameHub</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Welcome to Theplayfree</h2>
             <p className="text-gray-600 leading-relaxed mb-4">
-              These Terms of Service ("Terms") govern your use of GameHub and all related services, features, and content.
-              GameHub is a gaming platform that connects players, hosts tournaments, and provides gaming-related services.
+              These Terms of Service ("Terms") govern your use of Theplayfree and all related services, features, and content.
+              Theplayfree is a gaming platform that connects players, hosts tournaments, and provides gaming-related services.
             </p>
             <p className="text-gray-600 leading-relaxed">
-              Please read these Terms carefully. If you do not agree with any part of these Terms, you may not use GameHub.
+              Please read these Terms carefully. If you do not agree with any part of these Terms, you may not use Theplayfree.
               We reserve the right to update these Terms at any time, and your continued use of the service constitutes acceptance of any changes.
             </p>
           </motion.div>
@@ -244,7 +244,7 @@ export default function TermsOfService() {
             </h3>
             <div className="grid md:grid-cols-2 gap-4">
               {[
-                "You must be 13+ to use GameHub",
+                "You must be 13+ to use Theplayfree",
                 "You are responsible for your account security",
                 "No cheating, hacking, or exploits allowed",
                 "Respect intellectual property rights",
@@ -322,7 +322,7 @@ export default function TermsOfService() {
               <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
                 <p className="text-sm font-semibold text-red-900 mb-1">Age Restriction</p>
                 <p className="text-sm text-red-800">
-                  GameHub is not intended for users under 13 years of age. We do not knowingly collect personal information from children under 13.
+                  Theplayfree is not intended for users under 13 years of age. We do not knowingly collect personal information from children under 13.
                 </p>
               </div>
               <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
@@ -334,7 +334,7 @@ export default function TermsOfService() {
               <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
                 <p className="text-sm font-semibold text-blue-900 mb-1">Service Availability</p>
                 <p className="text-sm text-blue-800">
-                  GameHub is provided on an "AS IS" basis. We do not guarantee uninterrupted service or error-free operation.
+                  Theplayfree is provided on an "AS IS" basis. We do not guarantee uninterrupted service or error-free operation.
                 </p>
               </div>
             </div>
@@ -353,7 +353,7 @@ export default function TermsOfService() {
               Prohibited Content & Conduct
             </h3>
             <p className="text-gray-600 mb-4">
-              The following content and conduct are strictly prohibited on GameHub:
+              The following content and conduct are strictly prohibited on Theplayfree:
             </p>
             <div className="grid md:grid-cols-2 gap-4">
               {[
@@ -401,8 +401,8 @@ export default function TermsOfService() {
 
             <div className="grid md:grid-cols-2 gap-6">
               {[
-                { icon: Mail, title: "Email Us", text: "legal@gamehub.gg", href: "mailto:legal@gamehub.gg" },
-                { icon: Globe, title: "Visit Our Website", text: "www.gamehub.gg", href: "https://gamehub.gg" }
+                { icon: Mail, title: "Email Us", text: "legal@Theplayfree.gg", href: "mailto:legal@Theplayfree.gg" },
+                { icon: Globe, title: "Visit Our Website", text: "www.Theplayfree.gg", href: "https://Theplayfree.gg" }
               ].map((item, idx) => (
                 <motion.div
                   key={idx}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { Eye, EyeOff, Mail, Lock, User, Gamepad2 } from 'lucide-react';
 import { motion, useInView } from 'framer-motion';
@@ -48,6 +48,29 @@ export default function SignupPage() {
 
   const { mutate: signup, isPending, error } = useSignup();
 
+  // Set document metadata
+  useEffect(() => {
+    document.title = 'Sign Up - Theplayfree';
+    
+    // Set meta description
+    let metaDescription = document.querySelector('meta[name="description"]');
+    if (!metaDescription) {
+      metaDescription = document.createElement('meta');
+      metaDescription.setAttribute('name', 'description');
+      document.head.appendChild(metaDescription);
+    }
+    metaDescription.setAttribute('content', 'Create your Theplayfree account and join thousands of gamers. Start your gaming adventure today with free access to hundreds of games.');
+    
+    // Set canonical URL
+    let linkCanonical = document.querySelector('link[rel="canonical"]');
+    if (!linkCanonical) {
+      linkCanonical = document.createElement('link');
+      linkCanonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(linkCanonical);
+    }
+    linkCanonical.setAttribute('href', 'https://game-web-app1.vercel.app/signup');
+  }, []);
+
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -86,7 +109,7 @@ export default function SignupPage() {
             Create Account
           </h1>
           <p className="text-gray-600 mt-2 font-[poppins]">
-            Join GameHub and start your adventure
+            Join Theplayfree and start your adventure
           </p>
         </motion.div>
 

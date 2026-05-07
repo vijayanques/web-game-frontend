@@ -4,7 +4,7 @@
 
 // "use client";
 
-// const GameHubFooter = () => {
+// const TheplayfreeFooter = () => {
 //   // ── SVG Icons ──────────────────────────────────────────────────────────────
 //   const Icons = {
 //     Gamepad2: ({ size = 24 }: { size?: number }) => (
@@ -339,11 +339,11 @@
 //               <div className="mt-6 space-y-2.5">
 //                 <div className="flex items-center gap-2.5 text-xs text-gray-500">
 //                   <span className="text-orange-400/60"><Icons.Globe size={12} /></span>
-//                   <span>gamehub.gg</span>
+//                   <span>Theplayfree.gg</span>
 //                 </div>
 //                 <div className="flex items-center gap-2.5 text-xs text-gray-500">
 //                   <span className="text-orange-400/60"><Icons.Mail size={12} /></span>
-//                   <span>support@gamehub.gg</span>
+//                   <span>support@Theplayfree.gg</span>
 //                 </div>
 //                 <div className="flex items-center gap-2.5 text-xs text-gray-500">
 //                   <span className="text-orange-400/60"><Icons.MapPin size={12} /></span>
@@ -379,7 +379,7 @@
 //         {/* Bottom Bar */}
 //         <div className="pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
 //           <p className="text-xs text-gray-600">
-//             © 2025 <span className="text-gray-500">GameHub Inc.</span> All rights reserved.
+//             © 2025 <span className="text-gray-500">Theplayfree Inc.</span> All rights reserved.
 //           </p>
 //           <div className="flex items-center gap-2">
 //             <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse shadow-sm shadow-green-400/50" />
@@ -404,14 +404,14 @@
 //   );
 // };
 
-// export default GameHubFooter;
+// export default TheplayfreeFooter;
 
 
 
 
 // "use client";
 
-// const GameHubFooter = () => {
+// const TheplayfreeFooter = () => {
 //   // ── SVG Icons ──────────────────────────────────────────────────────────────
 //   const Icons = {
 //     Gamepad2: ({ size = 24 }: { size?: number }) => (
@@ -762,11 +762,11 @@
 //               <div className="mt-5 space-y-2 pt-5 border-t border-gray-200">
 //                 <div className="flex items-center gap-2 text-xs text-gray-400">
 //                   <span className="text-orange-400"><Icons.Globe size={12} /></span>
-//                   gamehub.gg
+//                   Theplayfree.gg
 //                 </div>
 //                 <div className="flex items-center gap-2 text-xs text-gray-400">
 //                   <span className="text-orange-400"><Icons.Mail size={12} /></span>
-//                   support@gamehub.gg
+//                   support@Theplayfree.gg
 //                 </div>
 //                 <div className="flex items-center gap-2 text-xs text-gray-400">
 //                   <span className="text-orange-400"><Icons.MapPin size={12} /></span>
@@ -780,7 +780,7 @@
 //         {/* ── Bottom Bar ── */}
 //         <div className="mt-10 pt-5 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-4">
 //           <p className="text-xs text-gray-400">
-//             © 2025 <span className="text-gray-600 font-semibold">GameHub Inc.</span> All rights reserved.
+//             © 2025 <span className="text-gray-600 font-semibold">Theplayfree Inc.</span> All rights reserved.
 //           </p>
 
 //           <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-full px-3 py-1.5 shadow-sm">
@@ -808,7 +808,7 @@
 //   );
 // };
 
-// export default GameHubFooter;
+// export default TheplayfreeFooter;
 
 
 
@@ -822,7 +822,7 @@ import * as LucideIcons from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { motion, useInView } from 'framer-motion';
 
-const GameHubFooter = () => {
+const TheplayfreeFooter = () => {
   const [emailValue, setEmailValue] = useState("");
   const [subscribed, setSubscribed] = useState(false);
   const router = useRouter();
@@ -1545,4 +1545,4 @@ const GameHubFooter = () => {
   );
 };
 
-export default GameHubFooter;
+export default TheplayfreeFooter;

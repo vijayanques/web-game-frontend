@@ -5,7 +5,7 @@
 // import { useCategory } from '@/contexts/CategoryContext';
 // // import CategoriesHeader from '@/components/Home/CategoriesHeader';
 // // import Allsection from '@/components/Home/All_games';
-// import GameHubFooter from '@/components/Footer';
+// import TheplayfreeFooter from '@/components/Footer';
 // import { useState } from "react";
 // import { Users, Star, Play } from "lucide-react";
 // import Link from "next/link";
@@ -56,7 +56,7 @@
 //             <>
 //                 {/* <Allsection /> */}
 
-//                 <GameHubFooter />
+//                 <TheplayfreeFooter />
 //             </>
 //         );
 //     }
@@ -67,7 +67,7 @@
 // import { useParams, redirect } from 'next/navigation';
 // import { useEffect, useState } from 'react';
 // import { useCategory } from '@/contexts/CategoryContext';
-// import GameHubFooter from '@/components/Footer';
+// import TheplayfreeFooter from '@/components/Footer';
 // import { Users, Star, Play } from "lucide-react";
 // import Link from "next/link";
 
@@ -183,7 +183,7 @@
 //         </div>
 //       </section>
 
-//       <GameHubFooter />
+//       <TheplayfreeFooter />
 //     </>
 //   );
 // }
@@ -194,7 +194,7 @@
 import { useParams, redirect } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useCategory } from '@/contexts/CategoryContext';
-import GameHubFooter from '@/components/Footer';
+import TheplayfreeFooter from '@/components/Footer';
 import { Users, Star, Play } from "lucide-react";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
@@ -333,7 +333,28 @@ export default function CategoryPage() {
         if (categoryId) {
             setSelectedCategory(categoryId);
         }
-    }, [categoryId, setSelectedCategory]);
+
+        // Set document metadata
+        if (currentCategory) {
+            document.title = `${categoryName} Games - Theplayfree`;
+            
+            let metaDescription = document.querySelector('meta[name="description"]');
+            if (!metaDescription) {
+                metaDescription = document.createElement('meta');
+                metaDescription.setAttribute('name', 'description');
+                document.head.appendChild(metaDescription);
+            }
+            metaDescription.setAttribute('content', `Explore our complete ${categoryName.toLowerCase()} game collection. Play free ${categoryName.toLowerCase()} games online at Theplayfree.`);
+            
+            let linkCanonical = document.querySelector('link[rel="canonical"]');
+            if (!linkCanonical) {
+                linkCanonical = document.createElement('link');
+                linkCanonical.setAttribute('rel', 'canonical');
+                document.head.appendChild(linkCanonical);
+            }
+            linkCanonical.setAttribute('href', `https://game-web-app1.vercel.app/category/${slug}`);
+        }
+    }, [categoryId, setSelectedCategory, currentCategory, categoryName, slug]);
 
     // Fetch games for this category
     const { data: apiGames = [], isLoading, error } = useQuery({
@@ -403,7 +424,7 @@ export default function CategoryPage() {
                 </div>
             </section>
 
-            <GameHubFooter />
+            <TheplayfreeFooter />
         </>
     );
 }
