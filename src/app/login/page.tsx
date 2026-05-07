@@ -58,8 +58,8 @@ export default function LoginPage() {
 
   return (
     <>
-      <div className="min-h-screen bg-[#E8E9ED] flex items-center justify-center px-4 ">
-        <div className="w-full max-w-md">
+      <div className="bg-[#E8E9ED] px-4 py-12">
+        <div className="w-full max-w-md mx-auto">
 
           {/* Logo Section */}
           <motion.div
