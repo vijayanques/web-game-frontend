@@ -34,8 +34,10 @@ async function fetchCategories() {
     }
     
     const data = await response.json();
-    // Handle the response format: { success: true, data: [...] }
-    return data.data || data.categories || (Array.isArray(data) ? data : []);
+    const categories = data.data || data.categories || (Array.isArray(data) ? data : []);
+    
+    // Filter only active categories
+    return categories.filter((cat: any) => cat.isActive !== false);
   } catch (error) {
     console.error('Error fetching categories for sitemap:', error);
     return [];
