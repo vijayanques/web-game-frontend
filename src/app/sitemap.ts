@@ -4,7 +4,8 @@ async function fetchGames() {
   try {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://game-backend-production-3988.up.railway.app';
     const response = await fetch(`${apiUrl}/api/games`, {
-      next: { revalidate: 3600 }, // Cache for 1 hour
+      next: { revalidate: 3600 },
+      timeout: 10000,
     });
     
     if (!response.ok) {
@@ -13,7 +14,6 @@ async function fetchGames() {
     }
     
     const data = await response.json();
-    // Handle the response format: { success: true, data: [...] }
     return data.data || data.games || (Array.isArray(data) ? data : []);
   } catch (error) {
     console.error('Error fetching games for sitemap:', error);
@@ -25,7 +25,8 @@ async function fetchCategories() {
   try {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://game-backend-production-3988.up.railway.app';
     const response = await fetch(`${apiUrl}/api/categories`, {
-      next: { revalidate: 3600 }, // Cache for 1 hour
+      next: { revalidate: 3600 },
+      timeout: 10000,
     });
     
     if (!response.ok) {
@@ -36,7 +37,6 @@ async function fetchCategories() {
     const data = await response.json();
     const categories = data.data || data.categories || (Array.isArray(data) ? data : []);
     
-    // Filter only active categories
     return categories.filter((cat: any) => cat.isActive !== false);
   } catch (error) {
     console.error('Error fetching categories for sitemap:', error);
