@@ -108,7 +108,7 @@ export const metadata: Metadata = {
   },
 
   verification: {
-    google: 'googleleae893e4229261858',
+    google: '6johWO9GkPOVjyaDvImIDpORJb_RVDiuVLKdsNDOb1k',
   },
 
   openGraph: {
