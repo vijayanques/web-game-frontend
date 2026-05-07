@@ -60,7 +60,7 @@ const nextConfig: NextConfig = {
 
   images: {
     unoptimized: true,
-    remotePatterns: [
+    remotePatterns: [ 
       { protocol: 'http', hostname: '**' },
       { protocol: 'https', hostname: '**' },
     ],
@@ -80,19 +80,12 @@ const nextConfig: NextConfig = {
           { key: 'Access-Control-Allow-Headers', value: 'Content-Type, Authorization' },
         ],
       },
+      // ✅ Sitemap fix
       {
         source: '/sitemap.xml',
         headers: [
           { key: 'Content-Type', value: 'text/xml; charset=utf-8' },
-          { key: 'Cache-Control', value: 'public, max-age=3600, s-maxage=3600' },
-        ],
-      },
-      {
-        source: '/robots.txt',
-        headers: [
-          { key: 'Content-Type', value: 'text/plain; charset=utf-8' },
-          { key: 'Cache-Control', value: 'public, max-age=3600, s-maxage=3600' },
-        ],
+        ], 
       },
     ];
   },

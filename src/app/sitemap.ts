@@ -1,12 +1,9 @@
 import { MetadataRoute } from 'next';
 
-export const dynamic = 'force-static';
-export const revalidate = 3600; // Revalidate every hour
-
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://game-web-app1.vercel.app';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://game-web-app1.vercel.app';
 
-  // Static routes
+  // Static routes - always included
   const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
@@ -58,11 +55,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  // Fetch categories
+  // Try to fetch categories
   let categoryRoutes: MetadataRoute.Sitemap = [];
   try {
-    const catResponse = await fetch('https://game-backend-production-3988.up.railway.app/api/categories', {
-      cache: 'no-store',
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://game-backend-production-3988.up.railway.app';
+    const catResponse = await fetch(`${apiUrl}/api/categories`, {
+      next: { revalidate: 3600 },
     });
     
     if (catResponse.ok) {
@@ -81,11 +79,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Error fetching categories:', error);
   }
 
-  // Fetch games
+  // Try to fetch games
   let gameRoutes: MetadataRoute.Sitemap = [];
   try {
-    const gameResponse = await fetch('https://game-backend-production-3988.up.railway.app/api/games', {
-      cache: 'no-store',
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://game-backend-production-3988.up.railway.app';
+    const gameResponse = await fetch(`${apiUrl}/api/games`, {
+      next: { revalidate: 3600 },
     });
     
     if (gameResponse.ok) {
