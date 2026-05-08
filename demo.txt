@@ -1,3 +1,7 @@
+
+this is sitemap.tsx
+
+
 import { MetadataRoute } from 'next';
 
 async function fetchGames() {
