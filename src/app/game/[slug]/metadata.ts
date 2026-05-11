@@ -23,19 +23,27 @@ interface GameData {
 
 async function fetchGameData(slug: string): Promise<GameData | null> {
   try {
-    const response = await fetch(`${API_BASE_URL}/games/${slug}`, {
-      next: { revalidate: 0 }, // No caching - always fetch fresh
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://game-backend-production-3988.up.railway.app/api';
+    console.log('🔍 Fetching game from:', `${apiUrl}/games/${slug}`);
+    
+    const response = await fetch(`${apiUrl}/games/${slug}`, {
+      cache: 'no-store', // Disable caching
     });
 
+    console.log('🔍 Response status:', response.status);
+
     if (!response.ok) {
+      console.error('❌ Failed to fetch game:', response.status);
       return null;
     }
 
     const result = await response.json();
+    console.log('✅ Game data:', result);
+    
     // Handle both direct data and wrapped response
     return result.data || result;
   } catch (error) {
-    console.error('Error fetching game data:', error);
+    console.error('❌ Error fetching game data:', error);
     return null;
   }
 }
