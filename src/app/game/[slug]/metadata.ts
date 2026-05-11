@@ -40,6 +40,8 @@ async function fetchGameData(slug: string): Promise<GameData | null> {
   }
 }
 
+export const revalidate = 0; // Disable caching for dynamic metadata
+
 export async function generateMetadata({
   params,
 }: {

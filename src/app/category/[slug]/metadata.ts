@@ -38,6 +38,8 @@ async function fetchCategoryData(slug: string): Promise<CategoryData | null> {
   }
 }
 
+export const revalidate = 0; // Disable caching for dynamic metadata
+
 export async function generateMetadata({
   params,
 }: {
