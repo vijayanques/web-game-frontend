@@ -58,8 +58,8 @@ export async function generateMetadata({
       
       // If SEO metadata exists, use it
       if (seoData.metaTitle) {
-        // Always use the correct frontend URL for canonical, ignore database value
-        const canonicalUrl = `https://game-web-app1.vercel.app/game/${slug}`;
+        // Use canonical URL from database if provided, otherwise generate it
+        const canonicalUrl = seoData.canonicalUrl || `https://game-web-app1.vercel.app/game/${slug}`;
         
         return {
           title: seoData.metaTitle,
