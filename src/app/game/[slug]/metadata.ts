@@ -58,17 +58,20 @@ export async function generateMetadata({
       
       // If SEO metadata exists, use it
       if (seoData.metaTitle) {
+        // Always use the correct frontend URL for canonical, ignore database value
+        const canonicalUrl = `https://game-web-app1.vercel.app/game/${slug}`;
+        
         return {
           title: seoData.metaTitle,
           description: seoData.metaDescription || '',
           keywords: seoData.metaKeywords?.split(',').map(k => k.trim()) || [],
           robots: seoData.robots || 'index, follow',
           alternates: {
-            canonical: seoData.canonicalUrl || `https://game-web-app1.vercel.app/game/${slug}`,
+            canonical: canonicalUrl,
           },
           openGraph: {
             type: 'website',
-            url: seoData.canonicalUrl || `https://game-web-app1.vercel.app/game/${slug}`,
+            url: canonicalUrl,
             title: seoData.ogTitle || seoData.metaTitle,
             description: seoData.ogDescription || seoData.metaDescription || '',
             images: seoData.ogImage ? [{
