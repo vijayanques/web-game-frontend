@@ -1,54 +1,26 @@
 // Game Page Metadata Generation
-// Server-side metadata generation for dynamic game pages
-
 import { Metadata } from 'next';
-import {
-  fetchSeoMetadata,
-  generateMetadataFromSeo,
-  generateGameStructuredData,
-} from '@/lib/seoMetadataFetcher';
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://theplayfree.com';
 
 interface GameData {
   id: number;
   title: string;
   slug: string;
   description?: string;
-  thumbnail?: string;
-  rating?: number;
-  genre?: string;
 }
 
-async function fetchGameData(slug: string): Promise<GameData | null> {
-  try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://game-backend-production-3988.up.railway.app/api';
-    console.log('🔍 Fetching game from:', `${apiUrl}/games/${slug}`);
-    
-    const response = await fetch(`${apiUrl}/games/${slug}`, {
-      cache: 'no-store', // Disable caching
-    });
-
-    console.log('🔍 Response status:', response.status);
-
-    if (!response.ok) {
-      console.error('❌ Failed to fetch game:', response.status);
-      return null;
-    }
-
-    const result = await response.json();
-    console.log('✅ Game data:', result);
-    
-    // Handle both direct data and wrapped response
-    return result.data || result;
-  } catch (error) {
-    console.error('❌ Error fetching game data:', error);
-    return null;
-  }
+interface SeoData {
+  metaTitle?: string;
+  metaDescription?: string;
+  metaKeywords?: string;
+  canonicalUrl?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  twitterTitle?: string;
+  twitterDescription?: string;
+  twitterImage?: string;
+  robots?: string;
 }
-
-export const revalidate = 0; // Disable caching for dynamic metadata
 
 export async function generateMetadata({
   params,
@@ -56,59 +28,77 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-
-  // Fetch game data
-  const game = await fetchGameData(slug);
-
-  if (!game) {
-    return {
-      title: 'Game Not Found',
-      description: 'The game you are looking for does not exist.',
-    };
-  }
-
-  // Fetch SEO metadata from backend - THIS IS THE ONLY SOURCE
-  const seoData = await fetchSeoMetadata('game', game.id);
   
-  console.log('🔍 Game ID:', game.id);
-  console.log('🔍 SEO Data fetched:', seoData);
+  try {
+    // Fetch game data
+    const gameResponse = await fetch(
+      `https://game-backend-production-3988.up.railway.app/api/games/${slug}`,
+      { cache: 'no-store' }
+    );
 
-  // If SEO metadata exists, use ONLY that
-  if (seoData && seoData.metaTitle) {
-    return {
-      title: seoData.metaTitle,
-      description: seoData.metaDescription || '',
-      keywords: seoData.metaKeywords ? seoData.metaKeywords.split(',').map(k => k.trim()) : [],
-      robots: seoData.robots || 'index, follow',
-      alternates: {
-        canonical: seoData.canonicalUrl || `${BASE_URL}/game/${slug}`,
-      },
-      openGraph: {
-        type: 'website',
-        url: seoData.canonicalUrl || `${BASE_URL}/game/${slug}`,
-        title: seoData.ogTitle || seoData.metaTitle,
-        description: seoData.ogDescription || seoData.metaDescription || '',
-        images: seoData.ogImage ? [
-          {
-            url: seoData.ogImage,
-            width: 1200,
-            height: 630,
-            alt: seoData.ogTitle || seoData.metaTitle,
+    if (!gameResponse.ok) {
+      console.error('Failed to fetch game:', gameResponse.status);
+      return {
+        title: 'Game Not Found',
+        description: 'The game you are looking for does not exist.',
+      };
+    }
+
+    const gameResult = await gameResponse.json();
+    const game: GameData = gameResult.data || gameResult;
+
+    // Fetch SEO metadata
+    const seoResponse = await fetch(
+      `https://game-backend-production-3988.up.railway.app/api/seo/game/${game.id}`,
+      { cache: 'no-store' }
+    );
+
+    if (seoResponse.ok) {
+      const seoData: SeoData = await seoResponse.json();
+      
+      // If SEO metadata exists, use it
+      if (seoData.metaTitle) {
+        return {
+          title: seoData.metaTitle,
+          description: seoData.metaDescription || '',
+          keywords: seoData.metaKeywords?.split(',').map(k => k.trim()) || [],
+          robots: seoData.robots || 'index, follow',
+          alternates: {
+            canonical: seoData.canonicalUrl || `https://game-web-app1.vercel.app/game/${slug}`,
           },
-        ] : [],
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title: seoData.twitterTitle || seoData.metaTitle,
-        description: seoData.twitterDescription || seoData.metaDescription || '',
-        images: seoData.twitterImage ? [seoData.twitterImage] : [],
-      },
+          openGraph: {
+            type: 'website',
+            url: seoData.canonicalUrl || `https://game-web-app1.vercel.app/game/${slug}`,
+            title: seoData.ogTitle || seoData.metaTitle,
+            description: seoData.ogDescription || seoData.metaDescription || '',
+            images: seoData.ogImage ? [{
+              url: seoData.ogImage,
+              width: 1200,
+              height: 630,
+              alt: seoData.ogTitle || seoData.metaTitle,
+            }] : [],
+          },
+          twitter: {
+            card: 'summary_large_image',
+            title: seoData.twitterTitle || seoData.metaTitle,
+            description: seoData.twitterDescription || seoData.metaDescription || '',
+            images: seoData.twitterImage ? [seoData.twitterImage] : [],
+          },
+        };
+      }
+    }
+
+    // Fallback to game title if no SEO metadata
+    return {
+      title: game.title,
+      description: game.description || '',
+    };
+
+  } catch (error) {
+    console.error('Error generating metadata:', error);
+    return {
+      title: 'Error Loading Game',
+      description: 'An error occurred while loading the game.',
     };
   }
-
-  // If no SEO metadata, return empty/minimal metadata
-  return {
-    title: game.title,
-    description: '',
-  };
 }
