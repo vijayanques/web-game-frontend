@@ -7,7 +7,9 @@ import { motion, useInView } from 'framer-motion';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useSignup } from '@/hooks/useAuth';
+import PageSeoHead from '@/components/PageSeoHead';
 import Footer from '@/components/Footer';
+import { showToast } from '@/lib/toast';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string()
@@ -48,28 +50,7 @@ export default function SignupPage() {
 
   const { mutate: signup, isPending, error } = useSignup();
 
-  // Set document metadata
-  useEffect(() => {
-    document.title = 'Sign Up - Theplayfree';
-    
-    // Set meta description
-    let metaDescription = document.querySelector('meta[name="description"]');
-    if (!metaDescription) {
-      metaDescription = document.createElement('meta');
-      metaDescription.setAttribute('name', 'description');
-      document.head.appendChild(metaDescription);
-    }
-    metaDescription.setAttribute('content', 'Create your Theplayfree account and join thousands of gamers. Start your gaming adventure today with free access to hundreds of games.');
-    
-    // Set canonical URL
-    let linkCanonical = document.querySelector('link[rel="canonical"]');
-    if (!linkCanonical) {
-      linkCanonical = document.createElement('link');
-      linkCanonical.setAttribute('rel', 'canonical');
-      document.head.appendChild(linkCanonical);
-    }
-    linkCanonical.setAttribute('href', 'https://game-web-app1.vercel.app/signup');
-  }, []);
+  // Set document metadata - removed, using PageSeoHead instead
 
   const formik = useFormik({
     initialValues: {
@@ -86,12 +67,21 @@ export default function SignupPage() {
         username: values.name,
         email: values.email,
         password: values.password,
+      }, {
+        onSuccess: () => {
+          showToast.success('Account created successfully! Please login.');
+        },
+        onError: (error) => {
+          showToast.error(error.message || 'Signup failed. Please try again.');
+        },
       });
     },
   });
 
   return (
     <>
+      <PageSeoHead pageSlug="/signup" />
+      
       <div className="bg-[#E8E9ED] px-4 py-12">
         <div className="w-full max-w-md mx-auto">
         

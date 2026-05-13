@@ -561,6 +561,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
 import { getStoredUser, useLogout, type User as UserType } from '@/hooks/useAuth';
+import NotificationBell from './NotificationBell';
 
 // Animation variants for scroll-triggered elements
 const logoVariants = {
@@ -737,301 +738,204 @@ export default function Header() {
 
       <div className="w-full font-sans">
         <div className="max-w-7xl mx-auto ">
-        <div className="w-full h-16 flex items-center justify-between relative">
+          <div className="w-full h-20 flex items-center justify-between relative">
 
-          {/* LEFT */}
-          <Link href="/">
+            {/* LEFT */}
+            <Link href="/">
+              <motion.div
+                ref={logoRef}
+                initial="hidden"
+                animate={isLogoInView ? "visible" : "hidden"}
+                variants={logoVariants}
+                className="flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity">
+                <img
+                  src="/Images/The Play free-04.png"
+                  alt="Theplayfree Logo"
+                  className="w-14 h-14 sm:w-35 sm:h-35 object-contain"
+                />
+              </motion.div>
+            </Link>
+
+            {/* CENTER - Hidden on mobile, shown on md+ */}
             <motion.div
-              ref={logoRef}
+              ref={searchBarRef}
               initial="hidden"
-              animate={isLogoInView ? "visible" : "hidden"}
-              variants={logoVariants}
-              className="flex items-center gap-2 sm:gap-3 flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity">
-              <div className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-xl bg-orange-500 text-white font-bold shadow-lg text-sm sm:text-base">
-                T
-              </div>
-              <span className="text-base sm:text-lg font-semibold font-[poppins] tracking-wide">
-                Theplayfree
-              </span>
-            </motion.div>
-          </Link>
-
-          {/* CENTER - Hidden on mobile, shown on md+ */}
-          <motion.div
-            ref={searchBarRef}
-            initial="hidden"
-            animate={isSearchBarInView ? "visible" : "hidden"}
-            variants={searchBarVariants}
-            className="hidden md:block absolute left-1/2 -translate-x-1/2 w-full max-w-sm lg:max-w-xl px-2 md:px-4">
-            <div ref={searchRef} className="relative">
-              <div className="group flex items-center 
+              animate={isSearchBarInView ? "visible" : "hidden"}
+              variants={searchBarVariants}
+              className="hidden md:block absolute left-1/2 -translate-x-1/2 w-full max-w-sm lg:max-w-xl px-2 md:px-4">
+              <div ref={searchRef} className="relative">
+                <div className="group flex items-center 
                 bg-white/60 backdrop-blur-md 
                 border border-gray-200
                 rounded-full px-3 md:px-4 lg:px-5 py-2 md:py-2.5 
                 focus-within:ring-2 focus-within:ring-orange-400
                 transition-all duration-300">
 
-                <Search className="w-3.5 h-3.5 md:w-4 md:h-4 text-gray-500 group-focus-within:text-orange-500 transition flex-shrink-0" />
+                  <Search className="w-3.5 h-3.5 md:w-4 md:h-4 text-gray-500 group-focus-within:text-orange-500 transition flex-shrink-0" />
 
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search games, tournaments..."
-                  className="bg-transparent font-[poppins] outline-none text-xs md:text-sm ml-2 md:ml-3 w-full placeholder-gray-500"
-                />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search games, tournaments..."
+                    className="bg-transparent font-[poppins] outline-none text-xs md:text-sm ml-2 md:ml-3 w-full placeholder-gray-500"
+                  />
 
-                {searchQuery && (
-                  <button onClick={clearSearch} className="ml-2 text-gray-400 hover:text-gray-600">
-                    <X className="w-3.5 h-3.5 md:w-4 md:h-4" />
-                  </button>
-                )}
-
-                <div className="absolute inset-0 rounded-full opacity-0 group-focus-within:opacity-100 transition duration-300 bg-orange-100/40 blur-xl -z-10"></div>
-              </div>
-
-              {/* Search Results Dropdown */}
-              {showSearchResults && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95, y: -10 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                  transition={{ duration: 0.2, ease: "easeOut" }}
-                  className="absolute top-full mt-2 w-full bg-white border border-gray-200 rounded-2xl shadow-2xl overflow-hidden z-[80]">
-                  {searchLoading ? (
-                    <div className="px-4 py-8 text-center">
-                      <div className="inline-block w-6 h-6 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
-                      <p className="text-sm text-gray-500 mt-2 font-[poppins]">Searching...</p>
-                    </div>
-                  ) : searchResults.length > 0 ? (
-                    <div className="max-h-96 overflow-y-auto">
-                      {searchResults.map((game) => (
-                        <div
-                          key={game.id}
-                          onClick={() => handleGameClick(game.slug)}
-                          className="flex items-center gap-3 px-4 py-3 hover:bg-orange-50 cursor-pointer transition-colors border-b border-gray-100 last:border-b-0"
-                        >
-                          {game.thumbnail_url ? (
-                            <img
-                              src={game.thumbnail_url}
-                              alt={game.title}
-                              className="w-12 h-12 rounded-lg object-cover flex-shrink-0"
-                            />
-                          ) : (
-                            <div className="w-12 h-12 rounded-lg bg-orange-100 flex items-center justify-center flex-shrink-0">
-                              <Gamepad2 className="w-6 h-6 text-orange-500" />
-                            </div>
-                          )}
-                          <div className="flex-1 min-w-0">
-                            <h4 className="text-sm font-semibold text-gray-900 font-[poppins] truncate">
-                              {game.title}
-                            </h4>
-                            {game.category_name && (
-                              <p className="text-xs text-gray-500 font-[poppins]">{game.category_name}</p>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="px-4 py-8 text-center">
-                      <Gamepad2 className="w-12 h-12 text-gray-300 mx-auto mb-2" />
-                      <p className="text-sm text-gray-500 font-[poppins]">No games found</p>
-                      <p className="text-xs text-gray-400 mt-1 font-[poppins]">Try a different search term</p>
-                    </div>
+                  {searchQuery && (
+                    <button onClick={clearSearch} className="ml-2 text-gray-400 hover:text-gray-600">
+                      <X className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                    </button>
                   )}
-                </motion.div>
-              )}
-            </div>
-          </motion.div>
 
-          {/* RIGHT */}
-          <motion.div
-            ref={rightSectionRef}
-            initial="hidden"
-            animate={isRightSectionInView ? "visible" : "hidden"}
-            className="flex items-center gap-3 sm:gap-5 flex-shrink-0">
-
-            {/* 🔔 Notification */}
-            <motion.div
-              custom={0}
-              initial="hidden"
-              animate={isRightSectionInView ? "visible" : "hidden"}
-              variants={itemVariants}
-              ref={ref}
-              className="relative z-[60]">
-
-              {/* Bell */}
-              <div
-                onClick={() => setOpen(!open)}
-                className="relative cursor-pointer group"
-              >
-                <div className="p-1.5 sm:p-2 rounded-full hover:bg-gray-100 transition">
-                  <Bell className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 group-hover:text-black transition" />
+                  <div className="absolute inset-0 rounded-full opacity-0 group-focus-within:opacity-100 transition duration-300 bg-orange-100/40 blur-xl -z-10"></div>
                 </div>
 
-                <span className="absolute top-1 right-1 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-red-500 rounded-full"></span>
-              </div>
-
-              {/* Dropdown */}
-              {open && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95, y: -10 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                  transition={{ duration: 0.2, ease: "easeOut" }}
-                  className="absolute right-0 mt-3 w-[calc(100vw-3rem)] max-w-[280px] sm:w-72 md:w-80 lg:w-96
-                  bg-white backdrop-blur-xl 
-                  border border-gray-200 
-                  rounded-2xl shadow-2xl 
-                  overflow-hidden z-[70]">
-
-                  {/* Header */}
-                  <div className="px-3 sm:px-4 md:px-5 py-2.5 md:py-3 border-b border-gray-200 flex justify-between items-center">
-                    <h3 className="font-[poppins] text-xs sm:text-sm font-semibold text-gray-800">
-                      Notifications
-                    </h3>
-                    <button className="cursor-pointer font-[poppins] text-[10px] sm:text-xs text-orange-500 hover:underline">
-                      Mark all read
-                    </button>
-                  </div>
-
-                  {/* List */}
-                  <div className="max-h-64 md:max-h-80 overflow-y-auto">
-
-                    {/* Item */}
-                    <div className="flex gap-2 sm:gap-3 px-3 sm:px-4 md:px-5 py-2.5 md:py-3 hover:bg-orange-50 transition cursor-pointer">
-                      <div className="w-8 h-8 md:w-9 md:h-9 flex-shrink-0 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600">
-                        <Gamepad2 className="w-4 h-4 md:w-5 md:h-5" />
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-xs md:text-sm font-[poppins] text-gray-700">
-                          New tournament available
-                        </p>
-                        <span className="text-[10px] md:text-xs font-[poppins] text-gray-400">
-                          2 min ago
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Item */}
-                    <div className="flex gap-2 sm:gap-3 px-3 sm:px-4 md:px-5 py-2.5 md:py-3 hover:bg-orange-50 transition cursor-pointer">
-                      <div className="w-8 h-8 md:w-9 md:h-9 flex-shrink-0 rounded-lg bg-green-100 flex items-center justify-center text-green-600">
-                        <Trophy className="w-4 h-4 md:w-5 md:h-5" />
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-xs md:text-sm font-[poppins] text-gray-700">
-                          You won a match!
-                        </p>
-                        <span className="text-[10px] md:text-xs font-[poppins] text-gray-400">
-                          1 hour ago
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Item */}
-                    <div className="flex gap-2 sm:gap-3 px-3 sm:px-4 md:px-5 py-2.5 md:py-3 hover:bg-orange-50 transition cursor-pointer">
-                      <div className="w-8 h-8 md:w-9 md:h-9 flex-shrink-0 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
-                        <Zap className="w-4 h-4 md:w-5 md:h-5" />
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-xs md:text-sm text-gray-700 font-[poppins]">
-                          New game added
-                        </p>
-                        <span className="text-[10px] md:text-xs text-gray-400 font-[poppins]">
-                          Yesterday
-                        </span>
-                      </div>
-                    </div>
-
-                  </div>
-
-                  {/* Footer */}
-                  <div className="text-center py-2.5 md:py-3 border-t border-gray-200">
-                    <button className="cursor-pointer text-xs md:text-sm font-[poppins] text-orange-500 hover:underline">
-                      View all notifications
-                    </button>
-                  </div>
-
-                </motion.div>
-              )}
-
-            </motion.div>
-
-            {/* Avatar or Login Button */}
-            {user ? (
-              <motion.div
-                custom={1}
-                initial="hidden"
-                animate={isRightSectionInView ? "visible" : "hidden"}
-                variants={itemVariants}
-                ref={profileRef}
-                className="relative z-[60]">
-                <div
-                  onClick={() => setProfileOpen(!profileOpen)}
-                  className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-full bg-orange-500 text-white font-semibold cursor-pointer shadow-md hover:scale-110 hover:shadow-lg transition-all duration-300 text-xs sm:text-sm"
-                >
-                  {user.username.substring(0, 2).toUpperCase()}
-                </div>
-
-                {/* Profile Dropdown */}
-                {profileOpen && (
+                {/* Search Results Dropdown */}
+                {showSearchResults && (
                   <motion.div
                     initial={{ opacity: 0, scale: 0.95, y: -10 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: -10 }}
                     transition={{ duration: 0.2, ease: "easeOut" }}
-                    className="absolute right-0 mt-3 w-[calc(100vw-3rem)] max-w-[220px] sm:w-56 md:w-64 
+                    className="absolute top-full mt-2 w-full bg-white border border-gray-200 rounded-2xl shadow-2xl overflow-hidden z-[80]">
+                    {searchLoading ? (
+                      <div className="px-4 py-8 text-center">
+                        <div className="inline-block w-6 h-6 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+                        <p className="text-sm text-gray-500 mt-2 font-[poppins]">Searching...</p>
+                      </div>
+                    ) : searchResults.length > 0 ? (
+                      <div className="max-h-96 overflow-y-auto">
+                        {searchResults.map((game) => (
+                          <div
+                            key={game.id}
+                            onClick={() => handleGameClick(game.slug)}
+                            className="flex items-center gap-3 px-4 py-3 hover:bg-orange-50 cursor-pointer transition-colors border-b border-gray-100 last:border-b-0"
+                          >
+                            {game.thumbnail_url ? (
+                              <img
+                                src={game.thumbnail_url}
+                                alt={game.title}
+                                className="w-12 h-12 rounded-lg object-cover flex-shrink-0"
+                              />
+                            ) : (
+                              <div className="w-12 h-12 rounded-lg bg-orange-100 flex items-center justify-center flex-shrink-0">
+                                <Gamepad2 className="w-6 h-6 text-orange-500" />
+                              </div>
+                            )}
+                            <div className="flex-1 min-w-0">
+                              <h4 className="text-sm font-semibold text-gray-900 font-[poppins] truncate">
+                                {game.title}
+                              </h4>
+                              {game.category_name && (
+                                <p className="text-xs text-gray-500 font-[poppins]">{game.category_name}</p>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="px-4 py-8 text-center">
+                        <Gamepad2 className="w-12 h-12 text-gray-300 mx-auto mb-2" />
+                        <p className="text-sm text-gray-500 font-[poppins]">No games found</p>
+                        <p className="text-xs text-gray-400 mt-1 font-[poppins]">Try a different search term</p>
+                      </div>
+                    )}
+                  </motion.div>
+                )}
+              </div>
+            </motion.div>
+
+            {/* RIGHT */}
+            <motion.div
+              ref={rightSectionRef}
+              initial="hidden"
+              animate={isRightSectionInView ? "visible" : "hidden"}
+              className="flex items-center gap-3 sm:gap-5 flex-shrink-0">
+
+              {/* 🔔 Notification */}
+              {/* <motion.div
+              custom={0}
+              initial="hidden"
+              animate={isRightSectionInView ? "visible" : "hidden"}
+              variants={itemVariants}
+              className="relative z-[60]">
+              <NotificationBell />
+            </motion.div> */}
+
+              {/* Avatar or Login Button */}
+              {user ? (
+                <motion.div
+                  custom={1}
+                  initial="hidden"
+                  animate={isRightSectionInView ? "visible" : "hidden"}
+                  variants={itemVariants}
+                  ref={profileRef}
+                  className="relative z-[60]">
+                  <div
+                    onClick={() => setProfileOpen(!profileOpen)}
+                    className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-full bg-orange-500 text-white font-semibold cursor-pointer shadow-md hover:scale-110 hover:shadow-lg transition-all duration-300 text-xs sm:text-sm"
+                  >
+                    {user.username.substring(0, 2).toUpperCase()}
+                  </div>
+
+                  {/* Profile Dropdown */}
+                  {profileOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                      transition={{ duration: 0.2, ease: "easeOut" }}
+                      className="absolute right-0 mt-3 w-[calc(100vw-3rem)] max-w-[220px] sm:w-56 md:w-64 
                     bg-white backdrop-blur-xl 
                     border border-gray-200 
                     rounded-2xl shadow-2xl 
                     overflow-hidden z-[70]">
 
-                    {/* Header */}
-                    <div className="px-3 sm:px-4 md:px-5 py-2.5 sm:py-3 md:py-4 border-b border-gray-200">
-                      <p className="text-xs sm:text-sm font-semibold text-gray-900 font-[poppins]">{user.username}</p>
-                      <p className="text-[10px] sm:text-xs text-orange-500 font-medium mt-0.5 font-[poppins]">Level {user.level}</p>
-                    </div>
+                      {/* Header */}
+                      <div className="px-3 sm:px-4 md:px-5 py-2.5 sm:py-3 md:py-4 border-b border-gray-200">
+                        <p className="text-xs sm:text-sm font-semibold text-gray-900 font-[poppins]">{user.username}</p>
+                        <p className="text-[10px] sm:text-xs text-orange-500 font-medium mt-0.5 font-[poppins]">Level {user.level}</p>
+                      </div>
 
-                    {/* Menu Items */}
-                    <div className="p-1.5 md:p-2">
-                      <Link href="/profile" onClick={() => setProfileOpen(false)} className="cursor-pointer font-[poppins] w-full flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-2.5 rounded-lg text-xs md:text-sm font-medium text-gray-700 hover:bg-orange-50 transition-colors">
-                        <User className="w-3.5 h-3.5 md:w-4 md:h-4 flex-shrink-0" />
-                        <span>Profile</span>
-                      </Link>
-                      <button className="cursor-pointer font-[poppins] w-full flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-2.5 rounded-lg text-xs md:text-sm font-medium text-gray-700 hover:bg-orange-50 transition-colors">
-                        <Settings className="w-3.5 h-3.5 md:w-4 md:h-4 flex-shrink-0" />
-                        <span>Settings</span>
-                      </button>
-                      <div className="font-[poppins] h-px bg-gray-200 my-1.5 md:my-2" />
-                      <button onClick={logout} className="cursor-pointer w-full flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-2.5 rounded-lg text-xs md:text-sm font-medium text-red-600 hover:bg-red-50 transition-colors">
-                        <LogOut className="w-3.5 h-3.5 md:w-4 md:h-4 flex-shrink-0" />
-                        <span>Logout</span>
-                      </button>
-                    </div>
+                      {/* Menu Items */}
+                      <div className="p-1.5 md:p-2">
+                        <Link href="/profile" onClick={() => setProfileOpen(false)} className="cursor-pointer font-[poppins] w-full flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-2.5 rounded-lg text-xs md:text-sm font-medium text-gray-700 hover:bg-orange-50 transition-colors">
+                          <User className="w-3.5 h-3.5 md:w-4 md:h-4 flex-shrink-0" />
+                          <span>Profile</span>
+                        </Link>
+                        <button className="cursor-pointer font-[poppins] w-full flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-2.5 rounded-lg text-xs md:text-sm font-medium text-gray-700 hover:bg-orange-50 transition-colors">
+                          <Settings className="w-3.5 h-3.5 md:w-4 md:h-4 flex-shrink-0" />
+                          <span>Settings</span>
+                        </button>
+                        <div className="font-[poppins] h-px bg-gray-200 my-1.5 md:my-2" />
+                        <button onClick={logout} className="cursor-pointer w-full flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-2.5 rounded-lg text-xs md:text-sm font-medium text-red-600 hover:bg-red-50 transition-colors">
+                          <LogOut className="w-3.5 h-3.5 md:w-4 md:h-4 flex-shrink-0" />
+                          <span>Logout</span>
+                        </button>
+                      </div>
 
-                  </motion.div>
-                )}
-              </motion.div>
-            ) : (
-              <motion.div
-                custom={1}
-                initial="hidden"
-                animate={isRightSectionInView ? "visible" : "hidden"}
-                variants={itemVariants}
-              >
-                <Link
-                  href="/login"
-                  className="px-3 sm:px-4 py-1.5 sm:py-2 bg-orange-500 text-white rounded-lg text-xs sm:text-sm font-semibold hover:bg-orange-600 transition-colors shadow-md font-[poppins]"
+                    </motion.div>
+                  )}
+                </motion.div>
+              ) : (
+                <motion.div
+                  custom={1}
+                  initial="hidden"
+                  animate={isRightSectionInView ? "visible" : "hidden"}
+                  variants={itemVariants}
                 >
-                  Login
-                </Link>
-              </motion.div>
-            )}
+                  <Link
+                    href="/login"
+                    className="px-3 sm:px-4 py-1.5 sm:py-2 bg-orange-500 text-white rounded-lg text-xs sm:text-sm font-semibold hover:bg-orange-600 transition-colors shadow-md font-[poppins]"
+                  >
+                    Login
+                  </Link>
+                </motion.div>
+              )}
 
-          </motion.div>
+            </motion.div>
 
-        </div>
+          </div>
         </div>
 
         {/* Mobile Search Bar - Shown only on mobile */}

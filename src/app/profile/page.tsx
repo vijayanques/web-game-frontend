@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { User, Mail, Trophy, Target, Calendar, LogOut } from 'lucide-react';
 import { getStoredUser, useLogout, type User as UserType } from '@/hooks/useAuth';
+import PageSeoHead from '@/components/PageSeoHead';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -18,24 +19,7 @@ export default function ProfilePage() {
       setUser(storedUser);
     }
 
-    // Set document metadata
-    document.title = 'My Profile - Theplayfree';
-    
-    let metaDescription = document.querySelector('meta[name="description"]');
-    if (!metaDescription) {
-      metaDescription = document.createElement('meta');
-      metaDescription.setAttribute('name', 'description');
-      document.head.appendChild(metaDescription);
-    }
-    metaDescription.setAttribute('content', 'View and manage your Theplayfree profile, gaming statistics, achievements, and account settings.');
-    
-    let linkCanonical = document.querySelector('link[rel="canonical"]');
-    if (!linkCanonical) {
-      linkCanonical = document.createElement('link');
-      linkCanonical.setAttribute('rel', 'canonical');
-      document.head.appendChild(linkCanonical);
-    }
-    linkCanonical.setAttribute('href', 'https://game-web-app1.vercel.app/profile');
+    // Set document metadata - removed, using PageSeoHead instead
   }, [router]);
 
   if (!user) {
@@ -47,8 +31,11 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8F4F1] py-12 px-4">
-      <div className="max-w-4xl mx-auto">
+    <>
+      <PageSeoHead pageSlug="/profile" />
+      
+      <div className="min-h-screen bg-[#F8F4F1] py-12 px-4">
+        <div className="max-w-4xl mx-auto">
         
         {/* Profile Header */}
         <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100 mb-6">
@@ -168,7 +155,8 @@ export default function ProfilePage() {
             Unauthorized access to other users' data is strictly prohibited.
           </p>
         </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

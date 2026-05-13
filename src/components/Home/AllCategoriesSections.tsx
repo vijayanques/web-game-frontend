@@ -2,11 +2,12 @@
 
 import { Star, Users, Play, ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { motion, useInView } from 'framer-motion';
 import { fetchCategories, Category } from '@/lib/api/categories';
 import { fetchGames, Game } from '@/lib/api/games';
+import ResponsiveAd from '../common/ResponsiveAd';
 
 // Animation variants for game cards
 const gameCardVariants = {

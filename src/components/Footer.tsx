@@ -1201,32 +1201,32 @@ const TheplayfreeFooter = () => {
       <div className="bg-[#E8E9ED] border-t border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7">
           <div className="py-6">
-          <motion.div
-            ref={statsRef}
-            initial="hidden"
-            animate={isStatsInView ? "visible" : "hidden"}
-            variants={statsContainerVariants}
-            className="grid grid-cols-2 md:grid-cols-4 gap-4 justify-items-center">
-            {stats.map((stat, i) => (
-              <motion.div
-                key={i}
-                custom={i}
-                variants={statItemVariants}
-                className="flex items-center justify-center gap-3 group">
-                <div className="w-11 h-11 rounded-xl bg-orange-50  flex items-center justify-center text-orange-500 group-hover:bg-orange-500 group-hover:text-white transition-all duration-300 flex-shrink-0 shadow-sm">
-                  {stat.icon}
-                </div>
-                <div>
-                  <div className=" font-[poppins] text-xl font-black text-gray-800 leading-none tracking-tight">
-                    {stat.value}
+            <motion.div
+              ref={statsRef}
+              initial="hidden"
+              animate={isStatsInView ? "visible" : "hidden"}
+              variants={statsContainerVariants}
+              className="grid grid-cols-2 md:grid-cols-4 gap-4 justify-items-center">
+              {stats.map((stat, i) => (
+                <motion.div
+                  key={i}
+                  custom={i}
+                  variants={statItemVariants}
+                  className="flex items-center justify-center gap-3 group">
+                  <div className="w-11 h-11 rounded-xl bg-orange-50  flex items-center justify-center text-orange-500 group-hover:bg-orange-500 group-hover:text-white transition-all duration-300 flex-shrink-0 shadow-sm">
+                    {stat.icon}
                   </div>
-                  <div className="text-[11px] font-[poppins] text-gray-500 mt-0.5 font-medium">
-                    {stat.label}
+                  <div>
+                    <div className=" font-[poppins] text-xl font-black text-gray-800 leading-none tracking-tight">
+                      {stat.value}
+                    </div>
+                    <div className="text-[11px] font-[poppins] text-gray-500 mt-0.5 font-medium">
+                      {stat.label}
+                    </div>
                   </div>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+                </motion.div>
+              ))}
+            </motion.div>
           </div>
         </div>
       </div>
@@ -1257,60 +1257,54 @@ const TheplayfreeFooter = () => {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
 
-          {/* ── Brand Column ── */}
-          <motion.div
-            ref={brandRef}
-            initial="hidden"
-            animate={isBrandInView ? "visible" : "hidden"}
-            variants={brandColumnVariants}
-            className="lg:col-span-4 space-y-6">
-            {/* Logo */}
-            <Link href="/" className="flex items-center gap-3 ">
-              <div className="w-11 h-11 rounded-2xl bg-orange-500 flex items-center justify-center">
-                <span className="text-white font-black text-xl">T</span>
-              </div>
-              <div>
-                <span className="text-base sm:text-lg font-semibold font-[poppins] tracking-wide">The<span className="text-orange-500">playfree</span></span>
-                {/* <div className="flex items-center gap-1 mt-0.5">
-                  {[1, 2, 3, 4, 5].map(s => (
-                    <span key={s} className="text-orange-400"><Icons.Star size={9} filled /></span>
-                  ))}
-                  <span className="text-[10px] text-gray-400 ml-1 font-medium">4.9 · 120k reviews</span>
-                </div> */}
-              </div>
-            </Link>
+            {/* ── Brand Column ── */}
+            <motion.div
+              ref={brandRef}
+              initial="hidden"
+              animate={isBrandInView ? "visible" : "hidden"}
+              variants={brandColumnVariants}
+              className="lg:col-span-4 space-y-6">
+              {/* Logo */}
+              <Link href="/">
+                <img
+                  src="/Images/The Play free-04.png"
+                  alt="Theplayfree Logo"
+                  className="w-14 h-14 sm:w-35 sm:h-35 object-contain"
+                />
+              </Link>
 
-            <p className="text-sm text-gray-500 font-[poppins] leading-relaxed">
-              The ultimate destination for gamers worldwide. Discover, play, and compete in hundreds of games across every genre imaginable.
-            </p>
 
-            {/* Featured Mini Games */}
-            <div className="bg-white/60 rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
-              <div className="px-4 pt-3 pb-2 border-b border-gray-100 flex items-center justify-between">
-                <span className="text-[11px] font-black font-[poppins] text-gray-600 uppercase tracking-widest">Top Games</span>
-                <a href="#" className="text-[11px] font-[poppins] text-orange-500 font-bold hover:text-orange-600">View all</a>
-              </div>
-              {featuredGames.map((game, i) => (
-                <div key={i} className="px-4 py-2.5 flex items-center justify-between hover:bg-orange-50 transition-colors group cursor-pointer border-b border-gray-50 last:border-0">
-                  <div className="flex items-center gap-3">
-                    <div className="w-7 h-7 rounded-lg bg-orange-500 flex items-center justify-center text-white text-[10px] font-[poppins] font-black">
-                      {i + 1}
-                    </div>
-                    <span className="text-sm font-semibold text-gray-700 group-hover:text-orange-500 font-[poppins] transition-colors">{game.name}</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-[11px] text-gray-500 font-[poppins]">{game.players} playing</span>
-                    <div className="flex items-center gap-0.5">
-                      <span className="text-orange-400"><Icons.Star size={9} filled /></span>
-                      <span className="text-[10px] font-bold font-[poppins] text-gray-600">{game.rating}</span>
-                    </div>
-                  </div>
+              <p className="text-sm text-gray-500 font-[poppins] leading-relaxed">
+                The ultimate destination for gamers worldwide. Discover, play, and compete in hundreds of games across every genre imaginable.
+              </p>
+
+              {/* Featured Mini Games */}
+              <div className="bg-white/60 rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+                <div className="px-4 pt-3 pb-2 border-b border-gray-100 flex items-center justify-between">
+                  <span className="text-[11px] font-black font-[poppins] text-gray-600 uppercase tracking-widest">Top Games</span>
+                  <a href="#" className="text-[11px] font-[poppins] text-orange-500 font-bold hover:text-orange-600">View all</a>
                 </div>
-              ))}
-            </div>
+                {featuredGames.map((game, i) => (
+                  <div key={i} className="px-4 py-2.5 flex items-center justify-between hover:bg-orange-50 transition-colors group cursor-pointer border-b border-gray-50 last:border-0">
+                    <div className="flex items-center gap-3">
+                      <div className="w-7 h-7 rounded-lg bg-orange-500 flex items-center justify-center text-white text-[10px] font-[poppins] font-black">
+                        {i + 1}
+                      </div>
+                      <span className="text-sm font-semibold text-gray-700 group-hover:text-orange-500 font-[poppins] transition-colors">{game.name}</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-[11px] text-gray-500 font-[poppins]">{game.players} playing</span>
+                      <div className="flex items-center gap-0.5">
+                        <span className="text-orange-400"><Icons.Star size={9} filled /></span>
+                        <span className="text-[10px] font-bold font-[poppins] text-gray-600">{game.rating}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
 
-            {/* Newsletter */}
-            {/* <div className="bg-white/60  rounded-2xl p-4 border border-gray-200 shadow-sm relative overflow-hidden">
+              {/* Newsletter */}
+              {/* <div className="bg-white/60  rounded-2xl p-4 border border-gray-200 shadow-sm relative overflow-hidden">
               <div className="" />
               <div className="absolute top-2 right-2 text-orange-400">
                 <Icons.Mail size={28} />
@@ -1344,164 +1338,164 @@ const TheplayfreeFooter = () => {
               </div>
             </div> */}
 
-            {/* Socials */}
-            <div>
-              <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-3 font-[poppins]">Join Our Community</p>
-              <div className="flex items-center gap-2">
-                {socials.map((s, i) => (
-                  <a key={i} href="#" aria-label={s.label}
-                    className={`w-9 h-9 rounded-xl bg-white border border-gray-200 shadow-sm flex items-center justify-center text-gray-500 ${s.bg} hover:text-white hover:border-transparent hover:shadow-md transition-all duration-200 hover:-translate-y-0.5`}
-                  >
-                    {s.icon}
-                  </a>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-
-          {/* ── Links Area ── */}
-          <motion.div
-            ref={linksRef}
-            initial="hidden"
-            animate={isLinksInView ? "visible" : "hidden"}
-            variants={linksColumnVariants}
-            className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-8 lg:pl-6 lg:border-l border-gray-200">
-
-            {/* Explore */}
-            <div>
-              <div className="flex items-center gap-2 mb-5">
-                <div className="w-7 h-7 rounded-lg bg-orange-500 flex items-center justify-center text-white shadow-sm shadow-orange-200">
-                  <Icons.Joystick size={15} />
-                </div>
-                <h4 className="text-gray-700 font-black text-xs uppercase tracking-widest font-[poppins]">Explore</h4>
-              </div>
-              <ul className="space-y-1">
-                {quickLinks.map((link, i) => (
-                  <li key={i}>
-                    <button
-                      onClick={() => {
-                        if (link.label === "All Games") {
-                          // Scroll to all games section with offset to show heading
-                          const allGamesSection = document.querySelector('[data-section="all-games"]');
-                          if (allGamesSection) {
-                            const yOffset = -100; // Offset to show heading (adjust as needed)
-                            const y = allGamesSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
-                            window.scrollTo({ top: y, behavior: 'smooth' });
-                          }
-                        } else if (link.href === '/') {
-                          router.push('/');
-                        } else if (link.href !== '#') {
-                          router.push(link.href);
-                        }
-                      }}
-                      className="w-full group flex items-center justify-between text-sm text-gray-500 font-[poppins] hover:text-orange-500 transition-colors duration-200 font-medium py-1.5 px-2.5 rounded-lg hover:bg-orange-50"
+              {/* Socials */}
+              <div>
+                <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-3 font-[poppins]">Join Our Community</p>
+                <div className="flex items-center gap-2">
+                  {socials.map((s, i) => (
+                    <a key={i} href="#" aria-label={s.label}
+                      className={`w-9 h-9 rounded-xl bg-white border border-gray-200 shadow-sm flex items-center justify-center text-gray-500 ${s.bg} hover:text-white hover:border-transparent hover:shadow-md transition-all duration-200 hover:-translate-y-0.5`}
                     >
-                      <span>{link.label}</span>
-                      {link.badge && (
-                        <span className={`text-[9px] font-black px-1.5 py-0.5 rounded-full ${link.badgeType === "live"
-                          ? "bg-red-500 text-white animate-pulse"
-                          : "bg-gray-100 text-gray-500 group-hover:bg-orange-100 group-hover:text-orange-500"
-                          }`}>
-                          {link.badge}
-                        </span>
-                      )}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Categories */}
-            <div>
-              <div className="flex items-center gap-2 mb-5">
-                <div className="w-7 h-7 rounded-lg bg-orange-500 flex items-center justify-center text-white shadow-sm shadow-orange-200">
-                  <Icons.Swords size={15} />
-                </div>
-                <h4 className="text-gray-700 font-black text-xs uppercase tracking-widest font-[poppins]">Categories</h4>
-              </div>
-              {categoriesLoading ? (
-                <ul className="space-y-1">
-                  {[1, 2, 3, 4, 5, 6].map((i) => (
-                    <li key={i} className="py-1.5 px-2.5">
-                      <div className="h-4 bg-gray-200 rounded animate-pulse" />
-                    </li>
+                      {s.icon}
+                    </a>
                   ))}
-                </ul>
-              ) : (
+                </div>
+              </div>
+            </motion.div>
+
+            {/* ── Links Area ── */}
+            <motion.div
+              ref={linksRef}
+              initial="hidden"
+              animate={isLinksInView ? "visible" : "hidden"}
+              variants={linksColumnVariants}
+              className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-8 lg:pl-6 lg:border-l border-gray-200">
+
+              {/* Explore */}
+              <div>
+                <div className="flex items-center gap-2 mb-5">
+                  <div className="w-7 h-7 rounded-lg bg-orange-500 flex items-center justify-center text-white shadow-sm shadow-orange-200">
+                    <Icons.Joystick size={15} />
+                  </div>
+                  <h4 className="text-gray-700 font-black text-xs uppercase tracking-widest font-[poppins]">Explore</h4>
+                </div>
                 <ul className="space-y-1">
-                  {footerCategories.map((cat, i) => (
+                  {quickLinks.map((link, i) => (
                     <li key={i}>
                       <button
                         onClick={() => {
-                          // Navigate to category page using slug
-                          router.push(`/category/${cat.slug}`);
+                          if (link.label === "All Games") {
+                            // Scroll to all games section with offset to show heading
+                            const allGamesSection = document.querySelector('[data-section="all-games"]');
+                            if (allGamesSection) {
+                              const yOffset = -100; // Offset to show heading (adjust as needed)
+                              const y = allGamesSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                              window.scrollTo({ top: y, behavior: 'smooth' });
+                            }
+                          } else if (link.href === '/') {
+                            router.push('/');
+                          } else if (link.href !== '#') {
+                            router.push(link.href);
+                          }
                         }}
-                        className="w-full group flex items-center justify-between text-sm font-[poppins] text-gray-500 hover:text-orange-500 transition-colors duration-200 font-medium py-1.5 px-2.5 rounded-lg hover:bg-orange-50"
+                        className="w-full group flex items-center justify-between text-sm text-gray-500 font-[poppins] hover:text-orange-500 transition-colors duration-200 font-medium py-1.5 px-2.5 rounded-lg hover:bg-orange-50"
                       >
-                        <span className="flex items-center gap-2">
-                          <span className="text-gray-500 group-hover:text-orange-400 transition-colors">{cat.icon}</span>
-                          {cat.label}
-                        </span>
-                        {cat.count && (
-                          <span className="text-[10px] bg-gray-100 text-gray-500 font-[poppins] px-2 py-0.5 rounded-full group-hover:bg-orange-100 group-hover:text-orange-500 transition-colors font-bold">
-                            {cat.count}
+                        <span>{link.label}</span>
+                        {link.badge && (
+                          <span className={`text-[9px] font-black px-1.5 py-0.5 rounded-full ${link.badgeType === "live"
+                            ? "bg-red-500 text-white animate-pulse"
+                            : "bg-gray-100 text-gray-500 group-hover:bg-orange-100 group-hover:text-orange-500"
+                            }`}>
+                            {link.badge}
                           </span>
                         )}
                       </button>
                     </li>
                   ))}
                 </ul>
-              )}
-            </div>
-
-            {/* Support + Contact */}
-            <div>
-              <div className="flex items-center gap-2 mb-5">
-                <div className="w-7 h-7 rounded-lg bg-orange-500 flex items-center justify-center text-white shadow-sm shadow-orange-200">
-                  <Icons.Headphones size={15} />
-                </div>
-                <h4 className="text-gray-700 font-black text-xs uppercase tracking-widest font-[poppins]">Support</h4>
               </div>
-              <ul className="space-y-1 mb-6">
-                {support.map((item, i) => (
-                  <li key={i}>
-                    <a href={item.href}
-                      className="group flex items-center text-sm font-[poppins] text-gray-500 hover:text-orange-500 transition-colors duration-200 font-medium py-1.5 px-2.5 rounded-lg hover:bg-orange-50"
-                    >
-                      {item.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
 
-              {/* Contact card */}
-              <div className="bg-white/60 rounded-2xl p-4 border border-gray-200 shadow-sm space-y-2.5">
-                <p className="text-[10px] font-black text-gray-500 font-[poppins] uppercase tracking-widest mb-3">Contact</p>
-                <a href="#" className="flex items-center gap-2.5 text-xs text-gray-500 font-[poppins] hover:text-orange-500 transition-colors group">
-                  <div className="w-6 h-6 rounded-lg text-gray-500 border border-orange-100 flex items-center justify-center  group-hover:bg-orange-500 group-hover:text-white transition-all">
-                    <Icons.Globe size={15} />
+              {/* Categories */}
+              <div>
+                <div className="flex items-center gap-2 mb-5">
+                  <div className="w-7 h-7 rounded-lg bg-orange-500 flex items-center justify-center text-white shadow-sm shadow-orange-200">
+                    <Icons.Swords size={15} />
                   </div>
-                  Theplayfree.com
-                </a>
-                <a href="#" className="flex font-[poppins] items-center gap-2.5 text-xs text-gray-500 hover:text-orange-500 transition-colors group">
-                  <div className="w-6 h-6 rounded-lg text-gray-500 border border-orange-100 flex items-center justify-center  group-hover:bg-orange-500 group-hover:text-white transition-all">
-                    <Icons.Mail size={15} />
+                  <h4 className="text-gray-700 font-black text-xs uppercase tracking-widest font-[poppins]">Categories</h4>
+                </div>
+                {categoriesLoading ? (
+                  <ul className="space-y-1">
+                    {[1, 2, 3, 4, 5, 6].map((i) => (
+                      <li key={i} className="py-1.5 px-2.5">
+                        <div className="h-4 bg-gray-200 rounded animate-pulse" />
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <ul className="space-y-1">
+                    {footerCategories.map((cat, i) => (
+                      <li key={i}>
+                        <button
+                          onClick={() => {
+                            // Navigate to category page using slug
+                            router.push(`/category/${cat.slug}`);
+                          }}
+                          className="w-full group flex items-center justify-between text-sm font-[poppins] text-gray-500 hover:text-orange-500 transition-colors duration-200 font-medium py-1.5 px-2.5 rounded-lg hover:bg-orange-50"
+                        >
+                          <span className="flex items-center gap-2">
+                            <span className="text-gray-500 group-hover:text-orange-400 transition-colors">{cat.icon}</span>
+                            {cat.label}
+                          </span>
+                          {cat.count && (
+                            <span className="text-[10px] bg-gray-100 text-gray-500 font-[poppins] px-2 py-0.5 rounded-full group-hover:bg-orange-100 group-hover:text-orange-500 transition-colors font-bold">
+                              {cat.count}
+                            </span>
+                          )}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+              {/* Support + Contact */}
+              <div>
+                <div className="flex items-center gap-2 mb-5">
+                  <div className="w-7 h-7 rounded-lg bg-orange-500 flex items-center justify-center text-white shadow-sm shadow-orange-200">
+                    <Icons.Headphones size={15} />
                   </div>
-                  Theplayfree.com
-                </a>
-                <div className=" cursor-pointer flex font-[poppins]  items-center gap-2.5 text-xs text-gray-500 hover:text-orange-500 transition-colors group">
-                  <div className="w-6 h-6 rounded-lg text-gray-500 border border-orange-100 flex items-center justify-center  group-hover:bg-orange-500 group-hover:text-white transition-all">
-                    <Icons.MapPin size={15} />
+                  <h4 className="text-gray-700 font-black text-xs uppercase tracking-widest font-[poppins]">Support</h4>
+                </div>
+                <ul className="space-y-1 mb-6">
+                  {support.map((item, i) => (
+                    <li key={i}>
+                      <a href={item.href}
+                        className="group flex items-center text-sm font-[poppins] text-gray-500 hover:text-orange-500 transition-colors duration-200 font-medium py-1.5 px-2.5 rounded-lg hover:bg-orange-50"
+                      >
+                        {item.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Contact card */}
+                <div className="bg-white/60 rounded-2xl p-4 border border-gray-200 shadow-sm space-y-2.5">
+                  <p className="text-[10px] font-black text-gray-500 font-[poppins] uppercase tracking-widest mb-3">Contact</p>
+                  <a href="#" className="flex items-center gap-2.5 text-xs text-gray-500 font-[poppins] hover:text-orange-500 transition-colors group">
+                    <div className="w-6 h-6 rounded-lg text-gray-500 border border-orange-100 flex items-center justify-center  group-hover:bg-orange-500 group-hover:text-white transition-all">
+                      <Icons.Globe size={15} />
+                    </div>
+                    Theplayfree.com
+                  </a>
+                  <a href="#" className="flex font-[poppins] items-center gap-2.5 text-xs text-gray-500 hover:text-orange-500 transition-colors group">
+                    <div className="w-6 h-6 rounded-lg text-gray-500 border border-orange-100 flex items-center justify-center  group-hover:bg-orange-500 group-hover:text-white transition-all">
+                      <Icons.Mail size={15} />
+                    </div>
+                    Theplayfree.com
+                  </a>
+                  <div className=" cursor-pointer flex font-[poppins]  items-center gap-2.5 text-xs text-gray-500 hover:text-orange-500 transition-colors group">
+                    <div className="w-6 h-6 rounded-lg text-gray-500 border border-orange-100 flex items-center justify-center  group-hover:bg-orange-500 group-hover:text-white transition-all">
+                      <Icons.MapPin size={15} />
+                    </div>
+                    San Francisco, CA
                   </div>
-                  San Francisco, CA
                 </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </div>
-      </div>
 
-      {/* ── Bottom Bar ── */}
+        {/* ── Bottom Bar ── */}
         <motion.div
           ref={bottomBarRef}
           initial="hidden"
@@ -1509,28 +1503,28 @@ const TheplayfreeFooter = () => {
           variants={bottomBarVariants}
           className="bg-[#E8E9ED] border-t border-gray-200">
           <div className="max-w-7xl mx-auto py-6">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-xs text-gray-500">
-              © 2026 <span className="text-gray-600 font-bold">Theplayfree</span> · Made with for gamers
-            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <p className="text-xs text-gray-500">
+                © 2026 <span className="text-gray-600 font-bold">Theplayfree</span> · Made with for gamers
+              </p>
 
-            <div className="flex items-center gap-2 bg-white/60  border border-gray-200 rounded-full px-3 py-1.5 shadow-sm">
-              <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse shadow-sm shadow-green-300" />
-              <span className="text-[11px] text-gray-500 font-semibold font-[poppins]">All systems operational</span>
-            </div>
+              <div className="flex items-center gap-2 bg-white/60  border border-gray-200 rounded-full px-3 py-1.5 shadow-sm">
+                <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse shadow-sm shadow-green-300" />
+                <span className="text-[11px] text-gray-500 font-semibold font-[poppins]">All systems operational</span>
+              </div>
 
-            <div className="flex items-center gap-1">
-              {[
-                { label: "Privacy", href: "/privacy-policy" },
-                { label: "Terms", href: "/terms-of-service" }
-              ].map((item, i, arr) => (
-                <span key={item.label} className="flex items-center">
-                  <a href={item.href} className="text-xs text-gray-500 hover:text-orange-500 transition-colors font-medium px-2 font-[poppins]">{item.label}</a>
-                  {i < arr.length - 1 && <span className="text-gray-200">·</span>}
-                </span>
-              ))}
+              <div className="flex items-center gap-1">
+                {[
+                  { label: "Privacy", href: "/privacy-policy" },
+                  { label: "Terms", href: "/terms-of-service" }
+                ].map((item, i, arr) => (
+                  <span key={item.label} className="flex items-center">
+                    <a href={item.href} className="text-xs text-gray-500 hover:text-orange-500 transition-colors font-medium px-2 font-[poppins]">{item.label}</a>
+                    {i < arr.length - 1 && <span className="text-gray-200">·</span>}
+                  </span>
+                ))}
+              </div>
             </div>
-          </div>
           </div>
         </motion.div>
       </div>

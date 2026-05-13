@@ -3,6 +3,7 @@
 import { useState, useEffect, use, useRef } from 'react'
 import { notFound } from 'next/navigation'
 import { motion, useInView } from 'framer-motion'
+import Head from 'next/head'
 import Footer from '@/components/Footer'
 import StarRating from '@/components/StarRating'
 import {
@@ -11,6 +12,7 @@ import {
   IconTag, IconCheck, IconChevronRight, IconUsers,
   IconTrophy, IconClock, IconDownload, IconStar,
 } from '@/components/Icons'
+import ResponsiveAd from '@/components/common/ResponsiveAd'
 
 /* ─── TYPES ──────────────────────────────────────────── */
 interface GameData {
@@ -55,6 +57,20 @@ interface SimilarGame {
   videoUrl?: string
 }
 
+interface SeoMetadata {
+  metaTitle?: string
+  metaDescription?: string
+  metaKeywords?: string
+  canonicalUrl?: string
+  ogTitle?: string
+  ogDescription?: string
+  ogImage?: string
+  twitterTitle?: string
+  twitterDescription?: string
+  twitterImage?: string
+  robots?: string
+}
+
 const TABS = ['All', 'Overview', 'Gameplay']
 
 /* ─── COMPONENT ──────────────────────────────────────── */
@@ -63,6 +79,7 @@ export default function GameDetailPage({ params }: { params: Promise<{ slug: str
 
   const [game, setGame] = useState<GameData | null>(null)
   const [similarGames, setSimilarGames] = useState<SimilarGame[]>([])
+  const [seoMetadata, setSeoMetadata] = useState<SeoMetadata | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [mounted, setMounted] = useState(false)
@@ -247,6 +264,17 @@ export default function GameDetailPage({ params }: { params: Promise<{ slug: str
         }
 
         setGame(normalizedGame)
+
+        // Fetch SEO metadata
+        try {
+          const seoResponse = await fetch(`${apiUrl}/api/seo/game/${normalizedGame.id}`)
+          if (seoResponse.ok) {
+            const seoData = await seoResponse.json()
+            setSeoMetadata(seoData)
+          }
+        } catch (seoError) {
+          console.log('SEO metadata not found, using defaults')
+        }
 
         // Fetch similar games based on category
         const categoryId = gameData.data.categoryId || gameData.data.category_id || (typeof gameData.data.category === 'object' ? gameData.data.category.id : null)
@@ -477,7 +505,31 @@ export default function GameDetailPage({ params }: { params: Promise<{ slug: str
   }
 
   return (
-    <div className="min-h-screen bg-gray-100" suppressHydrationWarning>
+    <>
+      <Head>
+        {/* Basic Meta Tags */}
+        <title>{seoMetadata?.metaTitle || `${game.title} - Play Free Online | Theplayfree`}</title>
+        <meta name="description" content={seoMetadata?.metaDescription || game.description || `Play ${game.title} online for free. ${game.description?.substring(0, 100)}...`} />
+        {seoMetadata?.metaKeywords && <meta name="keywords" content={seoMetadata.metaKeywords} />}
+        <meta name="robots" content={seoMetadata?.robots || 'index, follow'} />
+        {seoMetadata?.canonicalUrl && <link rel="canonical" href={seoMetadata.canonicalUrl} />}
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={`https://game-web-app1.vercel.app/game/${game.slug}`} />
+        <meta property="og:title" content={seoMetadata?.ogTitle || seoMetadata?.metaTitle || game.title} />
+        <meta property="og:description" content={seoMetadata?.ogDescription || seoMetadata?.metaDescription || game.description} />
+        <meta property="og:image" content={seoMetadata?.ogImage || game.thumbnail} />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content={`https://game-web-app1.vercel.app/game/${game.slug}`} />
+        <meta name="twitter:title" content={seoMetadata?.twitterTitle || seoMetadata?.ogTitle || game.title} />
+        <meta name="twitter:description" content={seoMetadata?.twitterDescription || seoMetadata?.ogDescription || game.description} />
+        <meta name="twitter:image" content={seoMetadata?.twitterImage || seoMetadata?.ogImage || game.thumbnail} />
+      </Head>
+
+      <div className="min-h-screen bg-gray-100" suppressHydrationWarning>
       <main className="px-3 sm:px-4 py-4 sm:py-5 bg-[#E8E9ED]" suppressHydrationWarning>
         <div className="max-w-7xl mx-auto">
         {/* Breadcrumb */}
@@ -926,7 +978,6 @@ export default function GameDetailPage({ params }: { params: Promise<{ slug: str
             </div>
           </div>
 
-          {/* ═══ RIGHT: SIDEBAR ═══ */}
           <aside className="w-full lg:w-[450px] shrink-0 flex flex-col gap-3 sm:gap-4">
             {/* Play button card */}
             <div className="bg-white/60 rounded-xl sm:rounded-2xl border border-gray-200 p-3 sm:p-4">
@@ -1211,6 +1262,7 @@ export default function GameDetailPage({ params }: { params: Promise<{ slug: str
 
       <Footer />
     </div>
+    </>
   )
 }
 

@@ -5,29 +5,9 @@ import { Shield, Lock, Eye, UserCheck, Database, Bell, Mail, Globe, FileText, Al
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import PageSeoHead from '@/components/PageSeoHead';
 
 export default function PrivacyPolicy() {
-  // Set document metadata
-  useEffect(() => {
-    document.title = 'Privacy Policy - Theplayfree';
-    
-    let metaDescription = document.querySelector('meta[name="description"]');
-    if (!metaDescription) {
-      metaDescription = document.createElement('meta');
-      metaDescription.setAttribute('name', 'description');
-      document.head.appendChild(metaDescription);
-    }
-    metaDescription.setAttribute('content', 'Learn how Theplayfree collects, uses, and protects your personal information. Read our comprehensive privacy policy and data protection practices.');
-    
-    let linkCanonical = document.querySelector('link[rel="canonical"]');
-    if (!linkCanonical) {
-      linkCanonical = document.createElement('link');
-      linkCanonical.setAttribute('rel', 'canonical');
-      document.head.appendChild(linkCanonical);
-    }
-    linkCanonical.setAttribute('href', 'https://game-web-app1.vercel.app/privacy-policy');
-  }, []);
-
   const sections = [
     {
       icon: <FileText className="w-6 h-6" />,
@@ -161,7 +141,12 @@ export default function PrivacyPolicy() {
   };
 
   return (
-    <div className="min-h-screen bg-[#E8E9ED] w-full overflow-x-hidden">
+    <>
+      <PageSeoHead
+        pageSlug="/privacy-policy"
+      />
+      
+      <div className="min-h-screen bg-[#E8E9ED] w-full overflow-x-hidden">
       {/* Hero Section */}
       <motion.div 
         className="relative w-full"
@@ -417,5 +402,6 @@ export default function PrivacyPolicy() {
 
       <Footer />
     </div>
+    </>
   );
 }

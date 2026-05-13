@@ -4,8 +4,9 @@ import { FileText, AlertCircle, CheckCircle, XCircle, Scale, Zap, Shield, Users,
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import PageSeoHead from '@/components/PageSeoHead';
 
-export default function TermsOfService() {
+function TermsOfService() {
   const sections = [
     {
       icon: <FileText className="w-6 h-6" />,
@@ -160,7 +161,12 @@ export default function TermsOfService() {
   };
 
   return (
-    <div className="min-h-screen bg-[#E8E9ED] w-full overflow-x-hidden">
+    <>
+      <PageSeoHead
+        pageSlug="/terms-of-service"
+      />
+      
+      <div className="min-h-screen bg-[#E8E9ED] w-full overflow-x-hidden">
       {/* Hero Section */}
       <motion.div
         className="relative w-full"
@@ -458,5 +464,8 @@ export default function TermsOfService() {
 
       <Footer />
     </div>
+    </>
   );
 }
+
+export default TermsOfService;

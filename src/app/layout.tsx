@@ -77,9 +77,14 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Poppins } from 'next/font/google';
 import QueryProvider from "@/providers/QueryProvider";
 import { CategoryProvider } from "@/contexts/CategoryContext";
+import { NotificationProvider } from "@/contexts/NotificationContext";
 import Header from "@/components/Header";
 import CategoriesHeader from "@/components/Home/CategoriesHeader";
 import CustomCursor from "@/components/CustomCursor";
+import ToastProvider from "@/components/ToastProvider";
+import NotificationBanner from "@/components/NotificationBanner";
+import { AdSenseProvider } from "@/providers/AdSenseProvider";
+import Script from "next/script";
 
 import "./globals.css";
 
@@ -98,41 +103,12 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Theplayfree - Free Browser Games",
-  description: "ThePlayFree is your destination for quick, free, and entertaining browser games.",
-  keywords: ["free games", "browser games", "online games", "play free"],
-  authors: [{ name: "Theplayfree" }],
-
-  alternates: {
-    canonical: 'https://game-web-app1.vercel.app',
-  },
-
   icons: {
     // icon: "/Images/favicon.png",
   },
 
   verification: {
     google: '6johWO9GkPOVjyaDvImIDpORJb_RVDiuVLKdsNDOb1k',
-  },
-
-  openGraph: {
-    title: "Theplayfree - Free Browser Games",
-    description: "ThePlayFree is your destination for quick, free, and entertaining browser games.",
-    type: "website",
-    url: 'https://game-web-app1.vercel.app',
-    images: [
-      {
-        url: "/Images/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Theplayfree - Free Browser Games",
-      },
-    ],
-  },
-
-  robots: {
-    index: true,
-    follow: true,
   },
 };
 
@@ -167,16 +143,28 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-your-client-id" // Replace with actual ID or handle via provider
+          crossOrigin="anonymous"
+          strategy="lazyOnload"
+        />
       </head>
       <body className="min-h-full flex flex-col">
         <CustomCursor />
         <QueryProvider>
-          <CategoryProvider>
-            <Header />
-            <CategoriesHeader />
-            {children}
-          </CategoryProvider>
+          <NotificationProvider>
+            <AdSenseProvider>
+              <NotificationBanner />
+              <CategoryProvider>
+                <Header />
+                <CategoriesHeader />
+                {children}
+              </CategoryProvider>
+            </AdSenseProvider>
+          </NotificationProvider>
         </QueryProvider>
+        <ToastProvider />
       </body>
     </html>
   );

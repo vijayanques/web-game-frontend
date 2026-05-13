@@ -7,7 +7,9 @@ import { motion, useInView } from 'framer-motion';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useLogin } from '@/hooks/useAuth';
+import PageSeoHead from '@/components/PageSeoHead';
 import Footer from '@/components/Footer';
+import { showToast } from '@/lib/toast';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -73,12 +75,21 @@ export default function LoginPage() {
       login({
         email: values.email,
         password: values.password,
+      }, {
+        onSuccess: () => {
+          showToast.success('Login successful! Welcome back.');
+        },
+        onError: (error) => {
+          showToast.error(error.message || 'Login failed. Please try again.');
+        },
       });
     },
   });
 
   return (
     <>
+      <PageSeoHead pageSlug="/login" />
+      
       <div className="bg-[#E8E9ED] px-4 py-12">
         <div className="w-full max-w-md mx-auto">
 
@@ -141,9 +152,17 @@ export default function LoginPage() {
 
               {/* Password Field */}
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2 font-[poppins]">
-                  Password
-                </label>
+                <div className="flex items-center justify-between mb-2">
+                  <label htmlFor="password" className="block text-sm font-medium text-gray-700 font-[poppins]">
+                    Password
+                  </label>
+                  <Link 
+                    href="/forgot-password" 
+                    className="text-sm text-orange-500 hover:text-orange-600 font-semibold font-[poppins]"
+                  >
+                    Forgot Password?
+                  </Link>
+                </div>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <input
@@ -168,8 +187,6 @@ export default function LoginPage() {
                   <p className="mt-1 text-xs text-red-600 font-[poppins]">{formik.errors.password}</p>
                 )}
               </div>
-
-           
 
               {/* Submit Button */}
               <button
