@@ -172,85 +172,72 @@ export default function MosaicGrid() {
   }));
 
   return (
-    <section data-section="all-games" className="px-4 sm:px-6 md:px-7 pt-6 sm:pt-8 pb-2 bg-[#E8E9ED] overflow-x-hidden">
-      <div className="max-w-[1600px] mx-auto flex flex-col xl:flex-row gap-6 items-start">
-        
-        {/* Left Sidebar Ad - Floats outside the main 7xl content area on wide screens */}
-        <div className="hidden 2xl:block w-[180px] shrink-0 sticky top-24">
-          <ResponsiveAd slot="left_sidebar_ad" layout="vertical" />
-        </div>
+    <section data-section="all-games" className="pt-6 sm:pt-8 pb-2 bg-[#E8E9ED] overflow-x-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7">
+        {/* Header */}
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={headerVariants}
+          className="flex justify-between items-center mb-4 sm:mb-6">
+          <div>
+            <motion.h2
+              initial="hidden"
+              animate="visible"
+              variants={titleVariants}
+              className="font-[poppins] text-xl sm:text-2xl font-semibold text-gray-900 tracking-tight">
+              All Games
+            </motion.h2>
+            <motion.p
+              initial="hidden"
+              animate="visible"
+              variants={subtitleVariants}
+              className="text-xs sm:text-sm font-[poppins] text-gray-500 mt-1">
+              Explore our complete gaming collection
+            </motion.p>
+          </div>
+        </motion.div>
 
-        <div className="flex-1 w-full max-w-7xl mx-auto">
-          {/* Header */}
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={headerVariants}
-            className="flex justify-between items-center mb-4 sm:mb-6">
-            <div>
-              <motion.h2
-                initial="hidden"
-                animate="visible"
-                variants={titleVariants}
-                className="font-[poppins] text-xl sm:text-2xl font-semibold text-gray-900 tracking-tight">
-                All Games
-              </motion.h2>
-              <motion.p
-                initial="hidden"
-                animate="visible"
-                variants={subtitleVariants}
-                className="text-xs sm:text-sm font-[poppins] text-gray-500 mt-1">
-                Explore our complete gaming collection
-              </motion.p>
-            </div>
-          </motion.div>
+        {/* Responsive Grid */}
+        {isLoading ? (
+          <div className="grid gap-2 sm:gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 auto-rows-[120px] sm:auto-rows-[140px] md:auto-rows-[150px]">
+            {[...Array(12)].map((_, i) => (
+              <div
+                key={i}
+                className="rounded-2xl bg-gray-200 animate-pulse"
+              />
+            ))}
+          </div>
+        ) : error ? (
+          <div className="text-center py-12">
+            <p className="text-red-500 font-[poppins]">Failed to load games. Please try again.</p>
+          </div>
+        ) : games.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-gray-500 font-[poppins]">No games found in this category.</p>
+          </div>
+        ) : (
+          <div className="grid gap-2 sm:gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 auto-rows-[120px] sm:auto-rows-[140px] md:auto-rows-[150px]">
+            {games.map((game, index) => {
+              // Inject an ad card every 12th position
+              const adIndex = Math.floor((index + 1) / 12);
+              const isAdPosition = (index + 1) % 12 === 0;
 
-          {/* Responsive Grid */}
-          {isLoading ? (
-            <div className="grid gap-2 sm:gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 auto-rows-[120px] sm:auto-rows-[140px] md:auto-rows-[150px]">
-              {[...Array(12)].map((_, i) => (
-                <div
-                  key={i}
-                  className="rounded-2xl bg-gray-200 animate-pulse"
-                />
-              ))}
-            </div>
-          ) : error ? (
-            <div className="text-center py-12">
-              <p className="text-red-500 font-[poppins]">Failed to load games. Please try again.</p>
-            </div>
-          ) : games.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-gray-500 font-[poppins]">No games found in this category.</p>
-            </div>
-          ) : (
-            <div className="grid gap-2 sm:gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 auto-rows-[120px] sm:auto-rows-[140px] md:auto-rows-[150px]">
-              {games.map((game, index) => {
-                // Inject an ad card every 12th position
-                const adIndex = Math.floor((index + 1) / 12);
-                const isAdPosition = (index + 1) % 12 === 0;
-
-                return (
-                  <React.Fragment key={`${game.slug}-${index}`}>
-                    <Card {...game} index={index} />
-                    {isAdPosition && (
-                      <ResponsiveAd
-                        slot={`in_grid_ad_${adIndex}`}
-                        layout="card"
-                        className="h-full"
-                      />
-                    )}
-                  </React.Fragment>
-                );
-              })}
-            </div>
-          )}
-        </div>
-
-        {/* Right Sidebar Ad - Floats outside the main 7xl content area on wide screens */}
-        <div className="hidden 2xl:block w-[180px] shrink-0 sticky top-24">
-          <ResponsiveAd slot="right_sidebar_ad" layout="vertical" />
-        </div>
+              return (
+                <React.Fragment key={`${game.slug}-${index}`}>
+                  <Card {...game} index={index} />
+                  {isAdPosition && (
+                    <ResponsiveAd
+                      slot={`in_grid_ad_${adIndex}`}
+                      layout="card"
+                      className="h-full"
+                    />
+                  )}
+                </React.Fragment>
+              );
+            })}
+          </div>
+        )}
       </div>
     </section>
   );

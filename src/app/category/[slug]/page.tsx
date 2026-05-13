@@ -9,6 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchGames, Game } from "@/lib/api/games";
 import { fetchCategories, Category } from "@/lib/api/categories";
 import { useParams, redirect } from 'next/navigation';
+import ResponsiveAd from '@/components/common/ResponsiveAd';
 
 interface CardProps {
     title: string;
@@ -161,33 +162,51 @@ export default function CategoryPage() {
 
     return (
         <>
-            <div className='bg-[#E8E9ED]'>
-                <section className=" max-w-7xl mx-auto ">
-                    <h2 className="font-[poppins]  mt-4 text-xl sm:text-2xl font-semibold text-gray-900 tracking-tight">{categoryName} Games</h2>
+            <div className='bg-[#E8E9ED] py-6'>
+                <ResponsiveAd slot="homepage_banner" className="max-w-7xl mx-auto mb-8 px-4" />
+                
+                <div className="max-w-[1600px] mx-auto flex flex-col xl:flex-row gap-4 justify-center px-4">
+                    {/* Left Sidebar Ad */}
+                    <div className="hidden xl:block w-[160px] shrink-0 sticky top-24 self-start">
+                        <ResponsiveAd slot="left_sidebar_ad" layout="vertical" />
+                    </div>
 
-                    {gamesLoading ? (
-                        <div className="text-white">Loading games...</div>
-                    ) : games.length === 0 ? (
-                        <div className="text-white">No games found in this category</div>
-                    ) : (
-                        <div className="grid gap-3 grid-cols-2 pt-3 md:grid-cols-4 lg:grid-cols-6 auto-rows-[140px]">
-                            {games.map((game: Game) => (
-                                <Card
-                                    key={game.id}
-                                    title={game.title}
-                                    slug={game.slug || game.title.toLowerCase().replace(/\s+/g, '-')}
-                                    image={game.thumbnail || ''}
-                                    videoUrl={game.videoUrl}
-                                    players={game.plays ? game.plays.toString() : '0'}
-                                    rating={game.rating || 0}
-                                    category={categoryName}
-                                    col={1}
-                                    row={1}
-                                />
-                            ))}
-                        </div>
-                    )}
-                </section>
+                    <section className="flex-1 max-w-7xl w-full">
+                        <h2 className="font-[poppins] mt-4 text-xl sm:text-2xl font-semibold text-gray-900 tracking-tight">{categoryName} Games</h2>
+
+                        {gamesLoading ? (
+                            <div className="text-white">Loading games...</div>
+                        ) : games.length === 0 ? (
+                            <div className="text-white">No games found in this category</div>
+                        ) : (
+                            <div className="grid gap-3 grid-cols-2 pt-3 md:grid-cols-4 lg:grid-cols-6 auto-rows-[140px]">
+                                {games.map((game: Game) => (
+                                    <Card
+                                        key={game.id}
+                                        title={game.title}
+                                        slug={game.slug || game.title.toLowerCase().replace(/\s+/g, '-')}
+                                        image={game.thumbnail || ''}
+                                        videoUrl={game.videoUrl}
+                                        players={game.plays ? game.plays.toString() : '0'}
+                                        rating={game.rating || 0}
+                                        category={categoryName}
+                                        col={1}
+                                        row={1}
+                                    />
+                                ))}
+                            </div>
+                        )}
+                    </section>
+
+                    {/* Right Sidebar Ad */}
+                    <div className="hidden xl:block w-[160px] shrink-0 sticky top-24 self-start">
+                        <ResponsiveAd slot="right_sidebar_ad" layout="vertical" />
+                    </div>
+                </div>
+
+                <ResponsiveAd slot="homepage_mid_banner_1" className="max-w-7xl mx-auto mt-12 px-4" />
+                <ResponsiveAd slot="homepage_mid_banner_2" className="max-w-7xl mx-auto mt-12 px-4" />
+                <ResponsiveAd slot="footer_ad" className="max-w-7xl mx-auto mt-12 px-4" />
             </div>
 
             <TheplayfreeFooter />

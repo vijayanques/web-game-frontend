@@ -531,7 +531,16 @@ export default function GameDetailPage({ params }: { params: Promise<{ slug: str
 
       <div className="min-h-screen bg-gray-100" suppressHydrationWarning>
       <main className="px-3 sm:px-4 py-4 sm:py-5 bg-[#E8E9ED]" suppressHydrationWarning>
-        <div className="max-w-7xl mx-auto">
+        <ResponsiveAd slot="homepage_banner" className="max-w-7xl mx-auto mb-6" />
+        
+        <div className="max-w-[1600px] mx-auto flex flex-col xl:flex-row gap-4 justify-center">
+          {/* Left Sidebar Ad */}
+          <div className="hidden xl:block w-[160px] shrink-0 sticky top-24 self-start">
+            <ResponsiveAd slot="left_sidebar_ad" layout="vertical" />
+          </div>
+
+          <div className="flex-1 max-w-7xl w-full">
+
         {/* Breadcrumb */}
         <motion.nav
           ref={breadcrumbRef}
@@ -1257,7 +1266,17 @@ export default function GameDetailPage({ params }: { params: Promise<{ slug: str
             </motion.div>
           </aside>
         </div>
+          </div>
+
+          {/* Right Sidebar Ad */}
+          <div className="hidden xl:block w-[160px] shrink-0 sticky top-24 self-start">
+            <ResponsiveAd slot="right_sidebar_ad" layout="vertical" />
+          </div>
         </div>
+
+        <ResponsiveAd slot="homepage_mid_banner_1" className="max-w-7xl mx-auto mt-8" />
+        <ResponsiveAd slot="homepage_mid_banner_2" className="max-w-7xl mx-auto mt-8" />
+        <ResponsiveAd slot="footer_ad" className="max-w-7xl mx-auto mt-8" />
       </main>
 
       <Footer />

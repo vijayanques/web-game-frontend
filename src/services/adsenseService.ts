@@ -8,11 +8,13 @@ export interface AdConfig {
   responsive: boolean;
   imageUrl?: string;
   targetUrl?: string;
+  allowedPages?: string[]; // New property for page-wise management
+  status?: boolean;
 }
 
 export const getAdConfigs = async (): Promise<AdConfig[]> => {
   try {
-    const response = await fetch(`${API_URL}/api/adsense/config`);
+    const response = await fetch(`${API_URL}/api/adsense/config`, { cache: 'no-store' });
     if (!response.ok) throw new Error('Failed to fetch ad configs');
     const data = await response.json();
     return data.data || [];
