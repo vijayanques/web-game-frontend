@@ -37,22 +37,22 @@ const ResponsiveAd: React.FC<ResponsiveAdProps> = ({ slot, className = '', style
   // If no target pages are selected, we show on all pages by default (as noted in Admin UI)
   if (config.allowedPages && config.allowedPages.length > 0) {
     // Ensure allowedPages is an array (in case it comes as a string from API)
-    const allowedList = (Array.isArray(config.allowedPages) 
-      ? config.allowedPages 
+    const allowedList = (Array.isArray(config.allowedPages)
+      ? config.allowedPages
       : (config.allowedPages as string).split(',')).map(s => s.trim().toLowerCase());
 
     // Handle "all" keyword if present
     if (!allowedList.includes('all')) {
       const path = pathname.toLowerCase();
-      const currentPage = path === '/' ? 'home' : 
-                          (path === '/game' || path.startsWith('/game/')) ? 'game' : 
-                          (path === '/category' || path.startsWith('/category/')) ? 'category' : 
-                          'other';
-      
+      const currentPage = path === '/' ? 'home' :
+        (path === '/game' || path.startsWith('/game/')) ? 'game' :
+          (path === '/category' || path.startsWith('/category/')) ? 'category' :
+            'other';
+
       // Check if the current page type OR the actual pathname is in the allowed list
-      const isAllowed = allowedList.includes(currentPage) || 
-                        allowedList.includes(path);
-                        
+      const isAllowed = allowedList.includes(currentPage) ||
+        allowedList.includes(path);
+
       if (!isAllowed) return null;
     }
   }
@@ -68,7 +68,7 @@ const ResponsiveAd: React.FC<ResponsiveAdProps> = ({ slot, className = '', style
   if (config.adType === 'static' || config.adType === 'promotional' || (!config.adClient && config.imageUrl)) {
     return (
       <div
-        className={`promo-ad-container overflow-hidden shadow-sm border border-gray-200/50 bg-white transition-all hover:shadow-md group ${layoutClasses} ${className}`}
+        className={`promo-ad-container overflow-hidden rounded-2xl shadow-sm border border-gray-200/60 bg-white/80 backdrop-blur-sm transition-all duration-300 hover:shadow-md hover:border-orange-200/80 group ${layoutClasses} ${className}`}
         style={{ ...style }}
       >
         <a
@@ -84,8 +84,11 @@ const ResponsiveAd: React.FC<ResponsiveAdProps> = ({ slot, className = '', style
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
             />
           ) : (
-            <div className="w-full h-full p-4 flex flex-col items-center justify-center bg-linear-to-r from-purple-50 to-indigo-50 border-2 border-dashed border-purple-200 rounded-xl">
-              <p className="text-purple-600 font-bold text-center text-xs sm:text-sm font-[poppins]">Ads Space</p>
+            <div className="w-full h-full p-4 flex flex-col items-center justify-center bg-linear-to-br from-orange-50/50 via-white to-orange-100/30 border-2 border-dashed border-orange-200/50 rounded-2xl">
+              <div className="w-10 h-10 mb-2 rounded-full bg-orange-100 flex items-center justify-center">
+                <span className="text-orange-500 font-bold text-lg font-[poppins]">A</span>
+              </div>
+              <p className="text-orange-500 font-semibold text-center text-[10px] uppercase tracking-widest font-[poppins]">Advertisement</p>
             </div>
           )}
         </a>
@@ -96,7 +99,7 @@ const ResponsiveAd: React.FC<ResponsiveAdProps> = ({ slot, className = '', style
   // Handle Google AdSense (Future Ready)
   return (
     <div
-      className={`adsense-container w-full overflow-hidden ${layoutClasses} ${className}`}
+      className={`adsense-container w-full overflow-hidden bg-gray-50/30 border border-gray-200/50 transition-all duration-300 hover:border-orange-200/50 ${layoutClasses} ${className}`}
       style={{ ...style }}
     >
       <ins

@@ -85,6 +85,7 @@ import ToastProvider from "@/components/ToastProvider";
 import NotificationBanner from "@/components/NotificationBanner";
 import { AdSenseProvider } from "@/providers/AdSenseProvider";
 import Script from "next/script";
+import { TrafficTracker } from "@/components/TrafficTracker";
 
 import "./globals.css";
 
@@ -155,6 +156,7 @@ export default function RootLayout({
         <QueryProvider>
           <NotificationProvider>
             <AdSenseProvider>
+              <TrafficTracker />
               <NotificationBanner />
               <CategoryProvider>
                 <Header />

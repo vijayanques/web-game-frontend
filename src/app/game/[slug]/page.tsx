@@ -13,6 +13,7 @@ import {
   IconTrophy, IconClock, IconDownload, IconStar,
 } from '@/components/Icons'
 import ResponsiveAd from '@/components/common/ResponsiveAd'
+import { getStoredUser } from '@/hooks/useAuth'
 
 /* ─── TYPES ──────────────────────────────────────────── */
 interface GameData {
@@ -346,6 +347,34 @@ export default function GameDetailPage({ params }: { params: Promise<{ slug: str
           categoryId: game.category_id || game.categoryId || 1
         })
       })
+
+      // New Traffic Tracker for Game Started
+      const ua = navigator.userAgent;
+      let device = 'desktop';
+      if (/mobile/i.test(ua)) device = 'mobile';
+      else if (/tablet/i.test(ua)) device = 'tablet';
+
+      let browser = 'other';
+      if (/chrome|crios/i.test(ua) && !/edge|edg|opr|brave/i.test(ua)) browser = 'chrome';
+      else if (/safari/i.test(ua) && !/chrome|crios/i.test(ua)) browser = 'safari';
+      else if (/firefox|fxios/i.test(ua)) browser = 'firefox';
+      else if (/edg/i.test(ua)) browser = 'edge';
+
+      const user = getStoredUser();
+      const username = user?.username || user?.name || 'Guest';
+
+      await fetch(`${apiUrl}/api/traffic/track`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username,
+          page: `game/${game.slug}`,
+          device,
+          browser,
+          action: 'game_started',
+          sessionTime: '0s',
+        })
+      });
     } catch (err) {
       console.error('Failed to track activity:', err)
     }
