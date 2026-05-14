@@ -68,6 +68,34 @@ export const loginUser = async (credentials: LoginCredentials): Promise<AuthResp
   return data;
 };
 
+// Google Login API call
+export const googleLoginUser = async (googleData: { email: string; username: string; googleId: string }): Promise<AuthResponse> => {
+  const response = await fetch(`${API_URL}/api/users/google-login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(googleData),
+    credentials: 'include',
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || 'Google login failed');
+  }
+
+  const data = await response.json();
+  
+  if (data.success && data.token) {
+    clientCookies.setToken(data.token);
+  }
+  if (data.success && data.data) {
+    clientCookies.setUser(data.data);
+  }
+
+  return data;
+};
+
 // Signup API call
 export const signupUser = async (credentials: SignupCredentials): Promise<AuthResponse> => {
   try {

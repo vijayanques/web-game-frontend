@@ -1,4 +1,5 @@
 import { initializeApp } from 'firebase/app';
+import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 
 const firebaseConfig = {
@@ -31,4 +32,8 @@ try {
   console.warn('   This is normal for non-browser environments');
 }
 
-export { app, messaging };
+// Initialize Auth
+const auth = getAuth(app);
+const googleProvider = new GoogleAuthProvider();
+
+export { app, messaging, auth, googleProvider };

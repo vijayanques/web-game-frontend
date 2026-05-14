@@ -1042,6 +1042,7 @@ const TheplayfreeFooter = () => {
     }));
 
   const support = [
+    { label: "Report a Bug", href: "/report-bug" },
     { label: "Privacy Policy", href: "/privacy-policy" },
     { label: "Terms of Service", href: "/terms-of-service" },
     { label: "About us", href: "/about-us" },

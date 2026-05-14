@@ -5,6 +5,7 @@ import { clientCookies } from '@/lib/cookies';
 import { 
   loginUser, 
   signupUser, 
+  googleLoginUser,
   forgotPassword, 
   resetPassword,
   type LoginCredentials,
@@ -64,6 +65,21 @@ export const useLogin = () => {
       if (data.success && data.data) {
         storeUser(data.data);
         router.push('/'); // Redirect to home page
+      }
+    },
+  });
+};
+
+// Google Login hook
+export const useGoogleLogin = () => {
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: googleLoginUser,
+    onSuccess: (data) => {
+      if (data.success && data.data) {
+        storeUser(data.data);
+        router.push('/');
       }
     },
   });
