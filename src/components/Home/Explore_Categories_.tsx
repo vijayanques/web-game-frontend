@@ -22,28 +22,28 @@ const categoryCardVariants = {
 };
 
 const colorPalette = [
-  { gradient: 'from-pink-500 via-red-500 to-yellow-500',   neon: '#f43f5e' },
+  { gradient: 'from-pink-500 via-red-500 to-yellow-500', neon: '#f43f5e' },
   { gradient: 'from-indigo-500 via-purple-500 to-pink-500', neon: '#a855f7' },
-  { gradient: 'from-green-400 via-teal-500 to-blue-500',    neon: '#10b981' },
-  { gradient: 'from-yellow-400 via-orange-500 to-red-500',  neon: '#f59e0b' },
-  { gradient: 'from-cyan-400 via-sky-500 to-blue-600',      neon: '#0ea5e9' },
-  { gradient: 'from-purple-500 via-pink-500 to-red-500',    neon: '#a855f7' },
+  { gradient: 'from-green-400 via-teal-500 to-blue-500', neon: '#10b981' },
+  { gradient: 'from-yellow-400 via-orange-500 to-red-500', neon: '#f59e0b' },
+  { gradient: 'from-cyan-400 via-sky-500 to-blue-600', neon: '#0ea5e9' },
+  { gradient: 'from-purple-500 via-pink-500 to-red-500', neon: '#a855f7' },
   { gradient: 'from-blue-500 via-indigo-500 to-purple-500', neon: '#6366f1' },
   { gradient: 'from-teal-400 via-green-500 to-emerald-600', neon: '#14b8a6' },
 ];
 
 const PARTICLE_POSITIONS = [
-  { left: '12%', delay: '0ms',   size: 3 },
+  { left: '12%', delay: '0ms', size: 3 },
   { left: '28%', delay: '100ms', size: 4 },
-  { left: '45%', delay: '50ms',  size: 3 },
+  { left: '45%', delay: '50ms', size: 3 },
   { left: '62%', delay: '160ms', size: 5 },
-  { left: '78%', delay: '80ms',  size: 3 },
+  { left: '78%', delay: '80ms', size: 3 },
   { left: '20%', delay: '200ms', size: 4 },
   { left: '55%', delay: '130ms', size: 3 },
 ];
 
 export default function Categories() {
-  const [active, setActive]   = useState<string | number>('all');
+  const [active, setActive] = useState<string | number>('all');
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -86,7 +86,7 @@ export default function Categories() {
   }, []);
 
   return (
-    <div className="px-4 sm:px-6 md:px-7 pt-6 sm:pt-8 bg-[#E8E9ED]">
+    <div className=" pt-6 sm:pt-8 bg-[#E8E9ED]">
       <div className="max-w-7xl mx-auto">
 
         <motion.h2
@@ -112,8 +112,8 @@ export default function Categories() {
           ) : (
             <div className="flex gap-3 sm:gap-4 md:gap-5 pb-2 pt-1 px-1">
               {categories.map((cat, index) => {
-                const Icon      = cat.icon;
-                const isActive  = active === cat.id;
+                const Icon = cat.icon;
+                const isActive = active === cat.id;
                 const isHovered = hoveredId === cat.id;
 
                 return (

@@ -1199,10 +1199,11 @@ const TheplayfreeFooter = () => {
           </div>
         </div>
       </div> */}
+
       <div className="bg-[#E8E9ED] border-t border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7">
           <div className="py-6">
-            <motion.div
+            {/* <motion.div
               ref={statsRef}
               initial="hidden"
               animate={isStatsInView ? "visible" : "hidden"}
@@ -1227,11 +1228,12 @@ const TheplayfreeFooter = () => {
                   </div>
                 </motion.div>
               ))}
-            </motion.div>
+            </motion.div> */}
           </div>
         </div>
       </div>
-      <div className="bg-orange-500 overflow-hidden">
+
+      {/* <div className="bg-orange-500 overflow-hidden">
         <div className="flex items-center">
           <div className="flex-shrink-0 bg-orange-600 px-5 py-2.5 flex items-center gap-2">
             <span className="text-white"><Icons.Flame size={13} /></span>
@@ -1250,7 +1252,7 @@ const TheplayfreeFooter = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* ── Main Footer Body ── */}
       <div className="px-4 sm:px-6 md:px-7 pt-12 pb-8">

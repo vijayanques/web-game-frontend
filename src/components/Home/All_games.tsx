@@ -173,7 +173,7 @@ export default function MosaicGrid() {
 
   return (
     <section data-section="all-games" className="pt-6 sm:pt-8 pb-2 bg-[#E8E9ED] overflow-x-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7">
+      <div className="max-w-7xl mx-auto ">
         {/* Header */}
         <motion.div
           initial="hidden"
