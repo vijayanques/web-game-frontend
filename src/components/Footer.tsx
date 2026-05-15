@@ -1413,7 +1413,7 @@ const TheplayfreeFooter = () => {
                       >
                         <span>{link.label}</span>
                         {link.badge && (
-                          <span className={`text-[9px] font-black px-1.5 py-0.5 rounded-full ${link.badgeType === "live"
+                          <span className={`cursor-pointer text-[9px] font-black px-1.5 py-0.5 rounded-full ${link.badgeType === "live"
                             ? "bg-red-500 text-white animate-pulse"
                             : "bg-gray-100 text-gray-500 group-hover:bg-orange-100 group-hover:text-orange-500"
                             }`}>
@@ -1471,17 +1471,17 @@ const TheplayfreeFooter = () => {
 
               {/* Support + Contact */}
               <div>
-                <div className="flex items-center gap-2 mb-5">
+                <div className="flex items-center gap-2 mb-5 cursor-pointer">
                   <div className="w-7 h-7 rounded-lg bg-orange-500 flex items-center justify-center text-white shadow-sm shadow-orange-200">
                     <Icons.Headphones size={15} />
                   </div>
                   <h4 className="text-gray-700 font-black text-xs uppercase tracking-widest font-[poppins]">Support</h4>
                 </div>
-                <ul className="space-y-1 mb-6">
+                <ul className="space-y-1 mb-6 cursor-pointer">
                   {support.map((item, i) => (
                     <li key={i}>
                       <a href={item.href}
-                        className="group flex items-center text-sm font-[poppins] text-gray-500 hover:text-orange-500 transition-colors duration-200 font-medium py-1.5 px-2.5 rounded-lg hover:bg-orange-50"
+                        className=" cursor-pointer group flex items-center text-sm font-[poppins] text-gray-500 hover:text-orange-500 transition-colors duration-200 font-medium py-1.5 px-2.5 rounded-lg hover:bg-orange-50"
                       >
                         {item.label}
                       </a>

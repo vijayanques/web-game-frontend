@@ -72,7 +72,7 @@ export default function LoginClient() {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
-      
+
       googleLogin({
         email: user.email || '',
         username: user.displayName || '',
@@ -96,7 +96,7 @@ export default function LoginClient() {
   return (
     <>
       <PageSeoHead pageSlug="/login" />
-      
+
       <div className="bg-[#E8E9ED] px-4 py-12">
         <div className="w-full max-w-md mx-auto">
 
@@ -146,8 +146,8 @@ export default function LoginClient() {
                     type="email"
                     {...formik.getFieldProps('email')}
                     className={`w-full pl-11 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent outline-none transition font-[poppins] ${formik.touched.email && formik.errors.email
-                        ? 'border-red-500'
-                        : 'border-gray-300'
+                      ? 'border-red-500'
+                      : 'border-gray-300'
                       }`}
                     placeholder="you@example.com"
                   />
@@ -163,8 +163,8 @@ export default function LoginClient() {
                   <label htmlFor="password" className="block text-sm font-medium text-gray-700 font-[poppins]">
                     Password
                   </label>
-                  <Link 
-                    href="/forgot-password" 
+                  <Link
+                    href="/forgot-password"
                     className="text-sm text-orange-500 hover:text-orange-600 font-semibold font-[poppins]"
                   >
                     Forgot Password?
@@ -177,8 +177,8 @@ export default function LoginClient() {
                     type={showPassword ? 'text' : 'password'}
                     {...formik.getFieldProps('password')}
                     className={`w-full pl-11 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent outline-none transition font-[poppins] ${formik.touched.password && formik.errors.password
-                        ? 'border-red-500'
-                        : 'border-gray-300'
+                      ? 'border-red-500'
+                      : 'border-gray-300'
                       }`}
                     placeholder="••••••••"
                   />
@@ -199,7 +199,7 @@ export default function LoginClient() {
               <button
                 type="submit"
                 disabled={isPending || !formik.isValid}
-                className="w-full bg-orange-500 text-white py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-[poppins] shadow-lg shadow-orange-500/30"
+                className="cursor-pointer w-full bg-orange-500 text-white py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-[poppins] shadow-lg shadow-orange-500/30"
               >
                 {isPending ? (
                   <span className="flex items-center justify-center gap-2">
@@ -229,7 +229,7 @@ export default function LoginClient() {
               animate={isSocialInView ? "visible" : "hidden"}
               variants={fadeUpVariants}
               className="flex justify-center">
-              <button 
+              <button
                 type="button"
                 onClick={handleGoogleLogin}
                 disabled={isGooglePending}

@@ -892,7 +892,7 @@ export default function Header() {
                     overflow-hidden z-[70]">
 
                       {/* Header */}
-                      <div className="px-3 sm:px-4 md:px-5 py-2.5 sm:py-3 md:py-4 border-b border-gray-200">
+                      <div className="px-3 sm:px-4 md:px-5 py-2.5 sm:py-3 md:py-4">
                         <p className="text-xs sm:text-sm font-semibold text-gray-900 font-[poppins]">{user.username}</p>
                         <p className="text-[10px] sm:text-xs text-orange-500 font-medium mt-0.5 font-[poppins]">Level {user.level}</p>
                       </div>
