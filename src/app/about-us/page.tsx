@@ -259,7 +259,7 @@ function AboutUs() {
             </motion.div>
 
             {/* Timeline Section */}
-            <motion.div
+            {/* <motion.div
               className="mb-8"
               variants={itemVariants}
             >
@@ -288,10 +288,10 @@ function AboutUs() {
                   </motion.div>
                 ))}
               </motion.div>
-            </motion.div>
+            </motion.div> */}
 
             {/* Team Section */}
-            <motion.div
+            {/* <motion.div
               className="mb-8"
               variants={itemVariants}
             >
@@ -318,7 +318,7 @@ function AboutUs() {
                   </motion.div>
                 ))}
               </motion.div>
-            </motion.div>
+            </motion.div> */}
 
             {/* Why Choose Us Section */}
             <motion.div
