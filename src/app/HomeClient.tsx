@@ -18,7 +18,7 @@ export default function HomeClient() {
         
         <div className="max-w-[1600px] mx-auto flex flex-col xl:flex-row gap-4 justify-center py-6 px-4">
           {/* Left Sidebar Ad - Sticky */}
-          <div className="hidden xl:block w-[160px] shrink-0 sticky top-24 self-start">
+          <div className="hidden 2xl:block w-[160px] shrink-0 sticky top-24 self-start">
             <ResponsiveAd slot="left_sidebar_ad" layout="vertical" />
           </div>
 
@@ -32,7 +32,7 @@ export default function HomeClient() {
           </div>
 
           {/* Right Sidebar Ad - Sticky */}
-          <div className="hidden xl:block w-[160px] shrink-0 sticky top-24 self-start">
+          <div className="hidden 2xl:block w-[160px] shrink-0 sticky top-24 self-start">
             <ResponsiveAd slot="right_sidebar_ad" layout="vertical" />
           </div>
         </div>

@@ -98,7 +98,7 @@ function ResetPasswordForm() {
     <>
       <PageSeoHead pageSlug="/reset-password" />
       
-      <div className="bg-[#E8E9ED] px-4 py-12 min-h-screen">
+      <div className="bg-[#E8E9ED] px-4 py-12">
         <div className="w-full max-w-md mx-auto">
 
           {/* Logo Section */}

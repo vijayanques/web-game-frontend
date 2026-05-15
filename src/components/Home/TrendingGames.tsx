@@ -70,19 +70,19 @@ export default function TrendingGames() {
           </div> */}
           <div>
             <h2 className="font-[poppins] text-xl sm:text-2xl font-semibold text-gray-900 tracking-tight">Trending Now</h2>
-            <p className="text-xs sm:text-sm font-[poppins] text-gray-500 mt-1">Most played games in the last 24 hours</p>
+            <p className="text-[10px] sm:text-sm font-[poppins] text-gray-500 mt-0.5 sm:mt-1">Most played games in the last 24 hours</p>
           </div>
         </div>
         <Link
           href="/trending"
-          className="text-orange-500 font-semibold hover:text-orange-600 transition-colors flex items-center gap-1 group"
+          className="text-orange-500 text-sm sm:text-base font-semibold hover:text-orange-600 transition-colors flex items-center gap-1 group whitespace-nowrap"
         >
           View All
           <span className="group-hover:translate-x-1 transition-transform">→</span>
         </Link>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-6">
         {games.slice(0, 5).map((game, index) => (
           <motion.div
             key={game.id}
@@ -94,8 +94,8 @@ export default function TrendingGames() {
             onMouseLeave={() => setHoveredId(null)}
           >
             {/* Ranking Badge */}
-            <div className="absolute -top-3 -left-3 z-10 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center border-2 border-orange-500">
-              <span className="text-lg font-black text-orange-500 font-[poppins]">{index + 1}</span>
+            <div className="absolute -top-2 -left-2 sm:-top-3 sm:-left-3 z-10 w-7 h-7 sm:w-10 sm:h-10 bg-white rounded-full shadow-lg flex items-center justify-center border-2 border-orange-500">
+              <span className="text-sm sm:text-lg font-black text-orange-500 font-[poppins]">{index + 1}</span>
             </div>
 
             <Link href={`/game/${game.slug}`} className="block">
@@ -131,7 +131,7 @@ export default function TrendingGames() {
                   <div className="bg-white/10 backdrop-blur-md rounded-xl p-2 border border-white/20">
                     <h3 className="text-white font-bold text-sm truncate mb-1 font-[poppins]">{game.title}</h3>
                     <div className="flex items-center justify-between text-[10px] text-gray-300">
-                      <span className=" font-[poppins] bg-orange-500/80 text-white px-1.5 py-0.5 rounded uppercase font-bold">
+                      <span className=" font-[poppins] bg-orange-500/80 text-white px-1 sm:px-1.5 py-0.5 rounded uppercase font-bold text-[8px] sm:text-[10px]">
                         {game.category?.name || 'Game'}
                       </span>
                       <div className="flex items-center gap-1">
