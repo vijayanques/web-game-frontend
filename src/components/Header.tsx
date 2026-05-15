@@ -903,10 +903,10 @@ export default function Header() {
                           <User className="w-3.5 h-3.5 md:w-4 md:h-4 flex-shrink-0" />
                           <span>Profile</span>
                         </Link> */}
-                        <button className="cursor-pointer font-[poppins] w-full flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-2.5 rounded-lg text-xs md:text-sm font-medium text-gray-700 hover:bg-orange-50 transition-colors">
+                        {/* <button className="cursor-pointer font-[poppins] w-full flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-2.5 rounded-lg text-xs md:text-sm font-medium text-gray-700 hover:bg-orange-50 transition-colors">
                           <Settings className="w-3.5 h-3.5 md:w-4 md:h-4 flex-shrink-0" />
                           <span>Settings</span>
-                        </button>
+                        </button> */}
                         <div className="font-[poppins] h-px bg-gray-200 my-1.5 md:my-2" />
                         <button onClick={logout} className="cursor-pointer w-full flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-2.5 rounded-lg text-xs md:text-sm font-medium text-red-600 hover:bg-red-50 transition-colors">
                           <LogOut className="w-3.5 h-3.5 md:w-4 md:h-4 flex-shrink-0" />

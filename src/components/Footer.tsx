@@ -1282,7 +1282,7 @@ const TheplayfreeFooter = () => {
               </p>
 
               {/* Featured Mini Games */}
-              <div className="bg-white/60 rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+              {/* <div className="bg-white/60 rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                 <div className="px-4 pt-3 pb-2 border-b border-gray-100 flex items-center justify-between">
                   <span className="text-[11px] font-black font-[poppins] text-gray-600 uppercase tracking-widest">Top Games</span>
                   <a href="#" className="text-[11px] font-[poppins] text-orange-500 font-bold hover:text-orange-600">View all</a>
@@ -1304,7 +1304,7 @@ const TheplayfreeFooter = () => {
                     </div>
                   </div>
                 ))}
-              </div>
+              </div> */}
 
               {/* Newsletter */}
               {/* <div className="bg-white/60  rounded-2xl p-4 border border-gray-200 shadow-sm relative overflow-hidden">

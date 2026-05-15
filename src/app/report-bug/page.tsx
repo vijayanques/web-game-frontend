@@ -15,7 +15,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 export default function ReportBugPage() {
   const queryClient = useQueryClient();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  
+
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -101,7 +101,7 @@ export default function ReportBugPage() {
             method: 'POST',
             body: formData,
           });
-          
+
           const uploadData = await uploadRes.json();
           if (uploadData.success) {
             imageUrl = uploadData.url;
@@ -121,10 +121,10 @@ export default function ReportBugPage() {
 
   return (
     <div className="min-h-screen bg-[#E8E9ED] text-gray-800 font-[poppins] flex flex-col">
-      <Header />
-      
+      {/* <Header /> */}
+
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex flex-col lg:flex-row gap-8 lg:gap-12 mt-16">
-        
+
         {/* Left Col: Submit Form */}
         <div className="w-full lg:w-5/12 flex flex-col">
           <div className="mb-6">
@@ -141,8 +141,8 @@ export default function ReportBugPage() {
             <form onSubmit={formik.handleSubmit} className="space-y-6">
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-2">Which related bug (Title)</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   name="title"
                   value={formik.values.title}
                   onChange={formik.handleChange}
@@ -157,7 +157,7 @@ export default function ReportBugPage() {
 
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-2">Description</label>
-                <textarea 
+                <textarea
                   name="description"
                   value={formik.values.description}
                   onChange={formik.handleChange}
@@ -173,7 +173,7 @@ export default function ReportBugPage() {
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-2">Upload Image (Optional)</label>
                 {!preview ? (
-                  <button 
+                  <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
                     className="w-full h-32 border-2 border-dashed border-gray-300 hover:border-orange-400 bg-gray-50 rounded-2xl flex flex-col items-center justify-center gap-2 transition-colors group cursor-pointer"
@@ -186,7 +186,7 @@ export default function ReportBugPage() {
                 ) : (
                   <div className="relative rounded-2xl overflow-hidden border border-gray-200 bg-gray-100 group">
                     <img src={preview} alt="Preview" className="w-full h-48 object-cover opacity-90 group-hover:opacity-100 transition-opacity" />
-                    <button 
+                    <button
                       type="button"
                       onClick={() => {
                         setFile(null);
@@ -198,16 +198,16 @@ export default function ReportBugPage() {
                     </button>
                   </div>
                 )}
-                <input 
-                  type="file" 
-                  accept="image/*" 
+                <input
+                  type="file"
+                  accept="image/*"
                   ref={fileInputRef}
                   onChange={handleFileChange}
-                  className="hidden" 
+                  className="hidden"
                 />
               </div>
 
-              <button 
+              <button
                 type="submit"
                 disabled={submitMutation.isPending || isUploading}
                 className="w-full bg-orange-500 hover:bg-orange-600 text-white font-black py-4 rounded-2xl transition-all shadow-md shadow-orange-500/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:-translate-y-0.5 active:translate-y-0"

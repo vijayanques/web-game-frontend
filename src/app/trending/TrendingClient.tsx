@@ -72,11 +72,11 @@ export default function TrendingClient() {
                 <div className="p-2.5 bg-orange-500 rounded-xl shadow-lg shadow-orange-500/20">
                   <TrendingUp className="w-6 h-6 text-white" />
                 </div>
-                <h1 className="text-3xl sm:text-4xl font-black text-gray-900 font-[poppins]">Trending Games</h1>
+                <h1 className="text-3xl sm:text-3xl font-black text-gray-900 font-[poppins]">Trending Games</h1>
               </div>
-              <p className="text-gray-500 font-[poppins] max-w-xl">
+              {/* <p className="text-gray-500 font-[poppins] max-w-xl">
                 Discover the most popular games played by thousands of players in the last 24 hours. Rankings are updated in real-time.
-              </p>
+              </p> */}
             </div>
 
             <div className="flex items-center gap-6 text-sm font-bold text-gray-600 bg-white/50 backdrop-blur-sm px-6 py-3 rounded-2xl border border-white/50">
@@ -107,9 +107,9 @@ export default function TrendingClient() {
                 >
                   {/* Ranking Badge - Premium Style */}
                   <div className={`absolute -top-2 -left-2 z-20 w-8 h-8 rounded-lg flex items-center justify-center font-black text-xs shadow-lg transform group-hover:scale-110 transition-transform ${index === 0 ? 'bg-yellow-400 text-yellow-900' :
-                      index === 1 ? 'bg-slate-300 text-slate-800' :
-                        index === 2 ? 'bg-orange-400 text-orange-950' :
-                          'bg-white text-gray-400 border border-gray-100'
+                    index === 1 ? 'bg-slate-300 text-slate-800' :
+                      index === 2 ? 'bg-orange-400 text-orange-950' :
+                        'bg-white text-gray-400 border border-gray-100'
                     }`}>
                     #{index + 1}
                   </div>
@@ -171,12 +171,6 @@ export default function TrendingClient() {
                 </motion.div>
               ))}
             </AnimatePresence>
-          </div>
-
-          {/* Footer Info */}
-          <div className="mt-16 text-center border-t border-gray-200 pt-8">
-            <p className="text-gray-400 text-sm font-[poppins]">
-            </p>
           </div>
         </div>
       </div>
