@@ -818,6 +818,8 @@ import { useState, useRef } from "react";
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 import { fetchCategories, Category } from '@/lib/api/categories';
+import { fetchTrendingGames } from '@/lib/api/games';
+
 import * as LucideIcons from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { motion, useInView } from 'framer-motion';
@@ -855,6 +857,13 @@ const TheplayfreeFooter = () => {
       return data;
     },
   });
+
+  // Fetch trending games for ticker
+  const { data: apiTrendingGames = [] } = useQuery({
+    queryKey: ['footer-trending-games'],
+    queryFn: fetchTrendingGames,
+  });
+
 
   // Helper function to get icon component from string
   const getIconComponent = (iconName?: string) => {
@@ -1071,11 +1080,14 @@ const TheplayfreeFooter = () => {
     { value: "98%", label: "Uptime", icon: <Icons.Zap size={20} />, color: "text-green-500", bg: "bg-green-50 border-green-100 group-hover:bg-green-500" },
   ];
 
-  const trendingGames = [
-    "Valorant Champions", "Fortnite Clash", "Minecraft", "FIFA 24",
-    "Rocket League", "Among Us", "GTA V", "Subway Surfers",
-    "Apex Legends", "Call of Duty Arena",
-  ];
+  const trendingGames = apiTrendingGames.length > 0 
+    ? apiTrendingGames.map(g => g.title)
+    : [
+        "Valorant Champions", "Fortnite Clash", "Minecraft", "FIFA 24",
+        "Rocket League", "Among Us", "GTA V", "Subway Surfers",
+        "Apex Legends", "Call of Duty Arena",
+      ];
+
 
   // Animation variants
   const statsContainerVariants = {
@@ -1233,7 +1245,7 @@ const TheplayfreeFooter = () => {
         </div>
       </div>
 
-      {/* <div className="bg-orange-500 overflow-hidden">
+      <div className="bg-orange-500 overflow-hidden">
         <div className="flex items-center">
           <div className="flex-shrink-0 bg-orange-600 px-5 py-2.5 flex items-center gap-2">
             <span className="text-white"><Icons.Flame size={13} /></span>
@@ -1252,7 +1264,8 @@ const TheplayfreeFooter = () => {
             </div>
           </div>
         </div>
-      </div> */}
+      </div>
+
 
       {/* ── Main Footer Body ── */}
       <div className="px-4 sm:px-6 md:px-7 pt-12 pb-8">

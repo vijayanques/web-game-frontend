@@ -348,6 +348,11 @@ export default function GameDetailPage({ params }: { params: Promise<{ slug: str
         })
       })
 
+      // Track play for trending system
+      await fetch(`${apiUrl}/api/games/${game.id}/play`, {
+        method: 'POST',
+      })
+
       // New Traffic Tracker for Game Started
       const ua = navigator.userAgent;
       let device = 'desktop';
@@ -559,757 +564,759 @@ export default function GameDetailPage({ params }: { params: Promise<{ slug: str
       </Head>
 
       <div className="min-h-screen bg-gray-100" suppressHydrationWarning>
-      <main className="px-3 sm:px-4 py-4 sm:py-5 bg-[#E8E9ED]" suppressHydrationWarning>
-        <ResponsiveAd slot="homepage_banner" className="max-w-7xl mx-auto mb-6" />
-        
-        <div className="max-w-[1600px] mx-auto flex flex-col xl:flex-row gap-4 justify-center">
-          {/* Left Sidebar Ad */}
-          <div className="hidden xl:block w-[160px] shrink-0 sticky top-24 self-start">
-            <ResponsiveAd slot="left_sidebar_ad" layout="vertical" />
-          </div>
+        <main className="px-3 sm:px-4 py-4 sm:py-5 bg-[#E8E9ED]" suppressHydrationWarning>
+          <ResponsiveAd slot="homepage_banner" className="max-w-7xl mx-auto mb-6" />
 
-          <div className="flex-1 max-w-7xl w-full">
+          <div className="max-w-[1600px] mx-auto flex flex-col xl:flex-row gap-4 justify-center">
+            {/* Left Sidebar Ad */}
+            <div className="hidden xl:block w-[160px] shrink-0 sticky top-24 self-start">
+              <ResponsiveAd slot="left_sidebar_ad" layout="vertical" />
+            </div>
 
-        {/* Breadcrumb */}
-        <motion.nav
-          ref={breadcrumbRef}
-          initial="initial"
-          animate="animate"
-          variants={fadeUpVariants}
-          className="flex items-center gap-1 sm:gap-1.5 text-xs font-[poppins] text-gray-500 mb-3 sm:mb-4 flex-wrap">
-          {['Games', typeof game.category === 'object' ? game.category.name : (game.category || 'All Games'), game.title].map((crumb, i, arr) => (
-            <span key={crumb} className="flex items-center gap-1 sm:gap-1.5">
-              <a href={i === 0 ? '/' : '#'} className={`hover:text-orange-500 transition-colors truncate ${i === arr.length - 1 ? 'text-orange-500 font-semibold' : ''}`}>
-                {crumb}
-              </a>
-              {i < arr.length - 1 && <IconChevronRight size={10} className="text-gray-400 shrink-0" />}
-            </span>
-          ))}
-        </motion.nav>
+            <div className="flex-1 max-w-7xl w-full">
 
-        <div className="flex flex-col lg:flex-row gap-3 sm:gap-4 lg:gap-5 items-start">
-          {/* ═══ LEFT: MAIN COLUMN ═══ */}
-          <div className="w-full lg:flex-1 flex flex-col gap-3 sm:gap-4">
-
-            {/* ── GAME PLAYER ── */}
-            <motion.div
-              ref={playerRef}
-              initial="initial"
-              animate="animate"
-              variants={scaleUpVariants}
-              className="bg-gray-900 rounded-xl sm:rounded-2xl overflow-hidden border border-gray-800 fullscreen-game-container"
-              style={{
-                position: isFullscreen ? 'fixed' : 'relative',
-                top: isFullscreen ? 0 : 'auto',
-                left: isFullscreen ? 0 : 'auto',
-                width: isFullscreen ? '100vw' : 'auto',
-                height: isFullscreen ? '100vh' : 'auto',
-                zIndex: isFullscreen ? 9999 : 'auto',
-                borderRadius: isFullscreen ? 0 : 'auto',
-              }}>
-              <div ref={gameContainerRef} className="relative bg-gray-950" style={{
-                paddingBottom: isFullscreen ? '0' : '56.25%',
-                height: isFullscreen ? '100%' : 'auto',
-              }}>
-                {(() => {
-                  // Extract iframe src from gameUrl if it contains iframe HTML
-                  const gameUrl = game.gameUrl || game.game_url || '';
-                  const iframeUrl = game.iframe_url || game.iframeUrl || '';
-
-                  // Try to extract src from iframe HTML
-                  let src = '';
-                  if (gameUrl.includes('<iframe')) {
-                    const srcMatch = gameUrl.match(/src=["']([^"']+)["']/);
-                    if (srcMatch) {
-                      src = srcMatch[1];
-                    }
-                  } else if (gameUrl.startsWith('http')) {
-                    src = gameUrl;
-                  } else if (iframeUrl) {
-                    src = iframeUrl;
-                  }
-
-                  return src ? (
-                    <iframe
-                      src={src}
-                      className={`${isFullscreen ? 'w-full h-full' : 'absolute inset-0 w-full h-full'} border-0`}
-                      allowFullScreen
-                      title={game.title}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      onLoad={handlePlayGame}
-                    />
-                  ) : (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-950 gap-3 sm:gap-4 px-4">
-                      <div className="w-16 sm:w-20 h-16 sm:h-20 rounded-xl sm:rounded-2xl bg-gray-800 border border-gray-700 flex items-center justify-center overflow-hidden">
-                        <IconGamepad size={28} className="sm:w-9 sm:h-9 text-orange-500" />
-                      </div>
-                      <p className="text-white font-bold text-sm sm:text-base text-center">{game.title}</p>
-                      <div className="w-48 sm:w-64">
-                        <div className="w-full bg-gray-800 rounded-full h-1.5 overflow-hidden">
-                          <div className="bg-orange-500 h-1.5 rounded-full w-2/3 animate-pulse" />
-                        </div>
-                        <p className="text-gray-500 text-xs text-center mt-2">Loading assets...</p>
-                      </div>
-                    </div>
-                  );
-                })()}
-              </div>
-
-              {/* Controls bar */}
-              <div className={`px-2 sm:px-4 py-2 sm:py-3 flex items-center justify-between bg-gray-900 gap-2 overflow-x-auto ${isFullscreen ? 'fixed bottom-0 left-0 right-0 z-50' : ''}`}>
-                <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
-                  <div className="w-6 sm:w-7 h-6 sm:h-7 rounded-lg bg-gray-800 flex items-center justify-center shrink-0">
-                    <IconGamepad size={12} className="sm:w-3.5 sm:h-3.5 text-orange-500" />
-                  </div>
-                  <span className="text-white font-bold text-xs sm:text-sm font-[poppins] truncate">{game.title}</span>
-                </div>
-                <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-                  <button
-                    onClick={handleLike}
-                    className="cursor-pointer hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors group"
-                  >
-                    <IconThumbUp size={14} className={liked ? 'text-orange-400' : 'text-gray-400 group-hover:text-white'} />
-                    <span className={`text-xs font-semibold ${liked ? 'text-orange-400' : 'text-gray-300'}`}>
-                      {likeCount}
-                    </span>
-                  </button>
-                  <button
-                    onClick={handleDislike}
-                    className="w-6 sm:w-8 h-6 sm:h-8 cursor-pointer rounded-lg bg-gray-800 hover:bg-gray-700 flex items-center justify-center transition-colors hidden sm:flex group"
-                    title="Dislike"
-                  >
-                    <IconThumbDown size={12} className={`sm:w-3.5 sm:h-3.5 ${disliked ? 'text-red-400' : 'text-gray-400 group-hover:text-white'}`} />
-                    {dislikeCount > 0 && (
-                      <span className={`text-xs font-semibold ml-1 ${disliked ? 'text-red-400' : 'text-gray-300'}`}>
-                        {dislikeCount}
-                      </span>
-                    )}
-                  </button>
-                  <button
-                    onClick={handleWishlist}
-                    className="w-6 sm:w-8 h-6 sm:h-8 cursor-pointer rounded-lg bg-gray-800 hover:bg-gray-700 flex items-center justify-center transition-colors group"
-                    title="Add to Wishlist"
-                  >
-                    <IconHeart size={12} className={`sm:w-3.5 sm:h-3.5 ${wishlisted ? 'text-red-400 fill-red-400' : 'text-gray-400 group-hover:text-white'}`} filled={wishlisted} />
-                    {wishlistCount > 0 && (
-                      <span className={`text-xs font-semibold ml-1 ${wishlisted ? 'text-red-400' : 'text-gray-300'}`}>
-                        {wishlistCount}
-                      </span>
-                    )}
-                  </button>
-
-                  <button
-                    onClick={handleFullscreen}
-                    className="w-6 sm:w-8 h-6 sm:h-8 cursor-pointer rounded-lg bg-gray-800 hover:bg-gray-700 flex items-center justify-center transition-colors"
-                    title="Toggle Fullscreen"
-                  >
-                    <IconMaximize size={12} className="sm:w-3.5 sm:h-3.5 text-gray-400" />
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* ── GAME TITLE + META ── */}
-            <motion.div
-              ref={titleMetaRef}
-              initial="initial"
-              animate="animate"
-              variants={fadeUpVariants}
-              className="bg-white/60 rounded-xl sm:rounded-2xl border border-gray-200 p-3 sm:p-5">
-              <div className="flex flex-col sm:flex-row items-start justify-between gap-3 sm:gap-4 mb-3 sm:mb-4">
-                <div className="w-full">
-                  <h1 className="text-xl sm:text-2xl font-black text-gray-900 mb-2 sm:mb-1 font-[poppins] break-words">{game.title}</h1>
-                  <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-                    <div className="relative" ref={shareMenuRef}>
-                      <button
-                        onClick={() => setShowShareMenu(!showShareMenu)}
-                        className="cursor-pointer flex font-[poppins] items-center gap-1 sm:gap-1.5 bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-semibold px-2.5 sm:px-3 py-1.5 rounded-full transition-colors"
-                      >
-                        <IconShare size={11} className="sm:w-3 sm:h-3" />
-                        <span className="hidden sm:inline">Share</span>
-                      </button>
-
-                      {/* Share Menu Dropdown */}
-                      {showShareMenu && (
-                        <div className="absolute top-full left-0 mt-2 w-48 sm:w-56 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2">
-                          <div className="p-2">
-                            <p className="text-xs font-bold text-gray-500 px-3 py-2 font-[poppins]">Share this game</p>
-
-                            {/* Social Media Options */}
-                            <button
-                              onClick={() => handleShare('facebook')}
-                              className="w-full flex items-center gap-2 sm:gap-3 px-3 py-2 sm:py-2.5 rounded-lg hover:bg-blue-50 transition-colors group"
-                            >
-                              <div className="w-7 sm:w-8 h-7 sm:h-8 rounded-lg bg-blue-600 flex items-center justify-center shrink-0">
-                                <svg className="w-3 sm:w-4 h-3 sm:h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                                </svg>
-                              </div>
-                              <span className="text-xs sm:text-sm font-semibold text-gray-700 group-hover:text-blue-600 font-[poppins]">Facebook</span>
-                            </button>
-
-                            <button
-                              onClick={() => handleShare('twitter')}
-                              className="w-full flex items-center gap-2 sm:gap-3 px-3 py-2 sm:py-2.5 rounded-lg hover:bg-sky-50 transition-colors group"
-                            >
-                              <div className="w-7 sm:w-8 h-7 sm:h-8 rounded-lg bg-sky-500 flex items-center justify-center shrink-0">
-                                <svg className="w-3 sm:w-4 h-3 sm:h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                                </svg>
-                              </div>
-                              <span className="text-xs sm:text-sm font-semibold text-gray-700 group-hover:text-sky-600 font-[poppins]">Twitter</span>
-                            </button>
-
-                            <button
-                              onClick={() => handleShare('whatsapp')}
-                              className="w-full flex items-center gap-2 sm:gap-3 px-3 py-2 sm:py-2.5 rounded-lg hover:bg-green-50 transition-colors group"
-                            >
-                              <div className="w-7 sm:w-8 h-7 sm:h-8 rounded-lg bg-green-500 flex items-center justify-center shrink-0">
-                                <svg className="w-3 sm:w-4 h-3 sm:h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
-                                </svg>
-                              </div>
-                              <span className="text-xs sm:text-sm font-semibold text-gray-700 group-hover:text-green-600 font-[poppins]">WhatsApp</span>
-                            </button>
-
-                            <button
-                              onClick={() => handleShare('telegram')}
-                              className="w-full flex items-center gap-2 sm:gap-3 px-3 py-2 sm:py-2.5 rounded-lg hover:bg-blue-50 transition-colors group"
-                            >
-                              <div className="w-7 sm:w-8 h-7 sm:h-8 rounded-lg bg-blue-500 flex items-center justify-center shrink-0">
-                                <svg className="w-3 sm:w-4 h-3 sm:h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                                  <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
-                                </svg>
-                              </div>
-                              <span className="text-xs sm:text-sm font-semibold text-gray-700 group-hover:text-blue-600 font-[poppins]">Telegram</span>
-                            </button>
-
-                            <button
-                              onClick={() => handleShare('reddit')}
-                              className="w-full flex items-center gap-2 sm:gap-3 px-3 py-2 sm:py-2.5 rounded-lg hover:bg-orange-50 transition-colors group"
-                            >
-                              <div className="w-7 sm:w-8 h-7 sm:h-8 rounded-lg bg-orange-500 flex items-center justify-center shrink-0">
-                                <svg className="w-3 sm:w-4 h-3 sm:h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                                  <path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z" />
-                                </svg>
-                              </div>
-                              <span className="text-xs sm:text-sm font-semibold text-gray-700 group-hover:text-orange-600 font-[poppins]">Reddit</span>
-                            </button>
-
-                            {/* Divider */}
-                            <div className="h-px bg-gray-200 my-2" />
-
-                            {/* Copy Link */}
-                            <button
-                              onClick={handleCopyLink}
-                              className=" cursor-pointer w-full flex items-center gap-2 sm:gap-3 px-3 py-2 sm:py-2.5 rounded-lg hover:bg-gray-50 transition-colors group"
-                            >
-                              <div className="w-7 sm:w-8 h-7 sm:h-8 rounded-lg bg-gray-200 flex items-center justify-center shrink-0">
-                                {copySuccess ? (
-                                  <IconCheck size={14} className="sm:w-4 sm:h-4 text-green-600" />
-                                ) : (
-                                  <svg className="w-3 sm:w-4 h-3 sm:h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                                  </svg>
-                                )}
-                              </div>
-                              <span className={`text-xs sm:text-sm font-semibold font-[poppins] ${copySuccess ? 'text-green-600' : 'text-gray-700 group-hover:text-gray-900'}`}>
-                                {copySuccess ? 'Link Copied!' : 'Copy Link'}
-                              </span>
-                            </button>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Metadata grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-0 divide-y divide-gray-100">
-                {[
-                  ['Developer', <span key="dev" className="text-orange-500 font-semibold">{game.developer || 'Unknown'}</span>],
-                  ['Rating', (
-                    <span key="rat" className="flex items-center gap-1 sm:gap-2 flex-wrap">
-                      <span className="font-bold text-gray-900 font-[poppins]">{game.rating}</span>
-                      <StarRating value={Math.round(game.rating / 2)} size={10} />
-                      <span className="text-gray-400 text-xs font-[poppins]">({game.votes || '0'} votes)</span>
-                    </span>
-                  )],
-                  ['Released', <span key="rel" className="font-semibold text-sm">{game.released || 'N/A'}</span>],
-                  ['Technology', <span key="tech" className="font-semibold text-sm">{game.technology || 'HTML5'}</span>],
-                  ['Platforms', <span key="plat" className="text-xs leading-relaxed">{(game.platforms || ['Browser']).join(', ')}</span>],
-                  ...(game.wiki ? [['Wiki pages', <span key="wiki" className="text-orange-500 font-semibold">{game.wiki}</span>]] : []),
-                ].map(([label, value]) => (
-                  <div key={String(label)} className="flex items-start gap-2 sm:gap-3 py-2 sm:py-3 px-0 sm:odd:pr-3 sm:even:pl-3 sm:odd:border-r sm:odd:border-gray-100">
-                    <span className="text-xs text-gray-600 w-20 sm:w-24 shrink-0 pt-0.5 font-[poppins]">{label}:</span>
-                    <span className="text-xs sm:text-sm text-gray-700 flex-1 font-[poppins]">{value}</span>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* ── TAGS ── */}
-            {game.tags && game.tags.length > 0 && (
-              <motion.div
-                ref={tagsRef}
+              {/* Breadcrumb */}
+              <motion.nav
+                ref={breadcrumbRef}
                 initial="initial"
                 animate="animate"
                 variants={fadeUpVariants}
-                className="bg-white/60 rounded-xl sm:rounded-2xl border border-gray-200 p-3 sm:p-5">
-                <div className="flex items-center gap-2 mb-3 sm:mb-4">
-                  <IconTag size={14} className="sm:w-4 sm:h-4 text-orange-500" />
-                  <h2 className="font-bold text-sm sm:text-base text-gray-900 font-[poppins]">Categories & Tags</h2>
-                </div>
-                <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                  {game.tags.map(({ label, count }) => (
-                    <button
-                      key={label}
-                      className="font-[poppins] inline-flex items-center gap-1 bg-gray-100 cursor-pointer hover:bg-orange-50 hover:text-orange-600 text-gray-700 text-xs font-semibold px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full transition-colors border border-transparent hover:border-orange-200"
-                    >
-                      {label}
-                      <span className="font-[poppins] text-xs text-gray-500 font-normal">{count}</span>
-                    </button>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-
-            {/* ── TABS ── */}
-            <div className="bg-white rounded-xl sm:rounded-2xl border border-gray-200 overflow-hidden sticky top-[60px] sm:top-[72px] z-40">
-              <div className="flex border-b border-gray-100 px-1 sm:px-2 pt-1 sm:pt-2 gap-0.5 sm:gap-1 overflow-x-auto">
-                {TABS.map((tab) => (
-                  <button
-                    key={tab}
-                    onClick={() => handleTabClick(tab)}
-                    className={`px-2.5 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold rounded-t-lg sm:rounded-t-xl transition-all cursor-pointer whitespace-nowrap ${activeTab === tab
-                        ? 'bg-orange-500 text-white'
-                        : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50'
-                      }`}
-                  >
-                    {tab}
-                  </button>
+                className="flex items-center gap-1 sm:gap-1.5 text-xs font-[poppins] text-gray-500 mb-3 sm:mb-4 flex-wrap">
+                {['Games', typeof game.category === 'object' ? game.category.name : (game.category || 'All Games'), game.title].map((crumb, i, arr) => (
+                  <span key={crumb} className="flex items-center gap-1 sm:gap-1.5">
+                    <a href={i === 0 ? '/' : '#'} className={`hover:text-orange-500 transition-colors truncate ${i === arr.length - 1 ? 'text-orange-500 font-semibold' : ''}`}>
+                      {crumb}
+                    </a>
+                    {i < arr.length - 1 && <IconChevronRight size={10} className="text-gray-400 shrink-0" />}
+                  </span>
                 ))}
-              </div>
-            </div>
+              </motion.nav>
 
-            {/* Content Sections */}
-            <div className="space-y-4 sm:space-y-6">
-              {/* OVERVIEW */}
-              <motion.div
-                ref={overviewRef}
-                initial="hidden"
-                animate="visible"
-                variants={fadeUpVariants}
-                id="section-overview"
-                className="bg-white/60 rounded-xl sm:rounded-2xl border border-gray-200 p-3 sm:p-5 scroll-mt-32">
-                <h2 className="text-lg sm:text-xl font-black text-gray-900 mb-3 sm:mb-4 flex items-center gap-2">
-                  <span className="w-1 h-5 sm:h-6 bg-orange-500 rounded-full font-[poppins]"></span>
-                  Overview
-                </h2>
-                <div className="space-y-4 sm:space-y-6">
-                  {/* Description */}
-                  <div>
-                    <p className="text-gray-600 text-xs sm:text-sm leading-relaxed font-[poppins]">{game.description}</p>
-                  </div>
+              <div className="flex flex-col lg:flex-row gap-3 sm:gap-4 lg:gap-5 items-start">
+                {/* ═══ LEFT: MAIN COLUMN ═══ */}
+                <div className="w-full lg:flex-1 flex flex-col gap-3 sm:gap-4">
 
-                  {/* How to Play */}
-                  {game.howToPlay && game.howToPlay.length > 0 && (
-                    <div>
-                      <h2 className="text-base sm:text-lg font-black text-gray-900 mb-3 sm:mb-4 font-[poppins]">How to Play {game.title}</h2>
-                      <div className="space-y-3 sm:space-y-4">
-                        {game.howToPlay.map(({ title, body }, i) => (
-                          <div key={i} className="flex gap-2 sm:gap-4">
-                            <div className="w-6 sm:w-7 h-6 sm:h-7 rounded-lg bg-orange-500 text-white text-xs font-black flex items-center justify-center shrink-0 mt-0.5">
-                              {i + 1}
+                  {/* ── GAME PLAYER ── */}
+                  <motion.div
+                    ref={playerRef}
+                    initial="initial"
+                    animate="animate"
+                    variants={scaleUpVariants}
+                    className="bg-gray-900 rounded-xl sm:rounded-2xl overflow-hidden border border-gray-800 fullscreen-game-container"
+                    style={{
+                      position: isFullscreen ? 'fixed' : 'relative',
+                      top: isFullscreen ? 0 : 'auto',
+                      left: isFullscreen ? 0 : 'auto',
+                      width: isFullscreen ? '100vw' : 'auto',
+                      height: isFullscreen ? '100vh' : 'auto',
+                      zIndex: isFullscreen ? 9999 : 'auto',
+                      borderRadius: isFullscreen ? 0 : 'auto',
+                    }}>
+                    <div ref={gameContainerRef} className="relative bg-gray-950" style={{
+                      paddingBottom: isFullscreen ? '0' : '56.25%',
+                      height: isFullscreen ? '100%' : 'auto',
+                    }}>
+                      {(() => {
+                        // Extract iframe src from gameUrl if it contains iframe HTML
+                        const gameUrl = game.gameUrl || game.game_url || '';
+                        const iframeUrl = game.iframe_url || game.iframeUrl || '';
+
+                        // Try to extract src from iframe HTML
+                        let src = '';
+                        if (gameUrl.includes('<iframe')) {
+                          const srcMatch = gameUrl.match(/src=["']([^"']+)["']/);
+                          if (srcMatch) {
+                            src = srcMatch[1];
+                          }
+                        } else if (gameUrl.startsWith('http')) {
+                          src = gameUrl;
+                        } else if (iframeUrl) {
+                          src = iframeUrl;
+                        }
+
+                        return src ? (
+                          <iframe
+                            src={src}
+                            className={`${isFullscreen ? 'w-full h-full' : 'absolute inset-0 w-full h-full'} border-0`}
+                            allowFullScreen
+                            title={game.title}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            onLoad={handlePlayGame}
+                          />
+                        ) : (
+                          <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-950 gap-3 sm:gap-4 px-4">
+                            <div className="w-16 sm:w-20 h-16 sm:h-20 rounded-xl sm:rounded-2xl bg-gray-800 border border-gray-700 flex items-center justify-center overflow-hidden">
+                              <IconGamepad size={28} className="sm:w-9 sm:h-9 text-orange-500" />
                             </div>
-                            <div>
-                              <p className="text-xs sm:text-sm font-bold text-gray-800 mb-1 font-[poppins]">{title}</p>
-                              <p className="text-xs sm:text-sm text-gray-500 leading-relaxed font-[poppins]">{body}</p>
+                            <p className="text-white font-bold text-sm sm:text-base text-center">{game.title}</p>
+                            <div className="w-48 sm:w-64">
+                              <div className="w-full bg-gray-800 rounded-full h-1.5 overflow-hidden">
+                                <div className="bg-orange-500 h-1.5 rounded-full w-2/3 animate-pulse" />
+                              </div>
+                              <p className="text-gray-500 text-xs text-center mt-2">Loading assets...</p>
                             </div>
                           </div>
-                        ))}
-                      </div>
+                        );
+                      })()}
                     </div>
-                  )}
 
-                  {/* Game Modes */}
-                  {game.gameModes && game.gameModes.length > 0 && (
-                    <div>
-                      <h3 className="font-bold text-sm sm:text-base text-gray-900 mb-2 sm:mb-3 font-[poppins]">Game Modes</h3>
-                      <div className="space-y-2 sm:space-y-3">
-                        {game.gameModes.map(({ name, desc }) => (
-                          <div key={name} className="flex gap-2 sm:gap-3 p-2 sm:p-3 rounded-lg sm:rounded-xl bg-white border border-gray-100 hover:border-orange-200 cursor-pointer hover:bg-orange-50/40 transition-colors">
-                            <div className="w-2 h-2 rounded-full bg-orange-500 shrink-0 mt-1.5 sm:mt-2" />
-                            <div>
-                              <span className="text-xs sm:text-sm font-bold text-gray-900 font-[poppins]">{name}</span>
-                              <span className="text-xs sm:text-sm text-gray-500 font-[poppins]">: {desc}</span>
-                            </div>
-                          </div>
-                        ))}
+                    {/* Controls bar */}
+                    <div className={`px-2 sm:px-4 py-2 sm:py-3 flex items-center justify-between bg-gray-900 gap-2 overflow-x-auto ${isFullscreen ? 'fixed bottom-0 left-0 right-0 z-50' : ''}`}>
+                      <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
+                        <div className="w-6 sm:w-7 h-6 sm:h-7 rounded-lg bg-gray-800 flex items-center justify-center shrink-0">
+                          <IconGamepad size={12} className="sm:w-3.5 sm:h-3.5 text-orange-500" />
+                        </div>
+                        <span className="text-white font-bold text-xs sm:text-sm font-[poppins] truncate">{game.title}</span>
                       </div>
-                    </div>
-                  )}
-
-                  {/* Tips */}
-                  {game.tips && game.tips.length > 0 && (
-                    <div>
-                      <h3 className="font-bold text-sm sm:text-base text-gray-900 mb-2 sm:mb-3 font-[poppins]">Tips</h3>
-                      <div className="space-y-1.5 sm:space-y-2">
-                        {game.tips.map((tip, i) => (
-                          <div key={i} className="flex items-start gap-2 text-xs sm:text-sm font-[poppins]">
-                            <IconCheck size={12} className="sm:w-3.5 sm:h-3.5 text-orange-500 shrink-0 mt-0.5" />
-                            <span className="text-gray-600">{tip}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Features */}
-                  {game.features && game.features.length > 0 && (
-                    <div>
-                      <h3 className="font-bold text-sm sm:text-base text-gray-900 mb-2 sm:mb-3 font-[poppins]">Features</h3>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2">
-                        {game.features.map((feat, i) => (
-                          <div key={i} className="flex items-start gap-2 text-xs sm:text-sm p-2 sm:p-3 bg-white rounded-lg sm:rounded-xl border border-gray-100 font-[poppins]">
-                            <div className="w-4 sm:w-5 h-4 sm:h-5 rounded-full bg-orange-100 flex items-center justify-center shrink-0 mt-0.5">
-                              <IconCheck size={8} className="sm:w-2.5 sm:h-2.5 text-orange-600" />
-                            </div>
-                            <span className="text-gray-600">{feat}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </motion.div>
-
-              {/* GAMEPLAY */}
-              {game.controls && game.controls.length > 0 && (
-                <motion.div
-                  ref={gameplayRef}
-                  initial="hidden"
-                  animate="visible"
-                  variants={fadeUpVariants}
-                  id="section-gameplay"
-                  className="bg-white/60 rounded-xl sm:rounded-2xl border border-gray-200 p-3 sm:p-5 scroll-mt-32">
-                  <h2 className="text-lg sm:text-xl font-black text-gray-900 mb-3 sm:mb-4 flex items-center gap-2">
-                    <span className="w-1 h-5 sm:h-6 bg-orange-500 rounded-full font-[poppins]"></span>
-                    Gameplay
-                  </h2>
-                  <div>
-                    <h2 className="text-base sm:text-lg font-black text-gray-900 mb-3 sm:mb-5 font-[poppins]">Controls & Key Bindings</h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2">
-                      {game.controls.map(({ key, action }) => (
-                        <div key={key} className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-white rounded-lg sm:rounded-xl border border-gray-100">
-                          <span className="font-[poppins] inline-flex items-center justify-center bg-white border border-gray-300 rounded-lg px-1.5 sm:px-2.5 py-0.5 sm:py-1 text-xs font-bold text-gray-700 shadow-sm min-w-[50px] sm:min-w-[64px] text-center shrink-0" style={{ boxShadow: '0 2px 0 #d1d5db' }}>
-                            {key}
+                      <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+                        <button
+                          onClick={handleLike}
+                          className="cursor-pointer hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors group"
+                        >
+                          <IconThumbUp size={14} className={liked ? 'text-orange-400' : 'text-gray-400 group-hover:text-white'} />
+                          <span className={`text-xs font-semibold ${liked ? 'text-orange-400' : 'text-gray-300'}`}>
+                            {likeCount}
                           </span>
-                          <span className="text-xs sm:text-sm text-gray-600 font-[poppins]">{action}</span>
+                        </button>
+                        <button
+                          onClick={handleDislike}
+                          className="w-6 sm:w-8 h-6 sm:h-8 cursor-pointer rounded-lg bg-gray-800 hover:bg-gray-700 flex items-center justify-center transition-colors hidden sm:flex group"
+                          title="Dislike"
+                        >
+                          <IconThumbDown size={12} className={`sm:w-3.5 sm:h-3.5 ${disliked ? 'text-red-400' : 'text-gray-400 group-hover:text-white'}`} />
+                          {dislikeCount > 0 && (
+                            <span className={`text-xs font-semibold ml-1 ${disliked ? 'text-red-400' : 'text-gray-300'}`}>
+                              {dislikeCount}
+                            </span>
+                          )}
+                        </button>
+                        <button
+                          onClick={handleWishlist}
+                          className="w-6 sm:w-8 h-6 sm:h-8 cursor-pointer rounded-lg bg-gray-800 hover:bg-gray-700 flex items-center justify-center transition-colors group"
+                          title="Add to Wishlist"
+                        >
+                          <IconHeart size={12} className={`sm:w-3.5 sm:h-3.5 ${wishlisted ? 'text-red-400 fill-red-400' : 'text-gray-400 group-hover:text-white'}`} filled={wishlisted} />
+                          {wishlistCount > 0 && (
+                            <span className={`text-xs font-semibold ml-1 ${wishlisted ? 'text-red-400' : 'text-gray-300'}`}>
+                              {wishlistCount}
+                            </span>
+                          )}
+                        </button>
+
+                        <button
+                          onClick={handleFullscreen}
+                          className="w-6 sm:w-8 h-6 sm:h-8 cursor-pointer rounded-lg bg-gray-800 hover:bg-gray-700 flex items-center justify-center transition-colors"
+                          title="Toggle Fullscreen"
+                        >
+                          <IconMaximize size={12} className="sm:w-3.5 sm:h-3.5 text-gray-400" />
+                        </button>
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  {/* ── GAME TITLE + META ── */}
+                  <motion.div
+                    ref={titleMetaRef}
+                    initial="initial"
+                    animate="animate"
+                    variants={fadeUpVariants}
+                    className="bg-white/60 rounded-xl sm:rounded-2xl border border-gray-200 p-3 sm:p-5">
+                    <div className="flex flex-col sm:flex-row items-start justify-between gap-3 sm:gap-4 mb-3 sm:mb-4">
+                      <div className="w-full">
+                        <h1 className="text-xl sm:text-2xl font-black text-gray-900 mb-2 sm:mb-1 font-[poppins] break-words">{game.title}</h1>
+                        <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+                          <div className="relative" ref={shareMenuRef}>
+                            <button
+                              onClick={() => setShowShareMenu(!showShareMenu)}
+                              className="cursor-pointer flex font-[poppins] items-center gap-1 sm:gap-1.5 bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-semibold px-2.5 sm:px-3 py-1.5 rounded-full transition-colors"
+                            >
+                              <IconShare size={11} className="sm:w-3 sm:h-3" />
+                              <span className="hidden sm:inline">Share</span>
+                            </button>
+
+                            {/* Share Menu Dropdown */}
+                            {showShareMenu && (
+                              <div className="absolute top-full left-0 mt-2 w-48 sm:w-56 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2">
+                                <div className="p-2">
+                                  <p className="text-xs font-bold text-gray-500 px-3 py-2 font-[poppins]">Share this game</p>
+
+                                  {/* Social Media Options */}
+                                  <button
+                                    onClick={() => handleShare('facebook')}
+                                    className="w-full flex items-center gap-2 sm:gap-3 px-3 py-2 sm:py-2.5 rounded-lg hover:bg-blue-50 transition-colors group"
+                                  >
+                                    <div className="w-7 sm:w-8 h-7 sm:h-8 rounded-lg bg-blue-600 flex items-center justify-center shrink-0">
+                                      <svg className="w-3 sm:w-4 h-3 sm:h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                                      </svg>
+                                    </div>
+                                    <span className="text-xs sm:text-sm font-semibold text-gray-700 group-hover:text-blue-600 font-[poppins]">Facebook</span>
+                                  </button>
+
+                                  <button
+                                    onClick={() => handleShare('twitter')}
+                                    className="w-full flex items-center gap-2 sm:gap-3 px-3 py-2 sm:py-2.5 rounded-lg hover:bg-sky-50 transition-colors group"
+                                  >
+                                    <div className="w-7 sm:w-8 h-7 sm:h-8 rounded-lg bg-sky-500 flex items-center justify-center shrink-0">
+                                      <svg className="w-3 sm:w-4 h-3 sm:h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                                      </svg>
+                                    </div>
+                                    <span className="text-xs sm:text-sm font-semibold text-gray-700 group-hover:text-sky-600 font-[poppins]">Twitter</span>
+                                  </button>
+
+                                  <button
+                                    onClick={() => handleShare('whatsapp')}
+                                    className="w-full flex items-center gap-2 sm:gap-3 px-3 py-2 sm:py-2.5 rounded-lg hover:bg-green-50 transition-colors group"
+                                  >
+                                    <div className="w-7 sm:w-8 h-7 sm:h-8 rounded-lg bg-green-500 flex items-center justify-center shrink-0">
+                                      <svg className="w-3 sm:w-4 h-3 sm:h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+                                      </svg>
+                                    </div>
+                                    <span className="text-xs sm:text-sm font-semibold text-gray-700 group-hover:text-green-600 font-[poppins]">WhatsApp</span>
+                                  </button>
+
+                                  <button
+                                    onClick={() => handleShare('telegram')}
+                                    className="w-full flex items-center gap-2 sm:gap-3 px-3 py-2 sm:py-2.5 rounded-lg hover:bg-blue-50 transition-colors group"
+                                  >
+                                    <div className="w-7 sm:w-8 h-7 sm:h-8 rounded-lg bg-blue-500 flex items-center justify-center shrink-0">
+                                      <svg className="w-3 sm:w-4 h-3 sm:h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
+                                      </svg>
+                                    </div>
+                                    <span className="text-xs sm:text-sm font-semibold text-gray-700 group-hover:text-blue-600 font-[poppins]">Telegram</span>
+                                  </button>
+
+                                  <button
+                                    onClick={() => handleShare('reddit')}
+                                    className="w-full flex items-center gap-2 sm:gap-3 px-3 py-2 sm:py-2.5 rounded-lg hover:bg-orange-50 transition-colors group"
+                                  >
+                                    <div className="w-7 sm:w-8 h-7 sm:h-8 rounded-lg bg-orange-500 flex items-center justify-center shrink-0">
+                                      <svg className="w-3 sm:w-4 h-3 sm:h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z" />
+                                      </svg>
+                                    </div>
+                                    <span className="text-xs sm:text-sm font-semibold text-gray-700 group-hover:text-orange-600 font-[poppins]">Reddit</span>
+                                  </button>
+
+                                  {/* Divider */}
+                                  <div className="h-px bg-gray-200 my-2" />
+
+                                  {/* Copy Link */}
+                                  <button
+                                    onClick={handleCopyLink}
+                                    className=" cursor-pointer w-full flex items-center gap-2 sm:gap-3 px-3 py-2 sm:py-2.5 rounded-lg hover:bg-gray-50 transition-colors group"
+                                  >
+                                    <div className="w-7 sm:w-8 h-7 sm:h-8 rounded-lg bg-gray-200 flex items-center justify-center shrink-0">
+                                      {copySuccess ? (
+                                        <IconCheck size={14} className="sm:w-4 sm:h-4 text-green-600" />
+                                      ) : (
+                                        <svg className="w-3 sm:w-4 h-3 sm:h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                        </svg>
+                                      )}
+                                    </div>
+                                    <span className={`text-xs sm:text-sm font-semibold font-[poppins] ${copySuccess ? 'text-green-600' : 'text-gray-700 group-hover:text-gray-900'}`}>
+                                      {copySuccess ? 'Link Copied!' : 'Copy Link'}
+                                    </span>
+                                  </button>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Metadata grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-0 divide-y divide-gray-100">
+                      {[
+                        ['Developer', <span key="dev" className="text-orange-500 font-semibold">{game.developer || 'Unknown'}</span>],
+                        ['Rating', (
+                          <span key="rat" className="flex items-center gap-1 sm:gap-2 flex-wrap">
+                            <span className="font-bold text-gray-900 font-[poppins]">{game.rating}</span>
+                            <StarRating value={Math.round(game.rating / 2)} size={10} />
+                            <span className="text-gray-400 text-xs font-[poppins]">({game.votes || '0'} votes)</span>
+                          </span>
+                        )],
+                        ['Released', <span key="rel" className="font-semibold text-sm">{game.released || 'N/A'}</span>],
+                        ['Technology', <span key="tech" className="font-semibold text-sm">{game.technology || 'HTML5'}</span>],
+                        ['Platforms', <span key="plat" className="text-xs leading-relaxed">{(game.platforms || ['Browser']).join(', ')}</span>],
+                        ...(game.wiki ? [['Wiki pages', <span key="wiki" className="text-orange-500 font-semibold">{game.wiki}</span>]] : []),
+                      ].map(([label, value]) => (
+                        <div key={String(label)} className="flex items-start gap-2 sm:gap-3 py-2 sm:py-3 px-0 sm:odd:pr-3 sm:even:pl-3 sm:odd:border-r sm:odd:border-gray-100">
+                          <span className="text-xs text-gray-600 w-20 sm:w-24 shrink-0 pt-0.5 font-[poppins]">{label}:</span>
+                          <span className="text-xs sm:text-sm text-gray-700 flex-1 font-[poppins]">{value}</span>
                         </div>
                       ))}
                     </div>
-                  </div>
-                </motion.div>
-              )}
-            </div>
-          </div>
+                  </motion.div>
 
-          <aside className="w-full lg:w-[450px] shrink-0 flex flex-col gap-3 sm:gap-4">
-            {/* Play button card */}
-            <div className="bg-white/60 rounded-xl sm:rounded-2xl border border-gray-200 p-3 sm:p-4">
-              {/* <button 
+                  {/* ── TAGS ── */}
+                  {game.tags && game.tags.length > 0 && (
+                    <motion.div
+                      ref={tagsRef}
+                      initial="initial"
+                      animate="animate"
+                      variants={fadeUpVariants}
+                      className="bg-white/60 rounded-xl sm:rounded-2xl border border-gray-200 p-3 sm:p-5">
+                      <div className="flex items-center gap-2 mb-3 sm:mb-4">
+                        <IconTag size={14} className="sm:w-4 sm:h-4 text-orange-500" />
+                        <h2 className="font-bold text-sm sm:text-base text-gray-900 font-[poppins]">Categories & Tags</h2>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                        {game.tags.map(({ label, count }) => (
+                          <button
+                            key={label}
+                            className="font-[poppins] inline-flex items-center gap-1 bg-gray-100 cursor-pointer hover:bg-orange-50 hover:text-orange-600 text-gray-700 text-xs font-semibold px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full transition-colors border border-transparent hover:border-orange-200"
+                          >
+                            {label}
+                            <span className="font-[poppins] text-xs text-gray-500 font-normal">{count}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* ── TABS ── */}
+                  <div className="bg-white rounded-xl sm:rounded-2xl border border-gray-200 overflow-hidden sticky top-[60px] sm:top-[72px] z-40">
+                    <div className="flex border-b border-gray-100 px-1 sm:px-2 pt-1 sm:pt-2 gap-0.5 sm:gap-1 overflow-x-auto">
+                      {TABS.map((tab) => (
+                        <button
+                          key={tab}
+                          onClick={() => handleTabClick(tab)}
+                          className={`px-2.5 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold rounded-t-lg sm:rounded-t-xl transition-all cursor-pointer whitespace-nowrap ${activeTab === tab
+                            ? 'bg-orange-500 text-white'
+                            : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50'
+                            }`}
+                        >
+                          {tab}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Content Sections */}
+                  <div className="space-y-4 sm:space-y-6">
+                    {/* OVERVIEW */}
+                    <motion.div
+                      ref={overviewRef}
+                      initial="hidden"
+                      animate="visible"
+                      variants={fadeUpVariants}
+                      id="section-overview"
+                      className="bg-white/60 rounded-xl sm:rounded-2xl border border-gray-200 p-3 sm:p-5 scroll-mt-32">
+                      <h2 className="text-lg sm:text-xl font-black text-gray-900 mb-3 sm:mb-4 flex items-center gap-2">
+                        <span className="w-1 h-5 sm:h-6 bg-orange-500 rounded-full font-[poppins]"></span>
+                        Overview
+                      </h2>
+                      <div className="space-y-4 sm:space-y-6">
+                        {/* Description */}
+                        <div>
+                          <p className="text-gray-600 text-xs sm:text-sm leading-relaxed font-[poppins]">{game.description}</p>
+                        </div>
+
+                        {/* How to Play */}
+                        {game.howToPlay && game.howToPlay.length > 0 && (
+                          <div>
+                            <h2 className="text-base sm:text-lg font-black text-gray-900 mb-3 sm:mb-4 font-[poppins]">How to Play {game.title}</h2>
+                            <div className="space-y-3 sm:space-y-4">
+                              {game.howToPlay.map(({ title, body }, i) => (
+                                <div key={i} className="flex gap-2 sm:gap-4">
+                                  <div className="w-6 sm:w-7 h-6 sm:h-7 rounded-lg bg-orange-500 text-white text-xs font-black flex items-center justify-center shrink-0 mt-0.5">
+                                    {i + 1}
+                                  </div>
+                                  <div>
+                                    <p className="text-xs sm:text-sm font-bold text-gray-800 mb-1 font-[poppins]">{title}</p>
+                                    <p className="text-xs sm:text-sm text-gray-500 leading-relaxed font-[poppins]">{body}</p>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Game Modes */}
+                        {game.gameModes && game.gameModes.length > 0 && (
+                          <div>
+                            <h3 className="font-bold text-sm sm:text-base text-gray-900 mb-2 sm:mb-3 font-[poppins]">Game Modes</h3>
+                            <div className="space-y-2 sm:space-y-3">
+                              {game.gameModes.map(({ name, desc }) => (
+                                <div key={name} className="flex gap-2 sm:gap-3 p-2 sm:p-3 rounded-lg sm:rounded-xl bg-white border border-gray-100 hover:border-orange-200 cursor-pointer hover:bg-orange-50/40 transition-colors">
+                                  <div className="w-2 h-2 rounded-full bg-orange-500 shrink-0 mt-1.5 sm:mt-2" />
+                                  <div>
+                                    <span className="text-xs sm:text-sm font-bold text-gray-900 font-[poppins]">{name}</span>
+                                    <span className="text-xs sm:text-sm text-gray-500 font-[poppins]">: {desc}</span>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Tips */}
+                        {game.tips && game.tips.length > 0 && (
+                          <div>
+                            <h3 className="font-bold text-sm sm:text-base text-gray-900 mb-2 sm:mb-3 font-[poppins]">Tips</h3>
+                            <div className="space-y-1.5 sm:space-y-2">
+                              {game.tips.map((tip, i) => (
+                                <div key={i} className="flex items-start gap-2 text-xs sm:text-sm font-[poppins]">
+                                  <IconCheck size={12} className="sm:w-3.5 sm:h-3.5 text-orange-500 shrink-0 mt-0.5" />
+                                  <span className="text-gray-600">{tip}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Features */}
+                        {game.features && game.features.length > 0 && (
+                          <div>
+                            <h3 className="font-bold text-sm sm:text-base text-gray-900 mb-2 sm:mb-3 font-[poppins]">Features</h3>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2">
+                              {game.features.map((feat, i) => (
+                                <div key={i} className="flex items-start gap-2 text-xs sm:text-sm p-2 sm:p-3 bg-white rounded-lg sm:rounded-xl border border-gray-100 font-[poppins]">
+                                  <div className="w-4 sm:w-5 h-4 sm:h-5 rounded-full bg-orange-100 flex items-center justify-center shrink-0 mt-0.5">
+                                    <IconCheck size={8} className="sm:w-2.5 sm:h-2.5 text-orange-600" />
+                                  </div>
+                                  <span className="text-gray-600">{feat}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </motion.div>
+
+                    {/* GAMEPLAY */}
+                    {game.controls && game.controls.length > 0 && (
+                      <motion.div
+                        ref={gameplayRef}
+                        initial="hidden"
+                        animate="visible"
+                        variants={fadeUpVariants}
+                        id="section-gameplay"
+                        className="bg-white/60 rounded-xl sm:rounded-2xl border border-gray-200 p-3 sm:p-5 scroll-mt-32">
+                        <h2 className="text-lg sm:text-xl font-black text-gray-900 mb-3 sm:mb-4 flex items-center gap-2">
+                          <span className="w-1 h-5 sm:h-6 bg-orange-500 rounded-full font-[poppins]"></span>
+                          Gameplay
+                        </h2>
+                        <div>
+                          <h2 className="text-base sm:text-lg font-black text-gray-900 mb-3 sm:mb-5 font-[poppins]">Controls & Key Bindings</h2>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2">
+                            {game.controls.map(({ key, action }) => (
+                              <div key={key} className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-white rounded-lg sm:rounded-xl border border-gray-100">
+                                <span className="font-[poppins] inline-flex items-center justify-center bg-white border border-gray-300 rounded-lg px-1.5 sm:px-2.5 py-0.5 sm:py-1 text-xs font-bold text-gray-700 shadow-sm min-w-[50px] sm:min-w-[64px] text-center shrink-0" style={{ boxShadow: '0 2px 0 #d1d5db' }}>
+                                  {key}
+                                </span>
+                                <span className="text-xs sm:text-sm text-gray-600 font-[poppins]">{action}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </div>
+                </div>
+
+                <aside className="w-full lg:w-[450px] shrink-0 flex flex-col gap-3 sm:gap-4">
+                  {/* Play button card */}
+                  <div className="bg-white/60 rounded-xl sm:rounded-2xl border border-gray-200 p-3 sm:p-4">
+                    {/* <button 
                 onClick={handlePlayGame}
                 className="w-full flex items-center justify-center gap-2 bg-orange-500 cursor-pointer hover:bg-orange-600 font-[poppins] text-white font-black text-sm sm:text-base py-3 sm:py-3.5 rounded-lg sm:rounded-xl transition-all shadow-sm shadow-orange-200 active:scale-95 mb-2 sm:mb-3"
               >
                 <IconPlay size={16} className="sm:w-4.5 sm:h-4.5" />
                 Play Now
               </button> */}
-              <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
-                <button
-                  onClick={handleLike}
-                  className={`flex flex-col cursor-pointer items-center gap-1 py-2 sm:py-2.5 rounded-lg sm:rounded-xl border transition-all text-xs font-semibold ${liked ? 'bg-orange-50 border-orange-200 text-orange-600' : 'bg-gray-50 border-gray-200 text-gray-500 hover:border-orange-200 hover:text-orange-500'
-                    }`}
-                >
-                  <IconThumbUp size={14} className="sm:w-4 sm:h-4" />
-                  <span className="text-[10px]">{likeCount}</span>
-                </button>
-                <button
-                  onClick={handleDislike}
-                  className={`flex flex-col cursor-pointer items-center gap-1 py-2 sm:py-2.5 rounded-lg sm:rounded-xl border transition-all text-xs font-semibold ${disliked ? 'bg-red-50 border-red-200 text-red-600' : 'bg-gray-50 border-gray-200 text-gray-500 hover:border-red-200 hover:text-red-500'
-                    }`}
-                >
-                  <IconThumbDown size={14} className="sm:w-4 sm:h-4" />
-                  <span className="text-[10px]">{dislikeCount}</span>
-                </button>
-                <button
-                  onClick={handleWishlist}
-                  className={`flex flex-col items-center cursor-pointer gap-1 py-2 sm:py-2.5 rounded-lg sm:rounded-xl border transition-all text-xs font-semibold ${wishlisted ? 'bg-red-50 border-red-200 text-red-500' : 'bg-gray-50 border-gray-200 text-gray-500 hover:border-red-200 hover:text-red-400'
-                    }`}
-                >
-                  <IconHeart size={14} className="sm:w-4 sm:h-4" filled={wishlisted} />
-                  <span className="text-[10px]">{wishlistCount}</span>
-                </button>
-                <button
-                  onClick={() => setShowSidebarShareMenu(!showSidebarShareMenu)}
-                  className="flex flex-col items-center gap-1 cursor-pointer py-2 sm:py-2.5 rounded-lg sm:rounded-xl border border-gray-200 bg-gray-50 text-gray-500 hover:border-blue-200 hover:text-blue-500 transition-all text-xs font-semibold relative"
-                >
-                  <IconShare size={14} className="sm:w-4 sm:h-4" />
-                  Share
+                    <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
+                      <button
+                        onClick={handleLike}
+                        className={`flex flex-col cursor-pointer items-center gap-1 py-2 sm:py-2.5 rounded-lg sm:rounded-xl border transition-all text-xs font-semibold ${liked ? 'bg-orange-50 border-orange-200 text-orange-600' : 'bg-gray-50 border-gray-200 text-gray-500 hover:border-orange-200 hover:text-orange-500'
+                          }`}
+                      >
+                        <IconThumbUp size={14} className="sm:w-4 sm:h-4" />
+                        <span className="text-[10px]">{likeCount}</span>
+                      </button>
+                      <button
+                        onClick={handleDislike}
+                        className={`flex flex-col cursor-pointer items-center gap-1 py-2 sm:py-2.5 rounded-lg sm:rounded-xl border transition-all text-xs font-semibold ${disliked ? 'bg-red-50 border-red-200 text-red-600' : 'bg-gray-50 border-gray-200 text-gray-500 hover:border-red-200 hover:text-red-500'
+                          }`}
+                      >
+                        <IconThumbDown size={14} className="sm:w-4 sm:h-4" />
+                        <span className="text-[10px]">{dislikeCount}</span>
+                      </button>
+                      <button
+                        onClick={handleWishlist}
+                        className={`flex flex-col items-center cursor-pointer gap-1 py-2 sm:py-2.5 rounded-lg sm:rounded-xl border transition-all text-xs font-semibold ${wishlisted ? 'bg-red-50 border-red-200 text-red-500' : 'bg-gray-50 border-gray-200 text-gray-500 hover:border-red-200 hover:text-red-400'
+                          }`}
+                      >
+                        <IconHeart size={14} className="sm:w-4 sm:h-4" filled={wishlisted} />
+                        <span className="text-[10px]">{wishlistCount}</span>
+                      </button>
+                      <button
+                        onClick={() => setShowSidebarShareMenu(!showSidebarShareMenu)}
+                        className="flex flex-col items-center gap-1 cursor-pointer py-2 sm:py-2.5 rounded-lg sm:rounded-xl border border-gray-200 bg-gray-50 text-gray-500 hover:border-blue-200 hover:text-blue-500 transition-all text-xs font-semibold relative"
+                      >
+                        <IconShare size={14} className="sm:w-4 sm:h-4" />
+                        Share
 
-                  {/* Share Menu Dropdown */}
-                  {showSidebarShareMenu && (
-                    <div ref={sidebarShareMenuRef} className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2">
-                      <div className="p-2">
-                        <p className="text-xs font-bold text-gray-500 px-3 py-2 font-[poppins]">Share this game</p>
+                        {/* Share Menu Dropdown */}
+                        {showSidebarShareMenu && (
+                          <div ref={sidebarShareMenuRef} className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2">
+                            <div className="p-2">
+                              <p className="text-xs font-bold text-gray-500 px-3 py-2 font-[poppins]">Share this game</p>
 
-                        {/* Social Media Options */}
-                        <button
-                          onClick={() => handleShare('facebook')}
-                          className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-blue-50 transition-colors group"
-                        >
-                          <div className="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center shrink-0">
-                            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                            </svg>
+                              {/* Social Media Options */}
+                              <button
+                                onClick={() => handleShare('facebook')}
+                                className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-blue-50 transition-colors group"
+                              >
+                                <div className="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center shrink-0">
+                                  <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                                  </svg>
+                                </div>
+                                <span className="text-xs font-semibold text-gray-700 group-hover:text-blue-600 font-[poppins]">Facebook</span>
+                              </button>
+
+                              <button
+                                onClick={() => handleShare('twitter')}
+                                className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-sky-50 transition-colors group"
+                              >
+                                <div className="w-7 h-7 rounded-lg bg-sky-500 flex items-center justify-center shrink-0">
+                                  <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                                  </svg>
+                                </div>
+                                <span className="text-xs font-semibold text-gray-700 group-hover:text-sky-600 font-[poppins]">Twitter</span>
+                              </button>
+
+                              <button
+                                onClick={() => handleShare('whatsapp')}
+                                className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-green-50 transition-colors group"
+                              >
+                                <div className="w-7 h-7 rounded-lg bg-green-500 flex items-center justify-center shrink-0">
+                                  <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+                                  </svg>
+                                </div>
+                                <span className="text-xs font-semibold text-gray-700 group-hover:text-green-600 font-[poppins]">WhatsApp</span>
+                              </button>
+
+                              <button
+                                onClick={() => handleShare('telegram')}
+                                className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-blue-50 transition-colors group"
+                              >
+                                <div className="w-7 h-7 rounded-lg bg-blue-500 flex items-center justify-center shrink-0">
+                                  <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
+                                  </svg>
+                                </div>
+                                <span className="text-xs font-semibold text-gray-700 group-hover:text-blue-600 font-[poppins]">Telegram</span>
+                              </button>
+
+                              <button
+                                onClick={() => handleShare('reddit')}
+                                className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-orange-50 transition-colors group"
+                              >
+                                <div className="w-7 h-7 rounded-lg bg-orange-500 flex items-center justify-center shrink-0">
+                                  <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z" />
+                                  </svg>
+                                </div>
+                                <span className="text-xs font-semibold text-gray-700 group-hover:text-orange-600 font-[poppins]">Reddit</span>
+                              </button>
+
+                              {/* Divider */}
+                              <div className="h-px bg-gray-200 my-2" />
+
+                              {/* Copy Link */}
+                              <button
+                                onClick={handleCopyLink}
+                                className=" cursor-pointer w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors group"
+                              >
+                                <div className=" cursor-pointer w-7 h-7 rounded-lg bg-gray-200 flex items-center justify-center shrink-0">
+                                  {copySuccess ? (
+                                    <IconCheck size={14} className="text-green-600" />
+                                  ) : (
+                                    <svg className=" cursor-pointer w-3 h-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                    </svg>
+                                  )}
+                                </div>
+                                <span className={`text-xs font-semibold font-[poppins] ${copySuccess ? 'text-green-600' : 'text-gray-700 group-hover:text-gray-900'}`}>
+                                  {copySuccess ? 'Copied!' : 'Copy Link'}
+                                </span>
+                              </button>
+                            </div>
                           </div>
-                          <span className="text-xs font-semibold text-gray-700 group-hover:text-blue-600 font-[poppins]">Facebook</span>
-                        </button>
+                        )}
+                      </button>
+                    </div>
+                  </div>
 
-                        <button
-                          onClick={() => handleShare('twitter')}
-                          className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-sky-50 transition-colors group"
-                        >
-                          <div className="w-7 h-7 rounded-lg bg-sky-500 flex items-center justify-center shrink-0">
-                            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                            </svg>
-                          </div>
-                          <span className="text-xs font-semibold text-gray-700 group-hover:text-sky-600 font-[poppins]">Twitter</span>
-                        </button>
+                  {/* Quick stats */}
+                  <motion.div
+                    ref={sidebarStatsRef}
+                    initial="hidden"
+                    animate="visible"
+                    variants={scaleUpVariants}
+                    className="bg-white/60 rounded-xl sm:rounded-2xl border border-gray-200 p-3 sm:p-4 grid grid-cols-2 gap-2 sm:gap-3">
+                    {[
+                      { icon: <IconStar size={14} className="sm:w-4 sm:h-4 text-orange-500" />, val: `${game.rating}/10`, label: 'Rating' },
+                      { icon: <IconUsers size={14} className="sm:w-4 sm:h-4 text-blue-500" />, val: (likeCount + dislikeCount).toString(), label: 'Votes' },
+                      { icon: <IconUsers size={14} className="sm:w-4 sm:h-4 text-green-500" />, val: game.players || '0', label: 'Players Active' },
+                      {
+                        icon: <IconClock size={14} className="sm:w-4 sm:h-4 text-purple-500" />, val: (() => {
+                          if (!game.released) return 'N/A'
+                          // Try to parse and format the date
+                          try {
+                            const date = new Date(game.released)
+                            if (isNaN(date.getTime())) return game.released
+                            return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+                          } catch {
+                            return game.released
+                          }
+                        })(), label: 'Released'
+                      },
+                    ].map(({ icon, val, label }) => (
+                      <div key={label} className="flex flex-col gap-1 p-2 sm:p-3 bg-white rounded-lg sm:rounded-xl">
+                        {icon}
+                        <p className="font-black text-gray-900 font-[poppins] text-xs sm:text-sm mt-0.5 sm:mt-1">{val}</p>
+                        <p className="text-xs text-gray-500 font-[poppins]">{label}</p>
+                      </div>
+                    ))}
+                  </motion.div>
 
-                        <button
-                          onClick={() => handleShare('whatsapp')}
-                          className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-green-50 transition-colors group"
-                        >
-                          <div className="w-7 h-7 rounded-lg bg-green-500 flex items-center justify-center shrink-0">
-                            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
-                            </svg>
-                          </div>
-                          <span className="text-xs font-semibold text-gray-700 group-hover:text-green-600 font-[poppins]">WhatsApp</span>
-                        </button>
+                  {/*  Similar Games  */}
+                  {similarGames.length > 0 && (
+                    <motion.div
+                      ref={similarGamesRef}
+                      initial="hidden"
+                      animate="visible"
+                      variants={fadeUpVariants}
+                      className="bg-white/60 rounded-xl sm:rounded-2xl border border-gray-200 p-3 sm:p-4">
+                      <div className="flex items-center justify-between mb-3 sm:mb-4">
+                        <h3 className="font-bold text-sm sm:text-base text-gray-900 font-[poppins]">Similar Games</h3>
+                        <a href="/" className="text-xs text-orange-500 font-semibold hover:underline font-[poppins]">See all</a>
+                      </div>
+                      <div className="grid gap-2 sm:gap-3 grid-cols-2">
+                        {similarGames.slice(0, 6).map((game) => (
+                          <a
+                            key={game.id}
+                            href={`/game/${game.slug}`}
+                            onMouseEnter={() => setHoveredGameId(game.id)}
+                            onMouseLeave={() => setHoveredGameId(null)}
+                            className="group relative rounded-lg sm:rounded-xl overflow-hidden cursor-pointer block"
+                          >
+                            <div className="absolute inset-0 rounded-lg sm:rounded-xl border border-white/10 group-hover:border-orange-400/60 transition-all duration-200 ease-out pointer-events-none z-10" />
 
-                        <button
-                          onClick={() => handleShare('telegram')}
-                          className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-blue-50 transition-colors group"
-                        >
-                          <div className="w-7 h-7 rounded-lg bg-blue-500 flex items-center justify-center shrink-0">
-                            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
-                            </svg>
-                          </div>
-                          <span className="text-xs font-semibold text-gray-700 group-hover:text-blue-600 font-[poppins]">Telegram</span>
-                        </button>
-
-                        <button
-                          onClick={() => handleShare('reddit')}
-                          className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-orange-50 transition-colors group"
-                        >
-                          <div className="w-7 h-7 rounded-lg bg-orange-500 flex items-center justify-center shrink-0">
-                            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z" />
-                            </svg>
-                          </div>
-                          <span className="text-xs font-semibold text-gray-700 group-hover:text-orange-600 font-[poppins]">Reddit</span>
-                        </button>
-
-                        {/* Divider */}
-                        <div className="h-px bg-gray-200 my-2" />
-
-                        {/* Copy Link */}
-                        <button
-                          onClick={handleCopyLink}
-                          className=" cursor-pointer w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors group"
-                        >
-                          <div className=" cursor-pointer w-7 h-7 rounded-lg bg-gray-200 flex items-center justify-center shrink-0">
-                            {copySuccess ? (
-                              <IconCheck size={14} className="text-green-600" />
+                            {/* Video or Image */}
+                            {hoveredGameId === game.id && game.videoUrl ? (
+                              <video
+                                src={game.videoUrl}
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                                preload="metadata"
+                                className="w-full h-24 sm:h-28 object-cover"
+                                style={{ display: 'block' }}
+                              />
                             ) : (
-                              <svg className=" cursor-pointer w-3 h-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                              </svg>
+                              <img
+                                src={game.thumbnail || '/Images/911-prey_16x9-cover.jpg'}
+                                alt={game.name || game.title || 'Game'}
+                                className="w-full h-24 sm:h-28 object-cover transition-transform duration-300 ease-out will-change-transform group-hover:scale-110"
+                              />
+                            )}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent z-5" />
+
+                            {/* Game Name - Center Bottom */}
+                            <div className="absolute bottom-12 sm:bottom-8 left-2 sm:left-3 right-2 sm:right-3 z-20">
+                              <h3 className="font-[poppins] text-xs sm:text-[10px] font-bold tracking-tight leading-tight group-hover:text-orange-500 transition-colors duration-200 line-clamp-2 text-white drop-shadow-lg">
+                                {game.name || game.title || 'Game'}
+                              </h3>
+                            </div>
+
+                            {/* Rating Badge - Bottom Left */}
+                            <div className="absolute bottom-2 sm:bottom-2.5 left-2 sm:left-3 flex items-center gap-1 rounded-full px-1.5 sm:px-2 py-0.5 sm:py-1 z-20">
+                              <IconStar size={10} className="sm:w-3 sm:h-3 text-yellow-400 fill-yellow-400 " />
+                              <span className="text-[7px] sm:text-xs font-semibold text-white font-[poppins]">{game.rating}</span>
+                            </div>
+
+                            {/* Players Badge - Bottom Right */}
+                            <div className="absolute bottom-2 sm:bottom-2.5 right-2 sm:right-3 flex items-center gap-0.5 rounded-full px-1.5 sm:px-2 py-0.5 sm:py-1 z-20">
+                              <IconUsers size={10} className="sm:w-3 sm:h-3 text-orange-500" />
+                              <span className="text-[9px] sm:text-xs text-gray-300 font-[poppins]">{game.players}</span>
+                            </div>
+
+                            {/* Play Button - Center on Hover */}
+                            <div className="absolute inset-0 flex items-center justify-center opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 ease-out z-20">
+                              <div className="absolute w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-orange-500/20 blur-xl animate-pulse" />
+
+                              <div className="relative font-[poppins] bg-orange-500/90 backdrop-blur px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-full flex items-center gap-1.5 text-white text-[10px] sm:text-xs font-semibold shadow-xl hover:scale-105 transition-transform duration-200">
+                                <IconPlay size={12} className="sm:w-3 sm:h-3" />
+                                Play
+                              </div>
+                            </div>
+
+                            {/* Glow Effect on Hover */}
+                            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out z-5">
+                              <div className="absolute bottom-0 w-full h-16 bg-gradient-to-t from-orange-500/20 to-transparent" />
+                            </div>
+                          </a>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* Platforms */}
+                  <motion.div
+                    ref={platformsRef}
+                    initial="hidden"
+                    animate="visible"
+                    variants={fadeUpVariants}
+                    className="bg-white/60 rounded-xl sm:rounded-2xl border border-gray-200 p-3 sm:p-4">
+                    <div className="flex items-center gap-2 mb-2 sm:mb-3">
+                      <IconMonitor size={13} className="sm:w-3.75 sm:h-3.75 text-orange-500" />
+                      <h3 className="font-bold text-gray-900 text-xs sm:text-sm font-[poppins]">Platforms</h3>
+                    </div>
+                    <div className="space-y-1.5 sm:space-y-2">
+                      {(game.platforms || ['Browser']).map((platform) => (
+                        <div key={platform} className="flex items-center gap-2 text-xs sm:text-sm text-gray-700 font-[poppins]">
+                          <div className="text-orange-400">
+                            {platform.toLowerCase().includes('mobile') || platform.toLowerCase().includes('ios') || platform.toLowerCase().includes('android') ? (
+                              <IconSmartphone size={12} className="sm:w-3.5 sm:h-3.5" />
+                            ) : (
+                              <IconMonitor size={12} className="sm:w-3.5 sm:h-3.5" />
                             )}
                           </div>
-                          <span className={`text-xs font-semibold font-[poppins] ${copySuccess ? 'text-green-600' : 'text-gray-700 group-hover:text-gray-900'}`}>
-                            {copySuccess ? 'Copied!' : 'Copy Link'}
-                          </span>
-                        </button>
-                      </div>
+                          {platform}
+                        </div>
+                      ))}
                     </div>
-                  )}
-                </button>
+                  </motion.div>
+                </aside>
               </div>
             </div>
 
-            {/* Quick stats */}
-            <motion.div
-              ref={sidebarStatsRef}
-              initial="hidden"
-              animate="visible"
-              variants={scaleUpVariants}
-              className="bg-white/60 rounded-xl sm:rounded-2xl border border-gray-200 p-3 sm:p-4 grid grid-cols-2 gap-2 sm:gap-3">
-              {[
-                { icon: <IconStar size={14} className="sm:w-4 sm:h-4 text-orange-500" />, val: `${game.rating}/10`, label: 'Rating' },
-                { icon: <IconUsers size={14} className="sm:w-4 sm:h-4 text-blue-500" />, val: (likeCount + dislikeCount).toString(), label: 'Votes' },
-                { icon: <IconUsers size={14} className="sm:w-4 sm:h-4 text-green-500" />, val: game.players || '0', label: 'Players Active' },
-                { icon: <IconClock size={14} className="sm:w-4 sm:h-4 text-purple-500" />, val: (() => {
-                  if (!game.released) return 'N/A'
-                  // Try to parse and format the date
-                  try {
-                    const date = new Date(game.released)
-                    if (isNaN(date.getTime())) return game.released
-                    return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
-                  } catch {
-                    return game.released
-                  }
-                })(), label: 'Released' },
-              ].map(({ icon, val, label }) => (
-                <div key={label} className="flex flex-col gap-1 p-2 sm:p-3 bg-white rounded-lg sm:rounded-xl">
-                  {icon}
-                  <p className="font-black text-gray-900 font-[poppins] text-xs sm:text-sm mt-0.5 sm:mt-1">{val}</p>
-                  <p className="text-xs text-gray-500 font-[poppins]">{label}</p>
-                </div>
-              ))}
-            </motion.div>
-
-            {/*  Similar Games  */}
-            {similarGames.length > 0 && (
-              <motion.div
-                ref={similarGamesRef}
-                initial="hidden"
-                animate="visible"
-                variants={fadeUpVariants}
-                className="bg-white/60 rounded-xl sm:rounded-2xl border border-gray-200 p-3 sm:p-4">
-                <div className="flex items-center justify-between mb-3 sm:mb-4">
-                  <h3 className="font-bold text-sm sm:text-base text-gray-900 font-[poppins]">Similar Games</h3>
-                  <a href="/" className="text-xs text-orange-500 font-semibold hover:underline font-[poppins]">See all</a>
-                </div>
-                <div className="grid gap-2 sm:gap-3 grid-cols-2">
-                  {similarGames.slice(0, 6).map((game) => (
-                    <a
-                      key={game.id}
-                      href={`/game/${game.slug}`}
-                      onMouseEnter={() => setHoveredGameId(game.id)}
-                      onMouseLeave={() => setHoveredGameId(null)}
-                      className="group relative rounded-lg sm:rounded-xl overflow-hidden cursor-pointer block"
-                    >
-                      <div className="absolute inset-0 rounded-lg sm:rounded-xl border border-white/10 group-hover:border-orange-400/60 transition-all duration-200 ease-out pointer-events-none z-10" />
-
-                      {/* Video or Image */}
-                      {hoveredGameId === game.id && game.videoUrl ? (
-                        <video
-                          src={game.videoUrl}
-                          autoPlay
-                          loop
-                          muted
-                          playsInline
-                          preload="metadata"
-                          className="w-full h-24 sm:h-28 object-cover"
-                          style={{ display: 'block' }}
-                        />
-                      ) : (
-                        <img
-                          src={game.thumbnail || '/Images/911-prey_16x9-cover.jpg'}
-                          alt={game.name || game.title || 'Game'}
-                          className="w-full h-24 sm:h-28 object-cover transition-transform duration-300 ease-out will-change-transform group-hover:scale-110"
-                        />
-                      )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent z-5" />
-
-                      {/* Game Name - Center Bottom */}
-                      <div className="absolute bottom-12 sm:bottom-8 left-2 sm:left-3 right-2 sm:right-3 z-20">
-                        <h3 className="font-[poppins] text-xs sm:text-[10px] font-bold tracking-tight leading-tight group-hover:text-orange-500 transition-colors duration-200 line-clamp-2 text-white drop-shadow-lg">
-                          {game.name || game.title || 'Game'}
-                        </h3>
-                      </div>
-
-                      {/* Rating Badge - Bottom Left */}
-                      <div className="absolute bottom-2 sm:bottom-2.5 left-2 sm:left-3 flex items-center gap-1 rounded-full px-1.5 sm:px-2 py-0.5 sm:py-1 z-20">
-                        <IconStar size={10} className="sm:w-3 sm:h-3 text-yellow-400 fill-yellow-400 " />
-                        <span className="text-[7px] sm:text-xs font-semibold text-white font-[poppins]">{game.rating}</span>
-                      </div>
-
-                      {/* Players Badge - Bottom Right */}
-                      <div className="absolute bottom-2 sm:bottom-2.5 right-2 sm:right-3 flex items-center gap-0.5 rounded-full px-1.5 sm:px-2 py-0.5 sm:py-1 z-20">
-                        <IconUsers size={10} className="sm:w-3 sm:h-3 text-orange-500" />
-                        <span className="text-[9px] sm:text-xs text-gray-300 font-[poppins]">{game.players}</span>
-                      </div>
-
-                      {/* Play Button - Center on Hover */}
-                      <div className="absolute inset-0 flex items-center justify-center opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 ease-out z-20">
-                        <div className="absolute w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-orange-500/20 blur-xl animate-pulse" />
-
-                        <div className="relative font-[poppins] bg-orange-500/90 backdrop-blur px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-full flex items-center gap-1.5 text-white text-[10px] sm:text-xs font-semibold shadow-xl hover:scale-105 transition-transform duration-200">
-                          <IconPlay size={12} className="sm:w-3 sm:h-3" />
-                          Play
-                        </div>
-                      </div>
-
-                      {/* Glow Effect on Hover */}
-                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out z-5">
-                        <div className="absolute bottom-0 w-full h-16 bg-gradient-to-t from-orange-500/20 to-transparent" />
-                      </div>
-                    </a>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-
-            {/* Platforms */}
-            <motion.div
-              ref={platformsRef}
-              initial="hidden"
-              animate="visible"
-              variants={fadeUpVariants}
-              className="bg-white/60 rounded-xl sm:rounded-2xl border border-gray-200 p-3 sm:p-4">
-              <div className="flex items-center gap-2 mb-2 sm:mb-3">
-                <IconMonitor size={13} className="sm:w-3.75 sm:h-3.75 text-orange-500" />
-                <h3 className="font-bold text-gray-900 text-xs sm:text-sm font-[poppins]">Platforms</h3>
-              </div>
-              <div className="space-y-1.5 sm:space-y-2">
-                {(game.platforms || ['Browser']).map((platform) => (
-                  <div key={platform} className="flex items-center gap-2 text-xs sm:text-sm text-gray-700 font-[poppins]">
-                    <div className="text-orange-400">
-                      {platform.toLowerCase().includes('mobile') || platform.toLowerCase().includes('ios') || platform.toLowerCase().includes('android') ? (
-                        <IconSmartphone size={12} className="sm:w-3.5 sm:h-3.5" />
-                      ) : (
-                        <IconMonitor size={12} className="sm:w-3.5 sm:h-3.5" />
-                      )}
-                    </div>
-                    {platform}
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          </aside>
-        </div>
+            {/* Right Sidebar Ad */}
+            <div className="hidden xl:block w-[160px] shrink-0 sticky top-24 self-start">
+              <ResponsiveAd slot="right_sidebar_ad" layout="vertical" />
+            </div>
           </div>
 
-          {/* Right Sidebar Ad */}
-          <div className="hidden xl:block w-[160px] shrink-0 sticky top-24 self-start">
-            <ResponsiveAd slot="right_sidebar_ad" layout="vertical" />
-          </div>
-        </div>
+          <ResponsiveAd slot="homepage_mid_banner_1" className="max-w-7xl mx-auto mt-8" />
+          <ResponsiveAd slot="homepage_mid_banner_2" className="max-w-7xl mx-auto mt-8" />
+          <ResponsiveAd slot="footer_ad" className="max-w-7xl mx-auto mt-8" />
+        </main>
 
-        <ResponsiveAd slot="homepage_mid_banner_1" className="max-w-7xl mx-auto mt-8" />
-        <ResponsiveAd slot="homepage_mid_banner_2" className="max-w-7xl mx-auto mt-8" />
-        <ResponsiveAd slot="footer_ad" className="max-w-7xl mx-auto mt-8" />
-      </main>
-
-      <Footer />
-    </div>
+        <Footer />
+      </div>
     </>
   )
 }

@@ -36,4 +36,4 @@ try {
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 
-export { app, messaging, auth, googleProvider };
+export { app, messaging, auth, googleProvider, getToken, onMessage };

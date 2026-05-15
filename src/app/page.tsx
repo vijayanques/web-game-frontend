@@ -1,43 +1,67 @@
-'use client';
+import type { Metadata } from 'next';
+import HomeClient from './HomeClient';
+import { generateMetadataFromSeo } from '@/lib/seoMetadataFetcher';
 
-import PageSeoHead from '@/components/PageSeoHead';
-import All_games from "@/components/Home/All_games";
-import AllCategoriesSections from "@/components/Home/AllCategoriesSections";
-import Categories from "@/components/Home/Explore_Categories_";
-import Footer from "@/components/Footer";
-import ResponsiveAd from "@/components/common/ResponsiveAd";
+export async function generateMetadata(): Promise<Metadata> {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://game-backend-production-3988.up.railway.app/api';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://theplayfree.com';
+
+  try {
+    // Fetch SEO metadata for the home page (static page slug "/")
+    // We use the specialized slug endpoint
+    const response = await fetch(`${apiUrl}/seo/type/page/slug/%2F`, { 
+      cache: 'no-store',
+      headers: { 'Accept': 'application/json' }
+    });
+    
+    if (response.ok) {
+      const result = await response.json();
+      const seoData = result.record || result.data || result;
+      
+      if (seoData && seoData.metaTitle) {
+        return generateMetadataFromSeo(seoData, {
+          title: 'Theplayfree - Free Browser Games',
+          description: 'Play free games online at Theplayfree',
+          url: baseUrl,
+        });
+      }
+    }
+    
+    console.warn('Home page SEO metadata not found in API, using defaults');
+  } catch (error) {
+    console.error('Error fetching home page metadata:', error);
+  }
+
+  // Final fallback metadata
+  return {
+    title: 'Theplayfree - Free Browser Games',
+    description: 'ThePlayFree is your destination for quick, free, and entertaining browser games.',
+    alternates: {
+      canonical: baseUrl,
+    },
+    openGraph: {
+      title: 'Theplayfree - Free Browser Games',
+      description: 'ThePlayFree is your destination for quick, free, and entertaining browser games.',
+      type: 'website',
+      url: baseUrl,
+      images: [
+        {
+          url: '/Images/favicon.png',
+          width: 1200,
+          height: 630,
+          alt: 'Theplayfree',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Theplayfree - Free Browser Games',
+      description: 'ThePlayFree is your destination for quick, free, and entertaining browser games.',
+      images: ['/Images/favicon.png'],
+    },
+  };
+}
 
 export default function Home() {
-  return (
-    <>
-      <PageSeoHead pageSlug="/" />
-      
-      <div className="min-h-screen bg-[#E8E9ED]">
-        <ResponsiveAd slot="homepage_banner" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6" />
-        
-        <div className="max-w-[1600px] mx-auto flex flex-col xl:flex-row gap-4 justify-center py-6 px-4">
-          {/* Left Sidebar Ad - Sticky */}
-          <div className="hidden xl:block w-[160px] shrink-0 sticky top-24 self-start">
-            <ResponsiveAd slot="left_sidebar_ad" layout="vertical" />
-          </div>
-
-          <div className="flex-1 max-w-7xl w-full">
-            <All_games />
-            <ResponsiveAd slot="homepage_mid_banner_1" className="w-full my-6" />
-            <Categories />
-            <ResponsiveAd slot="homepage_mid_banner_2" className="w-full my-6" />
-            <AllCategoriesSections />
-          </div>
-
-          {/* Right Sidebar Ad - Sticky */}
-          <div className="hidden xl:block w-[160px] shrink-0 sticky top-24 self-start">
-            <ResponsiveAd slot="right_sidebar_ad" layout="vertical" />
-          </div>
-        </div>
-
-        <ResponsiveAd slot="footer_ad" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-6" />
-        <Footer />
-      </div>
-    </>
-  );
+  return <HomeClient />;
 }

@@ -19,7 +19,9 @@
   }
 }
 
-html, body, #__next {
+html,
+body,
+#__next {
   background-color: #F8F4F1 !important;
 }
 
@@ -66,4 +68,18 @@ html, body, #__next {
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5) !important;
   }
+}
+
+@keyframes ticker {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-ticker {
+  animation: ticker 30s linear infinite;
 }

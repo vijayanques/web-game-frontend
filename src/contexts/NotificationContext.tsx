@@ -43,8 +43,11 @@ interface NotificationContextType {
 
 const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
 
+import { useFirebaseMessaging } from '@/hooks/useFirebaseMessaging';
+
 export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const router = useRouter();
+  useFirebaseMessaging(); // Handle FCM registration
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);

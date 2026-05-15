@@ -25,30 +25,42 @@ export interface Game {
 
 export const fetchGames = async (categoryId?: number | string): Promise<Game[]> => {
   let url = `${API_BASE_URL}/api/games`;
-  
+
   if (categoryId && categoryId !== 'all') {
     url += `?category_id=${categoryId}`;
   }
-  
+
   const response = await fetch(url, {
     cache: 'no-store', // Disable caching to ensure fresh data
   });
   const data = await response.json();
-  
+
   if (!data.success) {
     throw new Error(data.message || 'Failed to fetch games');
   }
-  
+
   return data.data;
 };
 
 export const fetchGamesByCategory = async (categoryId: number): Promise<Game[]> => {
   const response = await fetch(`${API_BASE_URL}/api/games?categoryId=${categoryId}`);
   const data = await response.json();
-  
+
   if (!data.success) {
     throw new Error(data.message || 'Failed to fetch games');
   }
-  
+
+  return data.data;
+};
+export const fetchTrendingGames = async (): Promise<Game[]> => {
+  const response = await fetch(`${API_BASE_URL}/api/games/trending`, {
+    cache: 'no-store',
+  });
+  const data = await response.json();
+
+  if (!data.success) {
+    throw new Error(data.message || 'Failed to fetch trending games');
+  }
+
   return data.data;
 };

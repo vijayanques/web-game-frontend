@@ -899,10 +899,10 @@ export default function Header() {
 
                       {/* Menu Items */}
                       <div className="p-1.5 md:p-2">
-                        <Link href="/profile" onClick={() => setProfileOpen(false)} className="cursor-pointer font-[poppins] w-full flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-2.5 rounded-lg text-xs md:text-sm font-medium text-gray-700 hover:bg-orange-50 transition-colors">
+                        {/* <Link href="/profile" onClick={() => setProfileOpen(false)} className="cursor-pointer font-[poppins] w-full flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-2.5 rounded-lg text-xs md:text-sm font-medium text-gray-700 hover:bg-orange-50 transition-colors">
                           <User className="w-3.5 h-3.5 md:w-4 md:h-4 flex-shrink-0" />
                           <span>Profile</span>
-                        </Link>
+                        </Link> */}
                         <button className="cursor-pointer font-[poppins] w-full flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-2.5 rounded-lg text-xs md:text-sm font-medium text-gray-700 hover:bg-orange-50 transition-colors">
                           <Settings className="w-3.5 h-3.5 md:w-4 md:h-4 flex-shrink-0" />
                           <span>Settings</span>
