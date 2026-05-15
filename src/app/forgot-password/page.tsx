@@ -59,7 +59,7 @@ export default function ForgotPasswordPage() {
   return (
     <>
       <PageSeoHead pageSlug="/forgot-password" />
-      
+
       <div className="bg-[#E8E9ED] px-4 py-12 min-h-screen">
         <div className="w-full max-w-md mx-auto">
 
@@ -88,7 +88,7 @@ export default function ForgotPasswordPage() {
             animate={isFormCardInView ? "visible" : "hidden"}
             variants={fadeUpVariants}
             className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
-            
+
             {!isSuccess ? (
               <form onSubmit={formik.handleSubmit} className="space-y-6">
                 {/* Email Field */}
@@ -102,11 +102,10 @@ export default function ForgotPasswordPage() {
                       id="email"
                       type="email"
                       {...formik.getFieldProps('email')}
-                      className={`w-full pl-11 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent outline-none transition font-[poppins] ${
-                        formik.touched.email && formik.errors.email
-                          ? 'border-red-500'
-                          : 'border-gray-300'
-                      }`}
+                      className={`w-full pl-11 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent outline-none transition font-[poppins] ${formik.touched.email && formik.errors.email
+                        ? 'border-red-500'
+                        : 'border-gray-300'
+                        }`}
                       placeholder="you@example.com"
                       disabled={isSubmitting}
                     />
@@ -120,7 +119,7 @@ export default function ForgotPasswordPage() {
                 <button
                   type="submit"
                   disabled={isSubmitting || !formik.isValid}
-                  className="w-full bg-orange-500 text-white py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-[poppins] shadow-lg shadow-orange-500/30"
+                  className="cursor-pointer w-full bg-orange-500 text-white py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-[poppins] shadow-lg shadow-orange-500/30"
                 >
                   {isSubmitting ? (
                     <span className="flex items-center justify-center gap-2">
@@ -133,7 +132,7 @@ export default function ForgotPasswordPage() {
                 </button>
 
                 {/* Back to Login */}
-                <Link 
+                <Link
                   href="/login"
                   className="flex items-center justify-center gap-2 text-sm text-gray-600 hover:text-orange-500 transition font-[poppins]"
                 >
@@ -158,7 +157,7 @@ export default function ForgotPasswordPage() {
                     <strong>Didn't receive the email?</strong> Check your spam folder or try again in a few minutes.
                   </p>
                 </div>
-                <Link 
+                <Link
                   href="/login"
                   className="inline-flex items-center justify-center gap-2 text-orange-500 hover:text-orange-600 font-semibold font-[poppins]"
                 >

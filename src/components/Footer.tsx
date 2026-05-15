@@ -1409,7 +1409,7 @@ const TheplayfreeFooter = () => {
                             router.push(link.href);
                           }
                         }}
-                        className="w-full group flex items-center justify-between text-sm text-gray-500 font-[poppins] hover:text-orange-500 transition-colors duration-200 font-medium py-1.5 px-2.5 rounded-lg hover:bg-orange-50"
+                        className="cursor-pointer w-full group flex items-center justify-between text-sm text-gray-500 font-[poppins] hover:text-orange-500 transition-colors duration-200 font-medium py-1.5 px-2.5 rounded-lg hover:bg-orange-50"
                       >
                         <span>{link.label}</span>
                         {link.badge && (
@@ -1453,7 +1453,7 @@ const TheplayfreeFooter = () => {
                           }}
                           className="w-full group flex items-center justify-between text-sm font-[poppins] text-gray-500 hover:text-orange-500 transition-colors duration-200 font-medium py-1.5 px-2.5 rounded-lg hover:bg-orange-50"
                         >
-                          <span className="flex items-center gap-2">
+                          <span className="flex items-center gap-2 cursor-pointer">
                             <span className="text-gray-500 group-hover:text-orange-400 transition-colors">{cat.icon}</span>
                             {cat.label}
                           </span>

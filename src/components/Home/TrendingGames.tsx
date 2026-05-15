@@ -65,12 +65,12 @@ export default function TrendingGames() {
     <section className="w-full max-w-7xl mx-auto px-4 py-8">
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-linear-to-br from-orange-400 to-red-500 rounded-xl shadow-lg shadow-orange-500/20">
+          {/* <div className="p-2 bg-linear-to-br from-orange-400 to-red-500 rounded-xl shadow-lg shadow-orange-500/20">
             <TrendingUp className="w-6 h-6 text-white" />
-          </div>
+          </div> */}
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 font-[poppins]">Trending Now</h2>
-            <p className="text-sm text-gray-500 font-[poppins]">Most played games in the last 24 hours</p>
+            <h2 className="font-[poppins] text-xl sm:text-2xl font-semibold text-gray-900 tracking-tight">Trending Now</h2>
+            <p className="text-xs sm:text-sm font-[poppins] text-gray-500 mt-1">Most played games in the last 24 hours</p>
           </div>
         </div>
         <Link
@@ -129,14 +129,14 @@ export default function TrendingGames() {
                 {/* Info */}
                 <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                   <div className="bg-white/10 backdrop-blur-md rounded-xl p-2 border border-white/20">
-                    <h3 className="text-white font-bold text-sm truncate mb-1">{game.title}</h3>
+                    <h3 className="text-white font-bold text-sm truncate mb-1 font-[poppins]">{game.title}</h3>
                     <div className="flex items-center justify-between text-[10px] text-gray-300">
-                      <span className="bg-orange-500/80 text-white px-1.5 py-0.5 rounded uppercase font-bold">
+                      <span className=" font-[poppins] bg-orange-500/80 text-white px-1.5 py-0.5 rounded uppercase font-bold">
                         {game.category?.name || 'Game'}
                       </span>
                       <div className="flex items-center gap-1">
                         <Trophy className="w-3 h-3 text-yellow-400" />
-                        <span>{game.todayPlays} plays</span>
+                        <span className='font-[poppins]'>{game.todayPlays} plays</span>
                       </div>
                     </div>
                   </div>

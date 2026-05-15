@@ -894,11 +894,11 @@ export default function Header() {
                       {/* Header */}
                       <div className="px-3 sm:px-4 md:px-5 py-2.5 sm:py-3 md:py-4">
                         <p className="text-xs sm:text-sm font-semibold text-gray-900 font-[poppins]">{user.username}</p>
-                        <p className="text-[10px] sm:text-xs text-orange-500 font-medium mt-0.5 font-[poppins]">Level {user.level}</p>
+                        {/* <p className="text-[10px] sm:text-xs text-orange-500 font-medium mt-0.5 font-[poppins]">Level {user.level}</p> */}
                       </div>
 
                       {/* Menu Items */}
-                      <div className="p-1.5 md:p-2">
+                      <div className="pl-1.5 pr-1.5 pt-0 pb-0 md:p-2">
                         {/* <Link href="/profile" onClick={() => setProfileOpen(false)} className="cursor-pointer font-[poppins] w-full flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-2.5 rounded-lg text-xs md:text-sm font-medium text-gray-700 hover:bg-orange-50 transition-colors">
                           <User className="w-3.5 h-3.5 md:w-4 md:h-4 flex-shrink-0" />
                           <span>Profile</span>

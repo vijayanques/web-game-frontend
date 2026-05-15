@@ -233,7 +233,7 @@ export default function LoginClient() {
                 type="button"
                 onClick={handleGoogleLogin}
                 disabled={isGooglePending}
-                className="flex items-center justify-center gap-2 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition font-[poppins] w-full"
+                className="cursor-pointer flex items-center justify-center gap-2 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition font-[poppins] w-full"
               >
                 {isGooglePending ? (
                   <div className="w-5 h-5 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"></div>

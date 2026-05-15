@@ -72,7 +72,7 @@ export default function TrendingClient() {
                 <div className="p-2.5 bg-orange-500 rounded-xl shadow-lg shadow-orange-500/20">
                   <TrendingUp className="w-6 h-6 text-white" />
                 </div>
-                <h1 className="text-3xl sm:text-3xl font-black text-gray-900 font-[poppins]">Trending Games</h1>
+                <h1 className="font-[poppins] text-xl sm:text-2xl font-semibold text-gray-900 tracking-tight">Trending Games</h1>
               </div>
               {/* <p className="text-gray-500 font-[poppins] max-w-xl">
                 Discover the most popular games played by thousands of players in the last 24 hours. Rankings are updated in real-time.
@@ -82,12 +82,12 @@ export default function TrendingClient() {
             <div className="flex items-center gap-6 text-sm font-bold text-gray-600 bg-white/50 backdrop-blur-sm px-6 py-3 rounded-2xl border border-white/50">
               <div className="flex items-center gap-2">
                 <Timer className="w-4 h-4 text-orange-500" />
-                <span>Updates every hour</span>
+                <span className='font-[poppins]'>Updates every hour</span>
               </div>
               <div className="w-px h-4 bg-gray-300" />
               <div className="flex items-center gap-2">
                 <Gamepad2 className="w-4 h-4 text-orange-500" />
-                <span>{games.length} Games</span>
+                <span className='font-[poppins]'>{games.length} Games</span>
               </div>
             </div>
           </div>
@@ -106,7 +106,7 @@ export default function TrendingClient() {
                   onMouseLeave={() => setHoveredId(null)}
                 >
                   {/* Ranking Badge - Premium Style */}
-                  <div className={`absolute -top-2 -left-2 z-20 w-8 h-8 rounded-lg flex items-center justify-center font-black text-xs shadow-lg transform group-hover:scale-110 transition-transform ${index === 0 ? 'bg-yellow-400 text-yellow-900' :
+                  <div className={`font-[poppins] absolute -top-2 -left-2 z-20 w-8 h-8 rounded-lg flex items-center justify-center font-black text-xs shadow-lg transform group-hover:scale-110 transition-transform ${index === 0 ? 'bg-yellow-400 text-yellow-900' :
                     index === 1 ? 'bg-slate-300 text-slate-800' :
                       index === 2 ? 'bg-orange-400 text-orange-950' :
                         'bg-white text-gray-400 border border-gray-100'
@@ -148,20 +148,20 @@ export default function TrendingClient() {
                       {/* Content Info */}
                       <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
                         <div className="space-y-1.5">
-                          <span className="text-[9px] font-black uppercase tracking-widest text-orange-400 bg-orange-400/10 px-2 py-0.5 rounded-md">
+                          <span className="font-[poppins] text-[9px] font-black uppercase tracking-widest text-orange-400 bg-orange-400/10 px-2 py-0.5 rounded-md">
                             {game.category?.name || 'Action'}
                           </span>
-                          <h3 className="text-white font-bold text-xs sm:text-sm leading-tight line-clamp-1 font-[poppins] group-hover:text-orange-400 transition-colors">
+                          <h3 className="font-[poppins] text-white font-bold text-xs sm:text-sm leading-tight line-clamp-1  group-hover:text-orange-400 transition-colors">
                             {game.title}
                           </h3>
                           <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/10">
                             <div className="flex items-center gap-1.5 text-[10px] text-gray-300">
                               <Trophy className="w-3 h-3 text-yellow-500" />
-                              <span className="font-semibold">{game.todayPlays.toLocaleString()} plays</span>
+                              <span className="font-semibold font-[poppins]">{game.todayPlays.toLocaleString()} plays</span>
                             </div>
                             <div className="flex items-center gap-1 text-[9px] font-bold text-orange-500">
                               <TrendingUp className="w-3 h-3" />
-                              <span>+{Math.round(game.trendingScore)}%</span>
+                              <span className='font-[poppins]'>+{Math.round(game.trendingScore)}%</span>
                             </div>
                           </div>
                         </div>
