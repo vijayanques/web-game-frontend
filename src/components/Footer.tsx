@@ -1071,11 +1071,29 @@ const TheplayfreeFooter = () => {
     { value: "98%", label: "Uptime", icon: <Icons.Zap size={20} />, color: "text-green-500", bg: "bg-green-50 border-green-100 group-hover:bg-green-500" },
   ];
 
-  const trendingGames = [
-    "Valorant Champions", "Fortnite Clash", "Minecraft", "FIFA 24",
-    "Rocket League", "Among Us", "GTA V", "Subway Surfers",
-    "Apex Legends", "Call of Duty Arena",
-  ];
+  // Fetch trending games
+  const { data: trendingGamesData = [] } = useQuery({
+    queryKey: ['trending-games'],
+    queryFn: async () => {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+      try {
+        const response = await fetch(`${apiUrl}/api/games/trending`);
+        const data = await response.json();
+        return Array.isArray(data) ? data : data.data || [];
+      } catch (error) {
+        console.error("Error fetching trending games:", error);
+        return [];
+      }
+    },
+  });
+
+  const trendingGames = trendingGamesData.length > 0
+    ? trendingGamesData.map((game: any) => game.title || game.name)
+    : [
+      "Valorant Champions", "Fortnite Clash", "Minecraft", "FIFA 24",
+      "Rocket League", "Among Us", "GTA V", "Subway Surfers",
+      "Apex Legends", "Call of Duty Arena",
+    ];
 
   // Animation variants
   const statsContainerVariants = {
