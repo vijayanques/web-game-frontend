@@ -86,6 +86,7 @@ import NotificationBanner from "@/components/NotificationBanner";
 import { AdSenseProvider } from "@/providers/AdSenseProvider";
 import Script from "next/script";
 import { TrafficTracker } from "@/components/TrafficTracker";
+import ScrollToTop from "@/components/ScrollToTop";
 
 import "./globals.css";
 
@@ -167,6 +168,7 @@ export default function RootLayout({
           </NotificationProvider>
         </QueryProvider>
         <ToastProvider />
+        <ScrollToTop />
       </body>
     </html>
   );

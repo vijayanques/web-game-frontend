@@ -168,3 +168,9 @@ export const IconStar = ({ filled, ...props }: IconProps) => (
     />
   </Icon>
 )
+
+export const IconChevronUp = (props: IconProps) => (
+  <Icon {...props}>
+    <polyline points="18 15 12 9 6 15" />
+  </Icon>
+)
