@@ -104,15 +104,48 @@ const poppins = Poppins({
   display: 'block',
 });
 
-export const metadata: Metadata = {
-  icons: {
-    // icon: "/Images/favicon.png",
-  },
+export async function generateMetadata(): Promise<Metadata> {
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://game-backend-production-3988.up.railway.app/api';
+  const baseUrl = API_URL.endsWith('/api') ? API_URL : `${API_URL}/api`;
+  
+  try {
+    // Fetch SEO metadata for the home page (slug /)
+    const response = await fetch(`${baseUrl}/seo/type/page/slug/%2F`, { 
+      next: { revalidate: 300 } // Revalidate every 5 minutes
+    });
+    
+    if (response.ok) {
+      const data = await response.json();
+      if (data.favicon) {
+        return {
+          title: data.metaTitle || "Theplayfree - Free Browser Games",
+          description: data.metaDescription || "ThePlayFree is your destination for quick, free, and entertaining browser games.",
+          icons: {
+            icon: data.favicon,
+            shortcut: data.favicon,
+            apple: data.favicon,
+          },
+          verification: {
+            google: '6johWO9GkPOVjyaDvImIDpORJb_RVDiuVLKdsNDOb1k',
+          },
+        };
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching SEO metadata for layout:', error);
+  }
 
-  verification: {
-    google: '6johWO9GkPOVjyaDvImIDpORJb_RVDiuVLKdsNDOb1k',
-  },
-};
+  return {
+    title: "Theplayfree - Free Browser Games",
+    description: "ThePlayFree is your destination for quick, free, and entertaining browser games.",
+    icons: {
+      icon: "/Images/favicon.png",
+    },
+    verification: {
+      google: '6johWO9GkPOVjyaDvImIDpORJb_RVDiuVLKdsNDOb1k',
+    },
+  };
+}
 
 export default function RootLayout({
   children,
